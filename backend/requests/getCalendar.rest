@@ -1,0 +1,6 @@
+POST http://localhost:3000/api/download
+Content-Type: application/json
+
+{
+    "osoite": "https://sisu.jyu.fi:443/ilmo/api/calendar-share/dfc3c760-9a64-44c7-9832-ef9847a5139a"
+}
