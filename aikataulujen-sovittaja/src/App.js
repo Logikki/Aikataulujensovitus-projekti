@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import getCalendar from './services/getCalendar'
+import {useState} from 'react'
+import FetchCalendarForm from './components/FetchCalendarForm'
 
-function App() {
+const App = () => {
+  const [kasiteltavaKalenteri, setKasiteltavaKalenteri] = useState('') //tänne tallennetaan käsiteltävä kalenteri tekstinä
+  const [kalenteriUrl, setUrl] = useState('') //url laatikkoa varten
+
+  const handleDownload = (event) => {
+    event.preventDefault()
+    getCalendar
+      .download(kalenteriUrl, setKasiteltavaKalenteri)
+      console.log("kalenteri: " + kasiteltavaKalenteri)
+  }
+    
+  //demon vuoksi laitetaan kasiteltavaKalenteri näkyviin sivulle
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <div>
+    <FetchCalendarForm 
+    kalenteriUrl={kalenteriUrl} 
+    handleKalenteriUrlChange={({ target }) => setUrl(target.value)} 
+    handleFetchCalendar={handleDownload}
+    />
     </div>
-  );
+  <p>
+    {kasiteltavaKalenteri} 
+  </p>
+  </div>
+  )
 }
 
-export default App;
+export default App

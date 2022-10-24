@@ -1,7 +1,6 @@
 const downloadRouter = require('express').Router()
-const request = require('request')
+const https = require('https')
 
-const PORT = 3000;
 /**
  * Tämä funktio hoitaa ics tiedoston hakemisen
  * kutsutaan post pyynnöllä, ja pyyntöön tulee liittää json muodossa osoitetieto
@@ -10,17 +9,31 @@ const PORT = 3000;
  */
 downloadRouter.post("/", async (req, res) => {
     const url = req.body.osoite
-    console.log(url)
-    request.get(url, function (error, response, body) {
-        if (!error && response.statusCode === 200) {
-            var data = body;
-            console.log("data: " + data)
-            return data
-        }
-        else {
-            console.log('jotain meni pieleen :P, tarkista url')
-        }
+    const download = (url) => {
+        return new Promise ((resolve, reject) => { 
+            https.get(url, res => {
+                if (res.statusCode !== 200) {
+                    reject(new Error(`Failed to get '${url}' (${res.statusCode})`));
+                }
+                let rawData = ''
+                res.on('data', chunk => {
+                    rawData += chunk
+                })
+                res.on('end', () => {
+                    try {
+                    resolve(rawData)
+                    }
+                    catch (e) {
+                        reject.message(e.message)
+                    }
+                })
+            })
+        })
+    }
+    download(url).then(data => {
+        res.json(data)
     })
+    .catch(error => {res.status(400).send('Bad request')})
 })
 
 module.exports = downloadRouter
