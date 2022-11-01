@@ -17,11 +17,11 @@ const App = () => {
   return (
     <div>
       <div>
-    <FetchCalendarForm 
+    {/* <FetchCalendarForm 
     kalenteriUrl={kalenteriUrl} 
     handleKalenteriUrlChange={({ target }) => setUrl(target.value)} 
     handleFetchCalendar={handleDownload}
-    />
+    /> */}
     </div>
   <p>
     {kasiteltavaKalenteri} 

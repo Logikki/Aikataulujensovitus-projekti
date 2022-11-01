@@ -1,0 +1,28 @@
+POST http://localhost:3003/api/privatecalendar
+Content-Type: application/json
+
+{
+    "sharedCalendarID": "635ff64c4d16d335e01697d8",
+    "freeTimes": [
+        {
+        "id": "1",
+        "start": "2023-03-07T10:30:00",
+        "end": "2023-03-07T13:00:00"
+      },
+      {
+        "id": "2",
+        "start": "2023-03-08T09:30:00",
+        "end": "2023-03-08T11:30:00"
+      },
+      {
+        "id": "3",
+        "start": "2023-03-08T12:00:00",
+        "end": "2023-03-08T15:00:00"
+      },
+      {
+        "id": "4",
+        "start": "2023-03-06T11:30:00",
+        "end": "2023-03-06T14:30:00"
+      }
+    ]
+}
