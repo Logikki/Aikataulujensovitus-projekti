@@ -24,7 +24,7 @@ function Navbar() {
   });
 
   // Omaa koodia
-  const [haku, setHaku] = useState("");
+  const [haku1, setHaku] = useState("");
   const nappiStyles = "btn btn-secondary";
   const inputStyles = { width: "100%" };
   const [popup, setPopup] = useState(false);
