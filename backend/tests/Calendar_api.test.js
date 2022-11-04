@@ -17,6 +17,5 @@ describe('Calendar tests', () => {
     test('posting shared calendar works', async () => {
         await api.post('/api/sharedcalendar')
             .expect(201)
-
     })
 })

@@ -9,7 +9,6 @@ privateCalendarRouter.post('/', async (req, res) => {
     const calendar = new PrivateCalendar({
         freeTimes : body.freeTimes
     })
-
     const savedCalendar = await calendar.save()
     sharedCalendar.privateCalendars = sharedCalendar.privateCalendars.concat(savedCalendar.id)
     await sharedCalendar.save()

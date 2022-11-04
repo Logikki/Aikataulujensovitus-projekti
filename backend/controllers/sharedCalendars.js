@@ -24,6 +24,4 @@ sharedCalendarRouter.post('/', async (req, res) => {
     res.status(201).json(newsharedCalendar)
 })
 
-
-
 module.exports = sharedCalendarRouter
