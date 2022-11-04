@@ -14,7 +14,6 @@ privateCalendarRouter.post('/', async (req, res) => {
     sharedCalendar.privateCalendars = sharedCalendar.privateCalendars.concat(savedCalendar.id)
     await sharedCalendar.save()
     res.status(201).json(savedCalendar)
-
 })
 
 module.exports = privateCalendarRouter
