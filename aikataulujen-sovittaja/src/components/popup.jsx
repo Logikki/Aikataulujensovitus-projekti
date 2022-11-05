@@ -7,9 +7,7 @@ const Popup = (props) => {
         <button
           className="btn-close btn btn-secondary"
           onClick={props.handleClose}
-        >
-          x
-        </button>
+        ></button>
         {props.content}
       </div>
     </div>

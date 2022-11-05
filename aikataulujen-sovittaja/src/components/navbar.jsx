@@ -57,7 +57,6 @@ function Navbar() {
         type="button"
         onClick={togglePopup} // TODO: Avaa pupup ikkuna
         style={{
-          width: 120,
           marginLeft: dimensions.width - 150,
           position: "absolute",
         }}
