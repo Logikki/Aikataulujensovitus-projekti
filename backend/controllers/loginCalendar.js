@@ -11,13 +11,11 @@ const jwt = require('jsonwebtoken')
 loginCalendarRouter.post('/', async (req, res) => {
     const { sharedCalendarID, password } = req.body
     console.log(sharedCalendarID)
-    console.log(password)
     const sharedCalendar = await SharedCalendar.findById(sharedCalendarID)
     console.log(sharedCalendar)
     const isPasswordCorrect = sharedCalendar === null
       ? false
       : await bcrypt.compare(password, sharedCalendar.hashedPassword)
-    
     if (!(sharedCalendar && isPasswordCorrect)) {
         return res.status(401).json({
             error: 'invalid calendar id or password'

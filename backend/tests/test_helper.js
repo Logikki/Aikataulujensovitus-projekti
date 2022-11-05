@@ -2,7 +2,6 @@ const PrivateCalendar = require('../models/privateCalendar')
 const SharedCalendar = require('../models/sharedCalendar')
 
 const privateCalendar = {
-    "sharedCalendarID": "635ff64c4d16d335e01697d8",
     "freeTimes": [
         {
         "id": "1",
@@ -25,6 +24,10 @@ const privateCalendar = {
         "end": "2023-03-06T14:30:00"
       }
     ]
+}
+
+const sharedCalendar = {
+  password: 'salainen'
 }
 
 const privateCalendarInDb = async () => {

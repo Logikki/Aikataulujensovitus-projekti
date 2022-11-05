@@ -1,28 +1,48 @@
 import axios from 'axios'
-import sharedCalendar from '../../../backend/models/sharedCalendar'
 const baseUrl = 'http://localhost:3003/api/privatecalendar'
-const SharedCalendarBaseUrl = 'http://localhost:3003/api/privatecalendar'
+const SharedCalendarBaseUrl = 'http://localhost:3003/api/sharedcalendar'
+
+let token = null
+//kirjautumisen jälkeen asetetaan tähän token
+const setToken = newToken => {
+    token = `bearer ${newToken}`
+}
 
 /**
  * sharedCalendar muotoa 
- * Tällä funktiolla luodaan uusi jaettu kalenteri
- * @returns sharedCalendar, joka luotiin tietokantaan
+ * @param password Tämä on password stringinä, se hashataan sitten backendissä
+ *  funktiolla luodaan uusi jaettu kalenteri
+ * @returns uuden luodun jaetun kalenterin ID stringinä
  */
-const createSharedCalendar = async () => {
-    const response = await axios.post(SharedCalendarBaseUrl)
+const createSharedCalendar = async (password) => {
+    const newObj = {password: password} 
+    const response = await axios.post(SharedCalendarBaseUrl, newObj)
     return response.data
 }
 
 /**
- * @param sharedCalendarID on jaetun kalenterin id, johon privateCalendar halutaan lisätä
  * @param newObject on privateCalendar, joka halutaan lisätä
  */
-const createPrivateCalendar = async (newObject, sharedCalendarID) => {
+const createPrivateCalendar = async (newObject) => {
     //lisätään objektiin tieto jaetun kalenterin id:stä. Tämä parsetaan sitten backendissä takaisin.
    const requestObj = {
-    sharedCalendarID: sharedCalendarID,
+    //sharedCalendarID: sharedCalendarID,
     ...newObject
    }
-    const response = await axios.post(baseUrl, requestObj)
+   const config = {
+    headers: { Authorization: token }
+}
+    const response = await axios.post(baseUrl, requestObj, config)
+    console.log(response)
     return response.data
 }
+
+const getSharedCalendar = async (id) => {
+    const config = {
+        headers: { Authorization: token }
+    }
+    const request = axios.get(`${SharedCalendarBaseUrl}/${id}`, config)
+    return request.then(response => response.data)
+}
+
+export default { setToken, createSharedCalendar, createPrivateCalendar, getSharedCalendar }

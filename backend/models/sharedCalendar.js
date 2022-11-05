@@ -4,7 +4,7 @@ const sharedCalendarSchema = mongoose.Schema({
    hashedPassword: String,
    privateCalendars: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'privateCalendar'
+    ref: 'PrivateCalendar'
    }]
 })
 
@@ -13,7 +13,8 @@ sharedCalendarSchema.set('toJSON', {
       returnedObject.id = returnedObject._id.toString()
       delete returnedObject._id
       delete returnedObject.__v
+      delete returnedObject.hashedPassword
     }
   })
-
+  
 module.exports = mongoose.model('sharedCalendar', sharedCalendarSchema)
