@@ -26,7 +26,7 @@ function Navbar() {
   // Omaa koodia
   const [haku, setHaku] = useState("");
   const nappiStyles = "btn btn-secondary";
-  const inputStyles = { width: "100%" };
+  const inputStyles = { width: "100%", textAlign: "center" };
   const [popup, setPopup] = useState(false);
   const [nimi, setNimi] = useState("");
   const [pass, setPass] = useState("");
@@ -40,15 +40,19 @@ function Navbar() {
       <input // Hae kalenteria input kenttä
         type="text"
         placeholder="Hae Kalenteria"
+        style={{ textAlign: "center" }}
         onInput={(e) => setHaku(e.target.value)}
       ></input>
-      <button // Kalenterin haku nappi
-        className={nappiStyles}
-        type="button"
-        //onClick={<funktio>} // TODO: Lähetä Inputin arvo parametrina backendiin
-      >
-        Hae
-      </button>
+      <div>
+        <button // Kalenterin haku nappi
+          style={{ marginLeft: "10px" }}
+          className={nappiStyles}
+          type="button"
+          //onClick={<funktio>} // TODO: Lähetä Inputin arvo parametrina backendiin
+        >
+          Hae Kalenteria
+        </button>
+      </div>
       <span
         style={{
           marginLeft: dimensions.width - 150,
@@ -69,8 +73,12 @@ function Navbar() {
           content={
             <>
               <div>
-                <h1 style={{ fontSize: "30px" }}>Uusi Kalenteri</h1>
-                <div>Kalenterin Nimi</div>
+                <h1 style={{ fontSize: "30px", textAlign: "center" }}>
+                  Uusi Kalenteri
+                </h1>
+                <div style={{ marginTop: "5px", textAlign: "center" }}>
+                  Kalenterin Nimi
+                </div>
                 <input // Kalenterin nimen input kenttä
                   className="form-control"
                   type="text"
@@ -79,7 +87,9 @@ function Navbar() {
                   style={inputStyles}
                 ></input>
 
-                <div style={{ marginTop: "5px" }}>Salasana</div>
+                <div style={{ marginTop: "5px", textAlign: "center" }}>
+                  Salasana
+                </div>
                 <input // Salasanan input kenttä
                   className="form-control"
                   type="text"
@@ -88,10 +98,24 @@ function Navbar() {
                   style={inputStyles}
                 ></input>
 
-                <div>
+                <div style={{ paddingTop: "170px" }}>
                   <button
                     className={nappiStyles}
-                    style={{ marginTop: "160px", float: "right" }} // Kalenterin luonti nappi
+                    style={{
+                      width: "120px",
+                      float: "left",
+                    }} // Kalenterin luonnin peruutus nappi
+                    type="button"
+                    onClick={togglePopup}
+                  >
+                    Peruuta
+                  </button>
+                  <button
+                    className={nappiStyles}
+                    style={{
+                      width: "120px",
+                      float: "right",
+                    }} // Kalenterin luonti nappi
                     type="button"
                     onClick={togglePopup} // TODO: Lähetä Inputtien arvo parametrina backendiin
                   >
