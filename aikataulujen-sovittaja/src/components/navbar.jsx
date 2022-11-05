@@ -42,70 +42,68 @@ function Navbar() {
         placeholder="Hae Kalenteria"
         onInput={(e) => setHaku(e.target.value)}
       ></input>
-      <div>
-        <button // Kalenterin haku nappi
-          className={nappiStyles}
-          type="button"
-          //onClick={<funktio>} // TODO: Lähetä Inputin arvo parametrina backendiin
-        >
-          Hae
-        </button>
-      </div>
-
-      <button // Uusi kalenteri nappi
+      <button // Kalenterin haku nappi
         className={nappiStyles}
         type="button"
-        onClick={togglePopup} // TODO: Avaa pupup ikkuna
+        //onClick={<funktio>} // TODO: Lähetä Inputin arvo parametrina backendiin
+      >
+        Hae
+      </button>
+      <span
         style={{
           marginLeft: dimensions.width - 150,
           position: "absolute",
         }}
       >
-        Uusi kalenteri
-      </button>
+        <button // Uusi kalenteri nappi
+          className={nappiStyles}
+          type="button"
+          onClick={togglePopup} // TODO: Avaa pupup ikkuna
+        >
+          Uusi kalenteri
+        </button>
+      </span>
 
-      <div>
-        {popup && (
-          <Popup
-            content={
-              <>
+      {popup && (
+        <Popup
+          content={
+            <>
+              <div>
+                <h1 style={{ fontSize: "30px" }}>Uusi Kalenteri</h1>
+                <div>Kalenterin Nimi</div>
+                <input // Kalenterin nimen input kenttä
+                  className="form-control"
+                  type="text"
+                  placeholder="Esimerkki Kalenteri"
+                  onInput={(e) => setNimi(e.target.value)}
+                  style={inputStyles}
+                ></input>
+
+                <div style={{ marginTop: "5px" }}>Salasana</div>
+                <input // Salasanan input kenttä
+                  className="form-control"
+                  type="text"
+                  placeholder="********"
+                  onInput={(e) => setPass(e.target.value)}
+                  style={inputStyles}
+                ></input>
+
                 <div>
-                  <h1 style={{ fontSize: "30px" }}>Uusi Kalenteri</h1>
-                  <div>Kalenterin Nimi</div>
-                  <input // Kalenterin nimen input kenttä
-                    className="form-control"
-                    type="text"
-                    placeholder="Esimerkki Kalenteri"
-                    onInput={(e) => setNimi(e.target.value)}
-                    style={inputStyles}
-                  ></input>
-
-                  <div style={{ marginTop: "5px" }}>Salasana</div>
-                  <input // Salasanan input kenttä
-                    className="form-control"
-                    type="text"
-                    placeholder="********"
-                    onInput={(e) => setPass(e.target.value)}
-                    style={inputStyles}
-                  ></input>
-
-                  <div>
-                    <button
-                      className={nappiStyles}
-                      style={{ marginTop: "160px", float: "right" }} // Kalenterin luonti nappi
-                      type="button"
-                      onClick={togglePopup} // TODO: Lähetä Inputtien arvo parametrina backendiin
-                    >
-                      Luo Kalenteri
-                    </button>
-                  </div>
+                  <button
+                    className={nappiStyles}
+                    style={{ marginTop: "160px", float: "right" }} // Kalenterin luonti nappi
+                    type="button"
+                    onClick={togglePopup} // TODO: Lähetä Inputtien arvo parametrina backendiin
+                  >
+                    Luo Kalenteri
+                  </button>
                 </div>
-              </>
-            }
-            handleClose={togglePopup}
-          />
-        )}
-      </div>
+              </div>
+            </>
+          }
+          handleClose={togglePopup}
+        />
+      )}
     </div>
   );
 }
