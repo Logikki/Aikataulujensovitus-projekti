@@ -45,4 +45,17 @@ const getSharedCalendar = async (id) => {
     return request.then(response => response.data)
 }
 
-export default { setToken, createSharedCalendar, createPrivateCalendar, getSharedCalendar }
+/**
+ * 
+ * @param id kalenterin id
+ * @returns uusi jaettu kalenteri
+ */
+const rem = async (id) => {
+    const config = {
+        headers: { Authorization: token }
+    }
+    const request = axios.delete(`${SharedCalendarBaseUrl}/${id}`, config)
+    return request.then(response => response.data)
+}
+
+export default { setToken, createSharedCalendar, createPrivateCalendar, getSharedCalendar, rem }

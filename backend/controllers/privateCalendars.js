@@ -42,7 +42,7 @@ privateCalendarRouter.delete('/:id', async (req, res) => {
     sharedCal.privateCalendars = sharedCal.privateCalendars.filter(cal =>cal !== calendarToDelete.id)
     //poistetaan jaetun kalenterista viite poistettavaan
     await sharedCal.save()
-    res.status(204).json(sharedCal)
+    res.status(204).json({sharedCal})
 } )
 
 module.exports = privateCalendarRouter
