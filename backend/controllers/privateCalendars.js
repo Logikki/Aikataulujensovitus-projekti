@@ -36,6 +36,9 @@ privateCalendarRouter.delete('/:id', async (req, res) => {
     if (!sharedCal.privateCalendars.includes(req.params.id)) {
         return res.status(401).json({error: 'You dont have permission to delete this calendar'})
     }
+   
+    
+
 
 } )
 
