@@ -18,7 +18,7 @@ app.use(middleware.tokenExtractor)
 
 app.use('/api/logincalendar', loginCalendarRouter)
 app.use('/api/download', downloadRouter)
-app.use('/api/sharedcalendar', sharedCalendarRouter )
+app.use('/api/sharedcalendar', sharedCalendarRouter)
 app.use('/api/privatecalendar', privateCalendarRouter )
 
 mongoose.connect(process.env.MONGODB_URI)

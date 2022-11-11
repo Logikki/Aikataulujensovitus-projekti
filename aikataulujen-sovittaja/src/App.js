@@ -18,6 +18,7 @@ const App = () => {
       .download(kalenteriUrl, setKasiteltavaKalenteri)
       console.log("kalenteri: " + kasiteltavaKalenteri)
   }
+  
   //demon vuoksi laitetaan kasiteltavaKalenteri näkyviin sivulle
   return (
     <div>

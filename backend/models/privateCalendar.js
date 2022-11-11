@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const privateCalendarSchema = mongoose.Schema({
+  //tämä muuttuu viä paaljoon
     freeTimes: [
         {
             id: String,
