@@ -1,0 +1,2 @@
+DELETE http://localhost:3003/api/privatecalendar/636e41ad8586e486cc0dc273
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaGFyZWRDYWxlbmRhcklEIjoiNjM2ZTM2NDBiNjE4MjJmNjQzYWJkZDhmIiwiaWF0IjoxNjY4MTY3MjU2fQ.BzAUApZff8SewyUSsKFby9uLNZb5D9LHnSnyGyH19xk

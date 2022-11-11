@@ -29,17 +29,20 @@ privateCalendarRouter.delete('/:id', async (req, res) => {
         return res.status(401).json({error: 'token missing '})
     }
     const decodedToken = jwt.verify(req.token, process.env.SECRET)
-    const sharedCal = SharedCalendar
+    const sharedCal = await SharedCalendar
       .findById(decodedToken.sharedCalendarID)
-    const calendarToDelete = PrivateCalendar
+    const calendarToDelete = await PrivateCalendar
       .findById(req.params.id)
+    //katsotaan, löytyykö jaetusta kalenterista tällä token id:llä kalenteria, joka pyydettiin poistamaan
+    //jos ei, niin käyttäjällä ei ole oikeuksia poistaa kalenteria
     if (!sharedCal.privateCalendars.includes(req.params.id)) {
         return res.status(401).json({error: 'You dont have permission to delete this calendar'})
     }
-   
-    
-
-
+    await PrivateCalendar.findByIdAndRemove(req.params.id)
+    sharedCal.privateCalendars = sharedCal.privateCalendars.filter(cal =>cal !== calendarToDelete.id)
+    //poistetaan jaetun kalenterista viite poistettavaan
+    await sharedCal.save()
+    res.status(204).json(sharedCal)
 } )
 
 module.exports = privateCalendarRouter
