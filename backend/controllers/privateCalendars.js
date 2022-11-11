@@ -24,4 +24,22 @@ privateCalendarRouter.post('/', async (req, res) => {
     res.status(201).json(savedCalendar)
 })
 
+privateCalendarRouter.delete('/:id', async (req, res) => {
+    if (!req.token) {
+        return res.status(401).json({error: 'token missing '})
+    }
+    const decodedToken = jwt.verify(req.token, process.env.SECRET)
+    const sharedCal = SharedCalendar
+      .findById(decodedToken.sharedCalendarID)
+    const calendarToDelete = PrivateCalendar
+      .findById(req.params.id)
+    if (!sharedCal.privateCalendars.includes(req.params.id)) {
+        return res.status(401).json({error: 'You dont have permission to delete this calendar'})
+    }
+   
+    
+
+
+} )
+
 module.exports = privateCalendarRouter

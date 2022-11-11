@@ -14,6 +14,7 @@ const App = () => {
     console.log("kalenteri: " + kasiteltavaKalenteri);
   };
 
+  
   //demon vuoksi laitetaan kasiteltavaKalenteri näkyviin sivulle
   return (
     <div>
