@@ -50,6 +50,7 @@ sharedCalendarRouter.get('/:id', async (req, res) => {
     const sharedCalendar = await SharedCalendar
             .findById(req.params.id)
             .populate('privateCalendars')
+    console.log(sharedCalendar.privateCalendars)
     res.json(sharedCalendar)
 })
 

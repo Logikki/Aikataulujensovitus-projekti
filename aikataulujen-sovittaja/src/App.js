@@ -49,7 +49,6 @@ const App = () => {
       //tähän voitaisiin laittaa error message
       }
     }
-  }
 
   const handleDownload = (event) => {
     event.preventDefault()
