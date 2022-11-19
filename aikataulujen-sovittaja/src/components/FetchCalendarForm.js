@@ -1,28 +1,28 @@
-
+import React from "react";
 /**
- * 
+ *
  * demotarkoitukseen
- * 
+ *
  */
 const FetchCalendarForm = ({
-    kalenteriUrl, handleKalenteriUrlChange, handleFetchCalendar
+  kalenteriUrl,
+  handleKalenteriUrlChange,
+  handleFetchCalendar,
 }) => {
-    return(
-        <form onSubmit={handleFetchCalendar}>
-    <div>
-        
+  return (
+    <form onSubmit={handleFetchCalendar}>
+      <div>
         <h2>Fetch calendar</h2>
-        <input  
-            type="text"
-            value={kalenteriUrl}
-            name="KalenteriUrl"
-            onChange={handleKalenteriUrlChange}
+        <input
+          type="text"
+          value={kalenteriUrl}
+          name="KalenteriUrl"
+          onChange={handleKalenteriUrlChange}
         />
         <button type="submit">fetch this calendar</button>
-        
-    </div>
+      </div>
     </form>
-    )
-    }
+  );
+};
 
-    export default FetchCalendarForm
+export default FetchCalendarForm;

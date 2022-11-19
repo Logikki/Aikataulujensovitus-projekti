@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken')
  */
 loginCalendarRouter.post('/', async (req, res) => {
     const { sharedCalendarID, password } = req.body
-    console.log(sharedCalendarID)
+    console.log("kalenteri id: ", sharedCalendarID)
     const sharedCalendar = await SharedCalendar.findById(sharedCalendarID)
     console.log(sharedCalendar)
     const isPasswordCorrect = sharedCalendar === null
