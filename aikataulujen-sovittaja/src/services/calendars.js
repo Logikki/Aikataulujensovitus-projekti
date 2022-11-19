@@ -38,6 +38,7 @@ const createPrivateCalendar = async (newObject) => {
 }
 
 const getSharedCalendar = async (id) => {
+    console.log("haetaan jaettu kalenteri", id)
     const config = {
         headers: { Authorization: token }
     }

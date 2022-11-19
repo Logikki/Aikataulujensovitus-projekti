@@ -38,6 +38,7 @@ sharedCalendarRouter.post('/', async (req, res) => {
 sharedCalendarRouter.get('/:id', async (req, res) => {
     //const body = req.body
     //verifoidaan token
+    console.log("suoritetaan jaetun kalenterin haku")
     console.log(req.params.id)
     if (!req.token) {
         return res.status(401).json({error: 'token missing '})

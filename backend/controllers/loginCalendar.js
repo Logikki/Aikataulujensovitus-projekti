@@ -9,6 +9,7 @@ const jwt = require('jsonwebtoken')
  * autentikoinnin onnistuessa lähetetään myös jaetun kalenterin tiedot.
  */
 loginCalendarRouter.post('/', async (req, res) => {
+    console.log("kirjaudutaan kalenteriin")
     const { sharedCalendarID, password } = req.body
     console.log("kalenteri id: ", sharedCalendarID)
     const sharedCalendar = await SharedCalendar.findById(sharedCalendarID)

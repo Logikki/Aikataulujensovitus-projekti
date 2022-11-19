@@ -8,7 +8,7 @@ import calendarLoginService from './services/calendarLogin'
 
 
 const App = () => {
-  const [kasiteltavaKalenteri, setKasiteltavaKalenteri] = useState(""); //tänne tallennetaan käsiteltävä kalenteri tekstinä
+  const [privateCalendars, setPrivateCalendars] = useState(""); //tänne tallennetaan käsiteltävä kalenteri tekstinä
   const [kalenteriUrl, setUrl] = useState(""); //url laatikkoa varten
   const [sharedCalendar, setSharedCalendar] = useState(null) //{sharedCalendar.sharedCalendarID, sharedCalendar.token}
   //näitä käytetään kirjautumisruudussa
@@ -22,25 +22,20 @@ const App = () => {
    * muuttujaan {sharedCalendar}
    */
 
-   useEffect(() => {
-    console.log("haetaan privatekalenterit kyseisestä jaetusta kalenterista")
-    const doThings = async () => {
-      const sharedCalendar = await calendarService.getSharedCalendar(sharedCalendar.sharedCalendarID)
-      console.log("privaatit: ", sharedCalendar.privateCalendars)
-      setKasiteltavaKalenteri = sharedCalendar.privateCalendars
-    }
-    doThings()
-    console.log(kasiteltavaKalenteri)
-  }, [])
-
   useEffect(() => {
+    const doThings = async () => {
     console.log("use effect, katsotaan onko cachessa kirjauduttu kalenteriin")
     const loggedSharedCalendarJSON = window.localStorage.getItem ('loggedSharedCalendar')
     if (loggedSharedCalendarJSON) {
       const calendar = JSON.parse(loggedSharedCalendarJSON)
       setSharedCalendar(calendar)
       calendarService.setToken(calendar.token)
+      const sharedCal = await calendarService.getSharedCalendar(calendar.sharedCalendarID)
+      console.log("privaatit: ", sharedCal.privateCalendars)
+      setPrivateCalendars(sharedCal.privateCalendars)
     }
+    }
+    doThings()
     console.log(sharedCalendar)
   }, [])
 
@@ -61,16 +56,20 @@ const App = () => {
         'loggedSharedCalendar', JSON.stringify(sharedCalendar)
       )
       calendarService.setToken(sharedCalendar.token)
+      setSharedCalendar(sharedCalendar)
       setCalendarID('')
       setCalendarPassword('')
+      const sharedCal = await calendarService.getSharedCalendar(sharedCalendar.sharedCalendarID)
+      console.log("privaatit: ", sharedCal.privateCalendars)
+      setPrivateCalendars(sharedCal.privateCalendars)
     } catch {
       //tähän voitaisiin laittaa error message
       }
     }
   const handleDownload = (event) => {
     event.preventDefault();
-    getCalendar.download(kalenteriUrl, setKasiteltavaKalenteri);
-    console.log("kalenteri: " + kasiteltavaKalenteri);
+    getCalendar.download(kalenteriUrl, setPrivateCalendars);
+    console.log("kalenteri: " + privateCalendars);
   };
 
   
@@ -83,14 +82,6 @@ const App = () => {
         handleCalendarLogin={handleCalendarLogin}
       ></Navbar>
       <div>
-        <FetchCalendarForm
-          kalenteriUrl={kalenteriUrl}
-          handleKalenteriUrlChange={({ target }) => setUrl(target.value)}
-          handleFetchCalendar={handleDownload}
-        />
-      </div>
-      <div>
-        {kasiteltavaKalenteri}
       </div>
     </div>
   );
