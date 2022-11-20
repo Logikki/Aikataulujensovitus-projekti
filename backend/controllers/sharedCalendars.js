@@ -8,7 +8,8 @@ const jwt = require('jsonwebtoken')
 sharedCalendarRouter.get('/', async (req,res) => {
     const sharedCalendars = await SharedCalendar
       .find({})
-    response.json(sharedCalendars)
+      .populate('privateCalendars')
+    res.json(sharedCalendars)
 })
 
 /**

@@ -1,29 +1,29 @@
 POST http://localhost:3003/api/privatecalendar
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaGFyZWRDYWxlbmRhcklEIjoiNjM2ZTM2NDBiNjE4MjJmNjQzYWJkZDhmIiwiaWF0IjoxNjY4MTgwMTcxfQ.ZFg_QAZIW5Xm4Ylk-MbtlueutvdYWA4g_XzAyl81NFA
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaGFyZWRDYWxlbmRhcklEIjoiNjM3YTA1YjEwYTdhY2Y1ODE2ZWQ0Yzk2IiwiaWF0IjoxNjY4OTQxMjU4fQ.y7FdKkzvwHIjuJwrCRpo56NuL71tjVJIHHC5cupaJzs
 
 {
     "sharedCalendarID": "636e3640b61822f643abdd8f",
-    "freeTimes": [
+    "event": [
         {
-        "id": "1",
         "start": "2023-03-07T10:30:00",
-        "end": "2023-03-07T13:00:00"
+        "end": "2023-03-07T13:00:00",
+        "timeZone": "jotain"
       },
       {
-        "id": "2",
         "start": "2023-03-08T09:30:00",
-        "end": "2023-03-08T11:30:00"
+        "end": "2023-03-08T11:30:00",
+        "timeZone": "jotain"
       },
       {
-        "id": "3",
         "start": "2023-03-08T12:00:00",
-        "end": "2023-03-08T15:00:00"
+        "end": "2023-03-08T15:00:00",
+        "timeZone": "jotain"
       },
       {
-        "id": "4",
         "start": "2023-03-06T11:30:00",
-        "end": "2023-03-06T14:30:00"
+        "end": "2023-03-06T14:30:00",
+        "timeZone": "jotain"
       }
     ]
 }

@@ -1,12 +1,13 @@
 const mongoose = require('mongoose')
 
 const privateCalendarSchema = mongoose.Schema({
-  //tämä muuttuu viä paaljoon
-    freeTimes: [
-        {
-            id: String,
+  // tämä muuttuu viä paaljoon
+  // nimi
+    event: [
+        { 
             start: String,
             end: String,
+            timeZone: String
         }
     ]
 })

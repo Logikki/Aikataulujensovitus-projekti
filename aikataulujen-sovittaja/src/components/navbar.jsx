@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Popup from "./popup";
 
-function Navbar({setCalendarPassword, setCalendarID, handleCalendarLogin }) {
+function Navbar({setCalendarPassword, setCalendarID, handleCalendarLogin, setNewCalendarPassword }) {
   // window width/height on resize courtesy of Jake Trent
   // https://www.pluralsight.com/guides/re-render-react-component-on-window-resize
   const [dimensions, setDimensions] = React.useState({
@@ -88,7 +88,7 @@ function Navbar({setCalendarPassword, setCalendarID, handleCalendarLogin }) {
                   className="form-control"
                   type="text"
                   placeholder="********"
-                  onInput={(e) => setCalendarPassword(e.target.value)}
+                  onInput={(e) => setNewCalendarPassword(e.target.value)}
                   style={inputStyles}
                 ></input>
 

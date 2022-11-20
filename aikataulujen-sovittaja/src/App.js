@@ -1,20 +1,21 @@
 import React from "react";
 import getCalendar from "./services/getCalendar";
 import { useState, useEffect } from "react";
-import FetchCalendarForm from "./components/FetchCalendarForm";
 import Navbar from "./components/navbar";
 import calendarService from './services/calendars'
 import calendarLoginService from './services/calendarLogin'
 
 
 const App = () => {
-  const [privateCalendars, setPrivateCalendars] = useState(""); //tänne tallennetaan käsiteltävä kalenteri tekstinä
+  const [privateCalendars, setPrivateCalendars] = useState(null); //tänne tallennetaan käsiteltävä kalenteri tekstinä
   const [kalenteriUrl, setUrl] = useState(""); //url laatikkoa varten
   const [sharedCalendar, setSharedCalendar] = useState(null) //{sharedCalendar.sharedCalendarID, sharedCalendar.token}
   //näitä käytetään kirjautumisruudussa
   const [calendarID, setCalendarID] = useState('')
   const [calendarPassword, setCalendarPassword] = useState('')
+  const [creatingNewCalendarPassword, setNewCalendarPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
+  const [vapaatAjat, setVapaatAjat] = useState(null)
 
   /**
    * Tämä funktio suoritetaan aina uudelleenpäivityksessä
@@ -39,13 +40,29 @@ const App = () => {
     console.log(sharedCalendar)
   }, [])
 
+
+/**
+ * Funktio hoitaa uuden kalenterin luonnin
+ * salasana otetaan muuttujasta {creatingNewCalendarPassword}
+ * 
+ */
+  const handleCreatingNewCalendar = async (e) => {
+    e.preventDefault()
+    const newCalendarID = await calendarService
+      .createSharedCalendar(creatingNewCalendarPassword)
+    //tässä vaiheessa voitaisiin ilmoittaa käyttäjälle, mikä on juuri luodun kalenterin id
+    //myöskin sähköpostia voitaisiin kysyä, johon tämä id lähetettäisiin
+  }
+
+
   /**
    * Funktio hoitaa kirjautumisen. 
    * Kirjautumisen jälkeen tallennetaan selaimeen jaettu kalenteri 
    */
-
   const handleCalendarLogin = async (event) => {
     event.preventDefault()
+    //jos ei olla vielä kirjauduttu sisään
+    if (sharedCalendar ) 
     console.log("haetaan kalenteria")
     console.log(calendarID, calendarPassword)
     try {
@@ -65,13 +82,14 @@ const App = () => {
     } catch {
       //tähän voitaisiin laittaa error message
       }
+    
+    
     }
   const handleDownload = (event) => {
     event.preventDefault();
     getCalendar.download(kalenteriUrl, setPrivateCalendars);
     console.log("kalenteri: " + privateCalendars);
   };
-
   
   //demon vuoksi laitetaan kasiteltavaKalenteri näkyviin sivulle
   return (
@@ -80,6 +98,7 @@ const App = () => {
         setCalendarPassword={setCalendarPassword}
         setCalendarID={setCalendarID}
         handleCalendarLogin={handleCalendarLogin}
+        setNewCalendarPassword={setNewCalendarPassword}
       ></Navbar>
       <div>
       </div>
