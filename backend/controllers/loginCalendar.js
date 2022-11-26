@@ -12,8 +12,20 @@ loginCalendarRouter.post('/', async (req, res) => {
     console.log("kirjaudutaan kalenteriin")
     const { sharedCalendarID, password } = req.body
     console.log("kalenteri id: ", sharedCalendarID)
-    const sharedCalendar = await SharedCalendar.findById(sharedCalendarID)
-    console.log(sharedCalendar)
+    try {
+        const sharedCalendar = await SharedCalendar.findById(sharedCalendarID)
+    }
+    catch {
+        return res.status(401).json({
+            error: 'invalid calendar id or password'
+        })
+    }
+    console.log("täs vaihees")
+    if (sharedCalendar === null) {
+        return res.status(401).json({
+            error: 'invalid calendar id or password'
+        })
+    }
     const isPasswordCorrect = sharedCalendar === null
       ? false
       : await bcrypt.compare(password, sharedCalendar.hashedPassword)
