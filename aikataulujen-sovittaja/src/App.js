@@ -4,13 +4,14 @@ import { useState, useEffect } from "react";
 import Navbar from "./components/navbar";
 import calendarService from './services/calendars'
 import calendarLoginService from './services/calendarLogin'
-
+import CalendarView from "./components/CalendarView";
 
 const App = () => {
   const [privateCalendars, setPrivateCalendars] = useState(null); //tänne tallennetaan käsiteltävä kalenteri tekstinä
   const [kalenteriUrl, setUrl] = useState(""); //url laatikkoa varten
   const [sharedCalendar, setSharedCalendar] = useState(null) //{sharedCalendar.sharedCalendarID, sharedCalendar.token}
   //näitä käytetään kirjautumisruudussa
+
   const [calendarID, setCalendarID] = useState('')
   const [calendarPassword, setCalendarPassword] = useState('')
   const [creatingNewCalendarPassword, setNewCalendarPassword] = useState('')
@@ -102,6 +103,9 @@ const App = () => {
         createNewCalendarHandler={handleCreatingNewCalendar}
       ></Navbar>
       <div>
+        <CalendarView 
+          sharedCalendar={sharedCalendar} 
+        />
       </div>
     </div>
   );
