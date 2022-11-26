@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import Popup from "./popup";
 
-function Navbar({setCalendarPassword, setCalendarID, handleCalendarLogin, setNewCalendarPassword, createNewCalendarHandler }) {
+function Navbar({
+  setCalendarPassword, 
+  setCalendarID, 
+  handleCalendarLogin, 
+  setNewCalendarPassword, 
+  createNewCalendarHandler,
+  handleLogout,
+  sharedCalendar}) {
+    
   // window width/height on resize courtesy of Jake Trent
   // https://www.pluralsight.com/guides/re-render-react-component-on-window-resize
   const [dimensions, setDimensions] = React.useState({
@@ -36,6 +44,12 @@ function Navbar({setCalendarPassword, setCalendarID, handleCalendarLogin, setNew
   return (
     //HAE KALENTERIA
     <div className="input-group p-3 mb-2 bg-dark text-black">
+      <button //Kirjaudu ulos nappi
+          className={nappiStyles}
+          type="button"
+          onClick={handleLogout}
+        >Poistu kalenterista 
+        </button>
       <input // Hae kalenteria input kenttä
         type="text"
         placeholder="Kalenterin ID"
@@ -113,6 +127,7 @@ function Navbar({setCalendarPassword, setCalendarID, handleCalendarLogin, setNew
                     type="button"
                     onClick={ ()=> {
                       togglePopup()
+                      createNewCalendarHandler()
                        }
                     } // TODO: Lähetä Inputtien arvo parametrina backendiin
                   >

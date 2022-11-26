@@ -41,7 +41,15 @@ const App = () => {
     console.log(sharedCalendar)
   }, [])
 
-
+  /**
+   * Tämä funktio hoitaa uloskirjautumisen.
+   * Poistetaan selaimen muistista kalenteri johon ollaan kirjauduttu.
+   */
+  const handleLogout = (event) => {
+    event.preventDefault()
+    window.localStorage.removeItem('loggedSharedCalendar')
+    setSharedCalendar(null)
+  }
 /**
  * Funktio hoitaa uuden kalenterin luonnin
  * salasana otetaan muuttujasta {creatingNewCalendarPassword}
@@ -101,10 +109,12 @@ const App = () => {
         handleCalendarLogin={handleCalendarLogin}
         setNewCalendarPassword={setNewCalendarPassword}
         createNewCalendarHandler={handleCreatingNewCalendar}
+        handleLogout={handleLogout}
+        sharedCalendar={sharedCalendar}
       ></Navbar>
       <div>
         <CalendarView 
-          sharedCalendar={sharedCalendar} 
+          sharedCalendar={sharedCalendar}
         />
       </div>
     </div>
