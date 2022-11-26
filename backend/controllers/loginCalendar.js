@@ -11,15 +11,13 @@ const jwt = require('jsonwebtoken')
 loginCalendarRouter.post('/', async (req, res) => {
     console.log("kirjaudutaan kalenteriin")
     const { sharedCalendarID, password } = req.body
-    console.log("kalenteri id: ", sharedCalendarID)
-    try {
-        const sharedCalendar = await SharedCalendar.findById(sharedCalendarID)
-    }
-    catch {
+    if (sharedCalendarID.length != 24){
         return res.status(401).json({
             error: 'invalid calendar id or password'
         })
     }
+    console.log("kalenteri id: ", sharedCalendarID)
+    const sharedCalendar = await SharedCalendar.findById(sharedCalendarID)
     console.log("täs vaihees")
     if (sharedCalendar === null) {
         return res.status(401).json({

@@ -2,6 +2,6 @@ POST http://localhost:3003/api/logincalendar
 Content-Type: application/json
 
 {
-    "sharedCalendarID": "637a05b10a7acf5816ed4c96",
+    "sharedCalendarID": "637a05b10a7acf5816ed4c95",
     "password": "verysecret"
 }
