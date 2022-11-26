@@ -2,9 +2,10 @@ import React from "react";
 import getCalendar from "./services/getCalendar";
 import { useState, useEffect } from "react";
 import Navbar from "./components/navbar";
-import calendarService from "./services/calendars";
 import calendarLoginService from "./services/calendarLogin";
 import Notification from "./components/Notification";
+import calendarService from "./services/calendars";
+import CalendarView from "./components/CalendarView";
 
 const App = () => {
   const [privateCalendars, setPrivateCalendars] = useState(null); //tänne tallennetaan käsiteltävä kalenteri tekstinä
@@ -106,6 +107,7 @@ const App = () => {
       ></Navbar>
       <div>
         <Notification message={errorMessage}></Notification>
+        <CalendarView sharedCalendar={sharedCalendar} />
       </div>
     </div>
   );
