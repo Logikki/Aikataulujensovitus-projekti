@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Popup from "./popup";
 
-function Navbar({setCalendarPassword, setCalendarID, handleCalendarLogin, setNewCalendarPassword }) {
+function Navbar({setCalendarPassword, setCalendarID, handleCalendarLogin, setNewCalendarPassword, createNewCalendarHandler }) {
   // window width/height on resize courtesy of Jake Trent
   // https://www.pluralsight.com/guides/re-render-react-component-on-window-resize
   const [dimensions, setDimensions] = React.useState({
@@ -111,7 +111,10 @@ function Navbar({setCalendarPassword, setCalendarID, handleCalendarLogin, setNew
                       float: "right",
                     }} // Kalenterin luonti nappi
                     type="button"
-                    onClick={togglePopup} // TODO: Lähetä Inputtien arvo parametrina backendiin
+                    onClick={ ()=> {
+                      togglePopup()
+                       }
+                    } // TODO: Lähetä Inputtien arvo parametrina backendiin
                   >
                     Luo Kalenteri
                   </button>

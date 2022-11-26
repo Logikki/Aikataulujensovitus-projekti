@@ -99,6 +99,7 @@ const App = () => {
         setCalendarID={setCalendarID}
         handleCalendarLogin={handleCalendarLogin}
         setNewCalendarPassword={setNewCalendarPassword}
+        createNewCalendarHandler={handleCreatingNewCalendar}
       ></Navbar>
       <div>
       </div>
