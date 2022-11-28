@@ -2,6 +2,7 @@ import React from "react";
 import getCalendar from "./services/getCalendar";
 import { useState, useEffect } from "react";
 import Navbar from "./components/navbar";
+import FetchCalendarForm from './components/FetchCalendarForm' 
 import calendarLoginService from "./services/calendarLogin";
 import Notification from "./components/Notification";
 import calendarService from "./services/calendars";
@@ -16,7 +17,6 @@ const App = () => {
   const [calendarPassword, setCalendarPassword] = useState("");
   const [creatingNewCalendarPassword, setNewCalendarPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
-  const [vapaatAjat, setVapaatAjat] = useState(null);
 
   /**
    * Tämä funktio suoritetaan aina uudelleenpäivityksessä
@@ -99,7 +99,9 @@ const App = () => {
       );
     }
   };
-  const handleDownload = (event) => {
+
+
+  const handleIcsDownload = (event) => {
     event.preventDefault();
     getCalendar.download(kalenteriUrl, setPrivateCalendars);
     console.log("kalenteri: " + privateCalendars);
@@ -121,6 +123,11 @@ const App = () => {
         <Notification message={errorMessage}></Notification>
         <CalendarView sharedCalendar={sharedCalendar} />
       </div>
+      <FetchCalendarForm 
+      kalenteriUrl={kalenteriUrl} 
+      handleKalenteriUrlChange={({ target }) => setUrl(target.value)} 
+      handleFetchCalendar={handleIcsDownload}
+      />
     </div>
   );
 };
