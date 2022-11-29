@@ -1,7 +1,19 @@
-var ical2json = require('ical2json');
+let ical2json = require('ical2json');
 
-// poista ylimääräiset systeemit
+// Hoitaa ICS tiedoston parseemisen
+// error handling pitäisi lisätä jos vain aikaa
 function parse(icsData) {
+    let parsedJson = [];
     let jsonData = ical2json.convert(icsData);
-    return jsonData;
+    let eventsData = jsonData.VCALENDAR[0].VEVENT;
+    for(const event of eventsData) {    
+        parsedJson.push({
+            start: event.DTSTART,
+            duration: event.DURATION,
+            timezone: event.TZID
+        });
+    }
+    return parsedJson;
 }
+
+export default { parse }

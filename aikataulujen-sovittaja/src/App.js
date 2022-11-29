@@ -1,5 +1,6 @@
 import React from "react";
 import getCalendar from "./services/getCalendar";
+import parseICS from "./services/parseICS";
 import { useState, useEffect } from "react";
 import Navbar from "./components/navbar";
 import FetchCalendarForm from './components/FetchCalendarForm' 
@@ -17,6 +18,9 @@ const App = () => {
   const [calendarPassword, setCalendarPassword] = useState("");
   const [creatingNewCalendarPassword, setNewCalendarPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
+
+  let privateCalendarJson = null;
+
 
   /**
    * Tämä funktio suoritetaan aina uudelleenpäivityksessä
@@ -104,7 +108,9 @@ const App = () => {
   const handleIcsDownload = (event) => {
     event.preventDefault();
     getCalendar.download(kalenteriUrl, setPrivateCalendars);
-    console.log("kalenteri: " + privateCalendars);
+    privateCalendarJson =  parseICS.parse(privateCalendars);
+    console.log(privateCalendarJson);
+    //console.log("kalenteri: " + privateCalendars);
   };
 
   //demon vuoksi laitetaan kasiteltavaKalenteri näkyviin sivulle
