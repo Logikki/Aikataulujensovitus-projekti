@@ -110,7 +110,6 @@ const App = () => {
     getCalendar.download(kalenteriUrl, setPrivateCalendars);
     privateCalendarJson =  parseICS.parse(privateCalendars);
     console.log(privateCalendarJson);
-    //console.log("kalenteri: " + privateCalendars);
   };
 
   //demon vuoksi laitetaan kasiteltavaKalenteri näkyviin sivulle

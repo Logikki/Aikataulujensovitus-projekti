@@ -20,13 +20,11 @@ function calculateEndTime(start, duration, timezone) {
 }
 
 // Funktio jolla muutetaan json data dayjs objekteiksi helppoa käsittelyä varten.
-// TÄHÄN TULEE VIELÄ MUUTOKSIA RIIPPUEN SIITÄ MINKÄLAISTA DATAA BACKENDIIN SYÖTETÄÄN
-// ALLA VAIN JOTAIN TESTIKOODIA
+// TODO
 function muutaJsonDayjs(data){
-    let dayjsdata = data.VCALENDAR[0].VEVENT;
     const today = dayjs(); 
     let dataa = [];
-    for(const event of dayjsdata) {    
+    for(const event of data) {    
       let dayjsutctesti = dayjs(event.DTSTART, "YYYYMMDD[T]HHmmss[Z]").utc('z').tz(event.TZID);
       let dayjslopetus = calculateEndTime(event.DTSTART, event.DURATION, event.TZID);
       if (dayjsutctesti.isAfter(today)) {
@@ -37,7 +35,6 @@ function muutaJsonDayjs(data){
 }
   
 // TESTI DATAA
-// EI TARVITSE VÄLITTÄÄ
 const data = {
     events: [
         {
@@ -79,9 +76,8 @@ const data = {
     ],
 };
 
-
-// Algortimi jolla lasketaan vapaat ajat annettuista tapahtumista.
-// VAATII TESTAAMISTA + OSA DATASTA MUUTTAMISTA OIKEAAN MUOTOON
+// TODO
+// https://runkit.com/embed/mpmqk4tnk79y
 function calculateAvailebleTimes(events) {
     let vapaat = [];
     let myohinaika = 0;

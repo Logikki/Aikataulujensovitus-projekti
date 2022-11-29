@@ -1,7 +1,7 @@
 let ical2json = require('ical2json');
 
-// Hoitaa ICS tiedoston parseemisen
-// error handling pitäisi lisätä jos vain aikaa
+// Hoitaa ICS tiedoston parseamisen
+// error handling pitäisi lisätä
 function parse(icsData) {
     let parsedJson = [];
     let jsonData = ical2json.convert(icsData);
