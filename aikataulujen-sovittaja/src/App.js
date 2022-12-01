@@ -18,9 +18,9 @@ const App = () => {
   const [calendarPassword, setCalendarPassword] = useState("");
   const [creatingNewCalendarPassword, setNewCalendarPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
+  const [name, setName] = useState("")
 
   let privateCalendarJson = null;
-
 
   /**
    * Tämä funktio suoritetaan aina uudelleenpäivityksessä
@@ -104,18 +104,23 @@ const App = () => {
     }
   };
 
+  const handlePostingPrivateCalendar = async (event) => {
+    event.preventDefault();
+    await getCalendar.download(kalenteriUrl, setPrivateCalendars);
+    privateCalendarJson = parseICS.parse(privateCalendars);
+    privateCalendarJson = {...privateCalendarJson, name : name}
+    console.log(privateCalendarJson)
+    await calendarService.createPrivateCalendar(privateCalendarJson, sharedCalendar.sharedCalendarID)
+  }
 
-  const handleIcsDownload = (event) => {
+// TESTAAMISTA VARTEN
+  const handleIcsDownload = async (event) => {
     event.preventDefault();
     getCalendar.download(kalenteriUrl, setPrivateCalendars);
-    privateCalendarJson =  parseICS.parse(privateCalendars);
+    privateCalendarJson = parseICS.parse(privateCalendars);
     console.log(privateCalendarJson);
   };
   
-  const handlePostingPrivateCalendar = () => {
-    
-  }
-
   //demon vuoksi laitetaan kasiteltavaKalenteri näkyviin sivulle
   return (
     <div>
@@ -131,9 +136,16 @@ const App = () => {
       ></Navbar>
       <div>
         <Notification message={errorMessage}></Notification>
-        <CalendarView sharedCalendar={sharedCalendar} />
+        <CalendarView 
+        sharedCalendar={sharedCalendar} 
+        kalenteriUrl={kalenteriUrl}
+        setUrl={setUrl}
+        handleDownload={handlePostingPrivateCalendar}
+        name={name}
+        setName={setName}
+        />
       </div>
-      <FetchCalendarForm 
+      <FetchCalendarForm //TESTAAMISTA VARTEN
       kalenteriUrl={kalenteriUrl} 
       handleKalenteriUrlChange={({ target }) => setUrl(target.value)} 
       handleFetchCalendar={handleIcsDownload}

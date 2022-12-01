@@ -23,10 +23,10 @@ const createSharedCalendar = async (password) => {
 /**
  * @param newObject on privateCalendar, joka halutaan lisätä
  */
-const createPrivateCalendar = async (newObject) => {
+const createPrivateCalendar = async (newObject, sharedCalendarID) => {
     //lisätään objektiin tieto jaetun kalenterin id:stä. Tämä parsetaan sitten backendissä takaisin.
    const requestObj = {
-    //sharedCalendarID: sharedCalendarID,
+    sharedCalendarID: sharedCalendarID,
     ...newObject
    }
    const config = {

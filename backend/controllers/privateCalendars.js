@@ -16,6 +16,7 @@ privateCalendarRouter.post('/', async (req, res) => {
     const decodedToken = jwt.verify(req.token, process.env.SECRET)
     const sharedCalendar = await SharedCalendar.findById(decodedToken.sharedCalendarID)
     const calendar = new PrivateCalendar({
+        name : body.name,
         freeTimes : body.freeTimes
     })
     const savedCalendar = await calendar.save()
