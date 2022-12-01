@@ -31,7 +31,7 @@ const createPrivateCalendar = async (newObject) => {
    }
    const config = {
     headers: { Authorization: token }
-}
+    }
     const response = await axios.post(baseUrl, requestObj, config)
     console.log(response)
     return response.data
