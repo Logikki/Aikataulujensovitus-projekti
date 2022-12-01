@@ -7,7 +7,7 @@ const CalendarView = (sharedCalendar) => {
     return (
       <div>
         calendarView
-        <DayPilotCalendar viewType="Week" />
+        <DayPilotCalendar viewType="Week" locale="fi-fi" />
       </div>
     );
   }
