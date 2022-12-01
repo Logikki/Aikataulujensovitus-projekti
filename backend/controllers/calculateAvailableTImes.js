@@ -19,19 +19,30 @@ function calculateEndTime(start, duration, timezone) {
     return endTime;
 }
 
+// sort dayjs objekteille
+function sortDayjs(a, b) {
+    if(a[0].isAfter(b[0])) {
+        return -1;
+    }
+    if(b[0].isAfter(a[0])){
+        return 1;
+    }
+    return 0;
+}
+
 // Funktio jolla muutetaan json data dayjs objekteiksi helppoa käsittelyä varten.
 // TODO
-function muutaJsonDayjs(data){
+function convertJsonToDayjs(data){
     const today = dayjs(); 
-    let dataa = [];
+    let result = [];
     for(const event of data) {    
-      let dayjsutctesti = dayjs(event.DTSTART, "YYYYMMDD[T]HHmmss[Z]").utc('z').tz(event.TZID);
-      let dayjslopetus = calculateEndTime(event.DTSTART, event.DURATION, event.TZID);
-      if (dayjsutctesti.isAfter(today)) {
-        dataa.push([dayjsutctesti,dayjslopetus]);
+      let dayjsStartime = dayjs(event.DTSTART, "YYYYMMDD[T]HHmmss[Z]").utc('z').tz(event.TZID);
+      let dayjsEndtime = calculateEndTime(event.DTSTART, event.DURATION, event.TZID);
+      if (dayjsStartime.isAfter(today)) {
+        result.push([dayjsStartime,dayjsEndtime]);
       }
     }
-    return dataa;
+    return result;
 }
   
 // TESTI DATAA
