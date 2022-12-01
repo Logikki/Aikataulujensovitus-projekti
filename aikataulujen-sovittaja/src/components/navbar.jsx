@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Popup from "./popup";
 
 function Navbar({
+  calendarIDValue,
   setCalendarPassword, 
   setCalendarID, 
   handleCalendarLogin, 
@@ -52,6 +53,7 @@ function Navbar({
         </button>
       <input // Hae kalenteria input kenttä
         type="text"
+        value={calendarIDValue}
         placeholder="Kalenterin ID"
         style={{ textAlign: "center",  }}
         onInput={(e) => setCalendarID(e.target.value)}

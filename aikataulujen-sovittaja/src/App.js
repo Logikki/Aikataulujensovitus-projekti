@@ -116,6 +116,7 @@ const App = () => {
         createNewCalendarHandler={handleCreatingNewCalendar}
         handleLogout={handleLogout}
         sharedCalendar={sharedCalendar}
+        calendarIDValue={calendarID}
       ></Navbar>
       <div>
         <Notification message={errorMessage}></Notification>
