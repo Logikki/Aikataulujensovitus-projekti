@@ -104,6 +104,10 @@ const App = () => {
     getCalendar.download(kalenteriUrl, setPrivateCalendars);
     console.log("kalenteri: " + privateCalendars);
   };
+  
+  const handlePostingPrivateCalendar = () => {
+    
+  }
 
   //demon vuoksi laitetaan kasiteltavaKalenteri näkyviin sivulle
   return (
