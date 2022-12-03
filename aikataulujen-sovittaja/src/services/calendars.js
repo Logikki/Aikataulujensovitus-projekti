@@ -32,6 +32,7 @@ const createPrivateCalendar = async (newObject, sharedCalendarID) => {
    const config = {
     headers: { Authorization: token }
     }
+    console.log(requestObj)
     const response = await axios.post(baseUrl, requestObj, config)
     console.log(response)
     return response.data

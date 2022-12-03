@@ -103,14 +103,23 @@ const App = () => {
       );
     }
   };
-
+/**
+ * Funktio hoitaa henkilön privaatin kalenterin lisäämisen tietokantaan
+ * Lisätään olioon nimi, myöhemmässä vaiheessa myös jaetun kalenterin id
+ */
   const handlePostingPrivateCalendar = async (event) => {
     event.preventDefault();
-    await getCalendar.download(kalenteriUrl, setPrivateCalendars);
-    privateCalendarJson = parseICS.parse(privateCalendars);
-    privateCalendarJson = {...privateCalendarJson, name : name}
-    console.log(privateCalendarJson)
-    await calendarService.createPrivateCalendar(privateCalendarJson, sharedCalendar.sharedCalendarID)
+    try {
+      await getCalendar.download(kalenteriUrl, setPrivateCalendars);
+      privateCalendarJson = parseICS.parse(privateCalendars);
+      privateCalendarJson = {events: privateCalendarJson, name : name}
+      console.log(privateCalendarJson)
+      await calendarService.createPrivateCalendar(privateCalendarJson, sharedCalendar.sharedCalendarID)
+      setName("")
+      setUrl("")
+    }  catch {
+      setErrorMessage("Jokin meni pieleen")
+    }
   }
 
 // TESTAAMISTA VARTEN

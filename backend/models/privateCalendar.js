@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const privateCalendarSchema = mongoose.Schema({
   // tämä muuttuu viä paaljoon
   name: String,
-    event: [
+    events: [
         { 
             start: String,
             duration: String,
