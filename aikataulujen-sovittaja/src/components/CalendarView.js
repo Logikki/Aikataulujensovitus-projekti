@@ -17,7 +17,6 @@ const CalendarView = ({
   } else {
     return (
       <div>
-        <DayPilotCalendar viewType="Week" />
         <div className="addPrivateCalendar">
         <AddPrivateCalandar //TESTAAMISTA VARTEN
           handleLogout={handleLogout}

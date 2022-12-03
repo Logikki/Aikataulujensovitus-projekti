@@ -167,16 +167,10 @@ const App = () => {
         handleFetchCalendar={handlePostingPrivateCalendar}
         name={name}
         kalenteriUrl={kalenteriUrl}
-        <div>{errorVisible && <Notification message={errorMessage}></Notification>}</div>
-        <CalendarView
-          sharedCalendar={sharedCalendar}
-          kalenteriUrl={kalenteriUrl}
-          setUrl={setUrl}
-          handleDownload={handlePostingPrivateCalendar}
-          name={name}
-          setName={setName}
-          //privates={privateCalendars}
-        />
+        /> 
+        <div>
+          {errorVisible && <Notification message={errorMessage}></Notification>}
+        </div>
       </div>
     </div>
   );
