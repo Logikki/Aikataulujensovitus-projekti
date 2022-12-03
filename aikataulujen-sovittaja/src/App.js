@@ -3,7 +3,7 @@ import getCalendar from "./services/getCalendar";
 import parseICS from "./services/parseICS";
 import { useState, useEffect } from "react";
 import Navbar from "./components/navbar";
-import FetchCalendarForm from './components/FetchCalendarForm' 
+import FetchCalendarForm from "./components/FetchCalendarForm";
 import calendarLoginService from "./services/calendarLogin";
 import Notification from "./components/Notification";
 import calendarService from "./services/calendars";
@@ -18,9 +18,10 @@ const App = () => {
   const [calendarPassword, setCalendarPassword] = useState("");
   const [creatingNewCalendarPassword, setNewCalendarPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
+  // Näytetään virheilmoitus
+  const [errorVisible, setErrorVisible] = useState(false);
 
   let privateCalendarJson = null;
-
 
   /**
    * Tämä funktio suoritetaan aina uudelleenpäivityksessä
@@ -96,19 +97,21 @@ const App = () => {
       );
       console.log("privaatit: ", sharedCal.privateCalendars);
       setPrivateCalendars(sharedCal.privateCalendars);
+      // Virheilmoitus pois?
+      setErrorVisible(false);
     } catch {
       //tähän voitaisiin laittaa error message
+      setErrorVisible(true);
       setErrorMessage(
         "Virhe kirjautumisessa. Salasana on väärin tai kalenteria ei löydy."
       );
     }
   };
 
-
   const handleIcsDownload = (event) => {
     event.preventDefault();
     getCalendar.download(kalenteriUrl, setPrivateCalendars);
-    privateCalendarJson =  parseICS.parse(privateCalendars);
+    privateCalendarJson = parseICS.parse(privateCalendars);
     console.log(privateCalendarJson);
   };
 
@@ -125,13 +128,13 @@ const App = () => {
         sharedCalendar={sharedCalendar}
       ></Navbar>
       <div>
-        <Notification message={errorMessage}></Notification>
+        <div>{errorVisible && <Notification message={errorMessage}></Notification>}</div>
         <CalendarView sharedCalendar={sharedCalendar} />
       </div>
-      <FetchCalendarForm 
-      kalenteriUrl={kalenteriUrl} 
-      handleKalenteriUrlChange={({ target }) => setUrl(target.value)} 
-      handleFetchCalendar={handleIcsDownload}
+      <FetchCalendarForm
+        kalenteriUrl={kalenteriUrl}
+        handleKalenteriUrlChange={({ target }) => setUrl(target.value)}
+        handleFetchCalendar={handleIcsDownload}
       />
     </div>
   );
