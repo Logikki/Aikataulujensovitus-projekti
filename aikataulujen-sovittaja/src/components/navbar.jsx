@@ -8,7 +8,6 @@ function Navbar({
   handleCalendarLogin, 
   setNewCalendarPassword, 
   createNewCalendarHandler,
-  handleLogout,
   sharedCalendar}) {
     
   // window width/height on resize courtesy of Jake Trent
@@ -45,17 +44,11 @@ function Navbar({
   return (
     //HAE KALENTERIA
     <div className="input-group p-3 mb-2 bg-dark text-black">
-      <button //Kirjaudu ulos nappi
-          className={nappiStyles}
-          type="button"
-          onClick={handleLogout}
-        >Poistu kalenterista 
-        </button>
       <input // Hae kalenteria input kenttä
         type="text"
         value={calendarIDValue}
         placeholder="Kalenterin ID"
-        style={{ textAlign: "center",  }}
+        style={{ textAlign: "center"}}
         onInput={(e) => setCalendarID(e.target.value)}
       ></input>
        <input // Hae kalenteria input kenttä
@@ -76,12 +69,15 @@ function Navbar({
       </div>
       <span
         style={{
-          marginLeft: dimensions.width - 150,
+          marginLeft: dimensions.width - 170,
           position: "absolute",
         }}
       >
         <button // Uusi kalenteri nappi
           className={nappiStyles}
+          style={{
+            width: "130px"
+          }}
           type="button"
           onClick={togglePopup} // TODO: Avaa pupup ikkuna
         >
@@ -130,7 +126,7 @@ function Navbar({
                     onClick={ ()=> {
                       togglePopup()
                       createNewCalendarHandler()
-                       }
+                      }
                     } // TODO: Lähetä Inputtien arvo parametrina backendiin
                   >
                     Luo Kalenteri

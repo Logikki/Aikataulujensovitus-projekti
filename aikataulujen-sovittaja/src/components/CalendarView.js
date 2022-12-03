@@ -1,3 +1,4 @@
+import React from "react";
 import { DayPilot, DayPilotCalendar } from "@daypilot/daypilot-lite-react";
 import AddPrivateCalandar from "./AddPrivateCalandar";
 
@@ -6,8 +7,9 @@ const CalendarView = ({
   sharedCalendar,
   kalenteriUrl,
   setUrl,
-  handleDownload,
   name,
+  handleFetchCalendar,
+  handleLogout,
   setName
   }) => {
   if (sharedCalendar == null) {
@@ -15,17 +17,17 @@ const CalendarView = ({
   } else {
     return (
       <div>
-
+        <DayPilotCalendar viewType="Week" />
         <div className="addPrivateCalendar">
         <AddPrivateCalandar //TESTAAMISTA VARTEN
           kalenteriUrl={kalenteriUrl} 
+          handleLogout={handleLogout}
           handleKalenteriUrlChange={({ target }) => setUrl(target.value)} 
-          handleFetchCalendar={handleDownload}
+          handleFetchCalendar={handleFetchCalendar}
           name={name}
           setName={({ target }) => setName(target.value)}
         />
         </div>
-        <DayPilotCalendar viewType="Week" />
       </div>
     );
   }

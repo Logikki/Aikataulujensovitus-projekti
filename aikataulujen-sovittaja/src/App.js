@@ -54,6 +54,9 @@ const App = () => {
    */
   const handleLogout = (event) => {
     event.preventDefault();
+    setErrorMessage(
+      null
+    );
     window.localStorage.removeItem("loggedSharedCalendar");
     setSharedCalendar(null);
   };
@@ -78,6 +81,9 @@ const App = () => {
    */
   const handleCalendarLogin = async (event) => {
     event.preventDefault();
+    setErrorMessage(
+      null
+    );
     //jos ei olla vielä kirjauduttu sisään
     if (sharedCalendar) console.log("haetaan kalenteria");
     console.log(calendarID, calendarPassword);
@@ -139,7 +145,6 @@ const App = () => {
         handleCalendarLogin={handleCalendarLogin}
         setNewCalendarPassword={setNewCalendarPassword}
         createNewCalendarHandler={handleCreatingNewCalendar}
-        handleLogout={handleLogout}
         sharedCalendar={sharedCalendar}
         calendarIDValue={calendarID}
       ></Navbar>
@@ -147,18 +152,15 @@ const App = () => {
         <Notification message={errorMessage}></Notification>
         <CalendarView 
         sharedCalendar={sharedCalendar} 
+        handleLogout={handleLogout}
         kalenteriUrl={kalenteriUrl}
         setUrl={setUrl}
         handleDownload={handlePostingPrivateCalendar}
         name={name}
         setName={setName}
+        handleFetchCalendar={handleIcsDownload}
         />
       </div>
-      <FetchCalendarForm //TESTAAMISTA VARTEN
-      kalenteriUrl={kalenteriUrl} 
-      handleKalenteriUrlChange={({ target }) => setUrl(target.value)} 
-      handleFetchCalendar={handleIcsDownload}
-      />
     </div>
   );
 };
