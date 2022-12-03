@@ -3,7 +3,7 @@ import getCalendar from "./services/getCalendar";
 import parseICS from "./services/parseICS";
 import { useState, useEffect } from "react";
 import Navbar from "./components/navbar";
-import FetchCalendarForm from './components/FetchCalendarForm' 
+import FetchCalendarForm from "./components/FetchCalendarForm";
 import calendarLoginService from "./services/calendarLogin";
 import Notification from "./components/Notification";
 import calendarService from "./services/calendars";
@@ -12,7 +12,7 @@ import CalendarView from "./components/CalendarView";
 const App = () => {
   //tänne tallennetaan privaatit kalenterit, jotka liittyvät jaettuun kalenteriin
   //muodossa [{id, name}]
-  const [pcNameAndID, setPcNID] = useState([])
+  const [pcNameAndID, setPcNID] = useState([]);
   const [privateCalendars, setPrivateCalendars] = useState(null);
 
   const [kalenteriUrl, setUrl] = useState(""); //url laatikkoa varten
@@ -22,8 +22,10 @@ const App = () => {
   const [calendarPassword, setCalendarPassword] = useState("");
   const [creatingNewCalendarPassword, setNewCalendarPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
-  const [name, setName] = useState("")
-  
+  const [name, setName] = useState("");
+  // Näytetään virheilmoitus
+  const [errorVisible, setErrorVisible] = useState(false);
+
   let privateCalendarJson = null;
 
   /**
@@ -44,13 +46,13 @@ const App = () => {
         const sharedCal = await calendarService.getSharedCalendar(
           calendar.sharedCalendarID
         );
-        let privates = []
-        sharedCal.privateCalendars.map(pc => 
-          privates = privates.concat({id : pc.id, name : pc.name})
-        )
-        setPcNID(privates)
+        let privates = [];
+        sharedCal.privateCalendars.map(
+          (pc) => (privates = privates.concat({ id: pc.id, name: pc.name }))
+        );
+        setPcNID(privates);
+      }
     };
-  }
     doThings();
   }, []);
 
@@ -99,32 +101,38 @@ const App = () => {
       const sharedCal = await calendarService.getSharedCalendar(
         sharedCalendar.sharedCalendarID
       );
-      
+
+      // Virheilmoitus pois?
+      setErrorVisible(false);
     } catch {
       //tähän voitaisiin laittaa error message
+      setErrorVisible(true);
       setErrorMessage(
         "Virhe kirjautumisessa. Salasana on väärin tai kalenteria ei löydy."
       );
     }
   };
-/**
- * Funktio hoitaa henkilön privaatin kalenterin lisäämisen tietokantaan
- * Lisätään olioon nimi, myöhemmässä vaiheessa myös jaetun kalenterin id
- */
+  /**
+   * Funktio hoitaa henkilön privaatin kalenterin lisäämisen tietokantaan
+   * Lisätään olioon nimi, myöhemmässä vaiheessa myös jaetun kalenterin id
+   */
   const handlePostingPrivateCalendar = async (event) => {
     event.preventDefault();
     try {
       await getCalendar.download(kalenteriUrl, setPrivateCalendars);
       privateCalendarJson = parseICS.parse(privateCalendars);
-      privateCalendarJson = {events: privateCalendarJson, name : name}
-      console.log(privateCalendarJson)
-      await calendarService.createPrivateCalendar(privateCalendarJson, sharedCalendar.sharedCalendarID)
-      setName("")
-      setUrl("")
-    }  catch {
-      setErrorMessage("Wrong credentials")
+      privateCalendarJson = { events: privateCalendarJson, name: name };
+      console.log(privateCalendarJson);
+      await calendarService.createPrivateCalendar(
+        privateCalendarJson,
+        sharedCalendar.sharedCalendarID
+      );
+      setName("");
+      setUrl("");
+    } catch {
+      setErrorMessage("Wrong credentials");
     }
-  }
+  };
 
   const handleDeletingPrivateCalendar = async (id) => {
     try {
@@ -147,15 +155,15 @@ const App = () => {
         calendarIDValue={calendarID}
       ></Navbar>
       <div>
-        <Notification message={errorMessage}></Notification>
-        <CalendarView 
-        sharedCalendar={sharedCalendar} 
-        kalenteriUrl={kalenteriUrl}
-        setUrl={setUrl}
-        handleDownload={handlePostingPrivateCalendar}
-        name={name}
-        setName={setName}
-        //privates={privateCalendars}
+        <div>{errorVisible && <Notification message={errorMessage}></Notification>}</div>
+        <CalendarView
+          sharedCalendar={sharedCalendar}
+          kalenteriUrl={kalenteriUrl}
+          setUrl={setUrl}
+          handleDownload={handlePostingPrivateCalendar}
+          name={name}
+          setName={setName}
+          //privates={privateCalendars}
         />
       </div>
     </div>
