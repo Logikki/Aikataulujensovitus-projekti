@@ -62,6 +62,9 @@ const App = () => {
    */
   const handleLogout = (event) => {
     event.preventDefault();
+    setErrorMessage(
+      null
+    );
     window.localStorage.removeItem("loggedSharedCalendar");
     setSharedCalendar(null);
   };
@@ -85,6 +88,9 @@ const App = () => {
    */
   const handleCalendarLogin = async (event) => {
     event.preventDefault();
+    setErrorMessage(
+      null
+    );
     //jos ei olla vielä kirjauduttu sisään
     if (sharedCalendar) console.log("haetaan kalenteria");
     console.log(calendarID, calendarPassword);
@@ -119,6 +125,8 @@ const App = () => {
   const handlePostingPrivateCalendar = async (event) => {
     event.preventDefault();
     try {
+      console.log(kalenteriUrl);
+      console.log(name);
       await getCalendar.download(kalenteriUrl, setPrivateCalendars);
       privateCalendarJson = parseICS.parse(privateCalendars);
       privateCalendarJson = { events: privateCalendarJson, name: name };
@@ -150,21 +158,23 @@ const App = () => {
         handleCalendarLogin={handleCalendarLogin}
         setNewCalendarPassword={setNewCalendarPassword}
         createNewCalendarHandler={handleCreatingNewCalendar}
-        handleLogout={handleLogout}
         sharedCalendar={sharedCalendar}
         calendarIDValue={calendarID}
       ></Navbar>
       <div>
-        <div>{errorVisible && <Notification message={errorMessage}></Notification>}</div>
-        <CalendarView
-          sharedCalendar={sharedCalendar}
-          kalenteriUrl={kalenteriUrl}
-          setUrl={setUrl}
-          handleDownload={handlePostingPrivateCalendar}
-          name={name}
-          setName={setName}
-          //privates={privateCalendars}
-        />
+        <Notification message={errorMessage}></Notification>
+        <CalendarView 
+        sharedCalendar={sharedCalendar} 
+        handleLogout={handleLogout}
+        setName={({ target }) => setName(target.value)}
+        handleKalenteriUrlChange={({ target }) => setUrl(target.value)} 
+        handleFetchCalendar={handlePostingPrivateCalendar}
+        name={name}
+        kalenteriUrl={kalenteriUrl}
+        /> 
+        <div>
+          {errorVisible && <Notification message={errorMessage}></Notification>}
+        </div>
       </div>
     </div>
   );
