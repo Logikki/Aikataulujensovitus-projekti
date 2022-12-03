@@ -124,7 +124,7 @@ function Navbar({
                     }} // Kalenterin luonti nappi
                     type="button"
                     onClick={ ()=> {
-                      togglePopup()
+                      togglePopup() 
                       createNewCalendarHandler()
                       }
                     } // TODO: Lähetä Inputtien arvo parametrina backendiin

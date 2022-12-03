@@ -28,9 +28,11 @@ const CalendarView = ({
           kalenteriUrl={kalenteriUrl}
         />
         </div>
+        calendarView
+        <DayPilotCalendar viewType="Week" locale="fi-fi" />
       </div>
     );
   }
 };
-
+//{privates.map(pc => <div>{pc.name}</div>)}
 export default CalendarView;

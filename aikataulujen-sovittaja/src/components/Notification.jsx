@@ -1,13 +1,15 @@
-import React from "react";
+import Alert from "react-bootstrap/Alert";
 
-const Notification = ({message}) => {
+const Notification = ({ message }) => {
     if (message === null) {
         return null;
     }
     return (
-        <div className="error">
-            {message}
-        </div>
+        <Alert key={"danger"} variant={"danger"}>
+            <p>
+                {message}
+            </p>
+        </Alert>
     );
 };
 

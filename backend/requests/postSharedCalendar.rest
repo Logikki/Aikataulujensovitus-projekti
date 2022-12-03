@@ -2,5 +2,5 @@ POST http://localhost:3003/api/sharedcalendar
 Content-Type: application/json
 
 {
-    "password": "verysecret"
+    "password": "secret"
 }

@@ -27,6 +27,7 @@ sharedCalendarRouter.post('/', async (req, res) => {
         sharedCalendars: []
     })
     const newsharedCalendar = await sharedCalendar.save()
+    console.log("tehdään uus jattu kalenteri")
     res.status(201).json(newsharedCalendar.id)
 })
 

@@ -3,14 +3,18 @@ import getCalendar from "./services/getCalendar";
 import parseICS from "./services/parseICS";
 import { useState, useEffect } from "react";
 import Navbar from "./components/navbar";
-import FetchCalendarForm from './components/FetchCalendarForm' 
+import FetchCalendarForm from "./components/FetchCalendarForm";
 import calendarLoginService from "./services/calendarLogin";
 import Notification from "./components/Notification";
 import calendarService from "./services/calendars";
 import CalendarView from "./components/CalendarView";
 
 const App = () => {
-  const [privateCalendars, setPrivateCalendars] = useState(null); //tänne tallennetaan käsiteltävä kalenteri tekstinä
+  //tänne tallennetaan privaatit kalenterit, jotka liittyvät jaettuun kalenteriin
+  //muodossa [{id, name}]
+  const [pcNameAndID, setPcNID] = useState([]);
+  const [privateCalendars, setPrivateCalendars] = useState(null);
+
   const [kalenteriUrl, setUrl] = useState(""); //url laatikkoa varten
   const [sharedCalendar, setSharedCalendar] = useState(null); //{sharedCalendar.sharedCalendarID, sharedCalendar.token}
   //näitä käytetään kirjautumisruudussa
@@ -18,7 +22,9 @@ const App = () => {
   const [calendarPassword, setCalendarPassword] = useState("");
   const [creatingNewCalendarPassword, setNewCalendarPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
-  const [name, setName] = useState("")
+  const [name, setName] = useState("");
+  // Näytetään virheilmoitus
+  const [errorVisible, setErrorVisible] = useState(false);
 
   let privateCalendarJson = null;
 
@@ -40,12 +46,14 @@ const App = () => {
         const sharedCal = await calendarService.getSharedCalendar(
           calendar.sharedCalendarID
         );
-        console.log("privaatit: ", sharedCal.privateCalendars);
-        setPrivateCalendars(sharedCal.privateCalendars);
+        let privates = [];
+        sharedCal.privateCalendars.map(
+          (pc) => (privates = privates.concat({ id: pc.id, name: pc.name }))
+        );
+        setPcNID(privates);
       }
     };
     doThings();
-    console.log(sharedCalendar);
   }, []);
 
   /**
@@ -66,8 +74,7 @@ const App = () => {
    * salasana otetaan muuttujasta {creatingNewCalendarPassword}
    *
    */
-  const handleCreatingNewCalendar = async (e) => {
-    e.preventDefault();
+  const handleCreatingNewCalendar = async () => {
     const newCalendarID = await calendarService.createSharedCalendar(
       creatingNewCalendarPassword
     );
@@ -100,19 +107,21 @@ const App = () => {
       const sharedCal = await calendarService.getSharedCalendar(
         sharedCalendar.sharedCalendarID
       );
-      console.log("privaatit: ", sharedCal.privateCalendars);
-      setPrivateCalendars(sharedCal.privateCalendars);
+
+      // Virheilmoitus pois?
+      setErrorVisible(false);
     } catch {
       //tähän voitaisiin laittaa error message
+      setErrorVisible(true);
       setErrorMessage(
         "Virhe kirjautumisessa. Salasana on väärin tai kalenteria ei löydy."
       );
     }
   };
-/**
- * Funktio hoitaa henkilön privaatin kalenterin lisäämisen tietokantaan
- * Lisätään olioon nimi, myöhemmässä vaiheessa myös jaetun kalenterin id
- */
+  /**
+   * Funktio hoitaa henkilön privaatin kalenterin lisäämisen tietokantaan
+   * Lisätään olioon nimi, myöhemmässä vaiheessa myös jaetun kalenterin id
+   */
   const handlePostingPrivateCalendar = async (event) => {
     event.preventDefault();
     try {
@@ -120,26 +129,23 @@ const App = () => {
       console.log(name);
       await getCalendar.download(kalenteriUrl, setPrivateCalendars);
       privateCalendarJson = parseICS.parse(privateCalendars);
-      privateCalendarJson = {events: privateCalendarJson, name : name}
-      console.log(privateCalendarJson)
-      await calendarService.createPrivateCalendar(privateCalendarJson, sharedCalendar.sharedCalendarID)
-      setName("")
-      setUrl("")
-    }  catch {
-      setErrorMessage("Jokin meni pieleen")
+      privateCalendarJson = { events: privateCalendarJson, name: name };
+      console.log(privateCalendarJson);
+      await calendarService.createPrivateCalendar(
+        privateCalendarJson,
+        sharedCalendar.sharedCalendarID
+      );
+      setName("");
+      setUrl("");
+    } catch {
+      setErrorMessage("Wrong credentials");
     }
-  }
-
-// TESTAAMISTA VARTEN
-  const handleIcsDownload = async (event) => {
-    console.log(kalenteriUrl);
-    event.preventDefault();
-    getCalendar.download(kalenteriUrl, setPrivateCalendars);
-    privateCalendarJson = parseICS.parse(privateCalendars);
-    console.log(privateCalendarJson);
   };
-  
-  //demon vuoksi laitetaan kasiteltavaKalenteri näkyviin sivulle
+
+  const handleDeletingPrivateCalendar = async () => {
+    //todo
+  };
+
   return (
     <div>
       <Navbar
@@ -161,12 +167,16 @@ const App = () => {
         handleFetchCalendar={handlePostingPrivateCalendar}
         name={name}
         kalenteriUrl={kalenteriUrl}
+        <div>{errorVisible && <Notification message={errorMessage}></Notification>}</div>
+        <CalendarView
+          sharedCalendar={sharedCalendar}
+          kalenteriUrl={kalenteriUrl}
+          setUrl={setUrl}
+          handleDownload={handlePostingPrivateCalendar}
+          name={name}
+          setName={setName}
+          //privates={privateCalendars}
         />
-            <FetchCalendarForm //TESTAAMISTA VARTEN
-      kalenteriUrl={kalenteriUrl} 
-      handleKalenteriUrlChange={({ target }) => setUrl(target.value)} 
-      handleFetchCalendar={handleIcsDownload}
-      />
       </div>
     </div>
   );
