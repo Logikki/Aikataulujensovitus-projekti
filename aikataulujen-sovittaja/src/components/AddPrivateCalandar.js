@@ -2,19 +2,36 @@ import React, { useState } from "react";
 import Popup from "./popup";
 
 const AddPrivateCalendar = ({
-    kalenteriUrl, 
+    handleLogout,
+    setName,
     handleKalenteriUrlChange, 
     handleFetchCalendar,
     name,
-    handleLogout,
-    setName
+    kalenteriUrl
 }) => {
     const nappiStyles = "btn btn-secondary";
     const inputStyles = { width: "100%", textAlign: "center" };
+    const errorStyles = { color: "red", marginTop: "5px", textAlign: "center", fontSize: "10px", height: "12px"};
     const [popup, setPopup] = useState(false);
+    const [urlErr, setUrlErr] = useState(false);
+    const [nameErr, setNameErr] = useState(false);
 
     const togglePopup = () => {
     setPopup(!popup);
+    };
+
+    const handleSubmit = () => {
+        console.log(name)
+        console.log(kalenteriUrl)
+        kalenteriUrl != '' ? setUrlErr(false) : setUrlErr(true);
+        name != '' ? setNameErr(false) : setNameErr(true);
+        console.log(urlErr);
+        console.log(nameErr);
+        if(!urlErr && !nameErr){
+            togglePopup();
+            //handleFetchCalendar();
+        }
+        // TODO: Viimeistele toiminnallisuus! joku await tai joku timeout.
     };
 
     return (
@@ -36,7 +53,6 @@ const AddPrivateCalendar = ({
                 onClick={handleLogout}
                 >Poistu kalenterista 
             </button>
-            <form onSubmit={handleFetchCalendar}>
                 {popup && (
                     <Popup
                     content={
@@ -51,35 +67,37 @@ const AddPrivateCalendar = ({
                             <input // Salasanan input kenttä
                             className="form-control"
                             type="text"
-                            value={kalenteriUrl}
-                            name="KalenteriUrl"
                             onChange={handleKalenteriUrlChange}
                             style={inputStyles}
                             ></input>
+                            
+                            {urlErr && (
+                            <p style={errorStyles}>Aseta URL</p>)}
+
                             <div style={{ marginTop: "5px", textAlign: "center" }}>
                             Nimi
                             </div>
                             <input // Salasanan input kenttä
                             className="form-control"
                             type="text"
-                            value={name}
-                            name="Name"
                             onChange={setName}
                             style={inputStyles}
                             ></input>
+                            
+                            {nameErr && (
+                            <p style={errorStyles}>Aseta Nimi</p>)}
 
-                            <div style={{ paddingTop: "170px" }}>
+
+                            <div style={{ paddingTop: "100px" }}>
                             <button
                                 className={nappiStyles}
                                 style={{
                                 width: "150px",
                                 float: "right",
                                 }} // Kalenterin luonti nappi
-                                type="submit"
-                                onClick={ ()=> {
-                                togglePopup()
-                                }
-                                } // TODO: Lähetä Inputtien arvo parametrina backendiin
+                                type="button"
+                                onClick={handleSubmit}
+                                 // TODO: Lähetä Inputtien arvo parametrina backendiin
                             >
                                 Lisää Kalenteri
                             </button>
@@ -90,7 +108,6 @@ const AddPrivateCalendar = ({
                     handleClose={togglePopup}
                     />
                 )}
-            </form>
         </div>
     )
 }

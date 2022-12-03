@@ -116,6 +116,8 @@ const App = () => {
   const handlePostingPrivateCalendar = async (event) => {
     event.preventDefault();
     try {
+      console.log(kalenteriUrl);
+      console.log(name);
       await getCalendar.download(kalenteriUrl, setPrivateCalendars);
       privateCalendarJson = parseICS.parse(privateCalendars);
       privateCalendarJson = {events: privateCalendarJson, name : name}
@@ -130,6 +132,7 @@ const App = () => {
 
 // TESTAAMISTA VARTEN
   const handleIcsDownload = async (event) => {
+    console.log(kalenteriUrl);
     event.preventDefault();
     getCalendar.download(kalenteriUrl, setPrivateCalendars);
     privateCalendarJson = parseICS.parse(privateCalendars);
@@ -153,13 +156,17 @@ const App = () => {
         <CalendarView 
         sharedCalendar={sharedCalendar} 
         handleLogout={handleLogout}
-        kalenteriUrl={kalenteriUrl}
-        setUrl={setUrl}
-        handleDownload={handlePostingPrivateCalendar}
+        setName={({ target }) => setName(target.value)}
+        handleKalenteriUrlChange={({ target }) => setUrl(target.value)} 
+        handleFetchCalendar={handlePostingPrivateCalendar}
         name={name}
-        setName={setName}
-        handleFetchCalendar={handleIcsDownload}
+        kalenteriUrl={kalenteriUrl}
         />
+            <FetchCalendarForm //TESTAAMISTA VARTEN
+      kalenteriUrl={kalenteriUrl} 
+      handleKalenteriUrlChange={({ target }) => setUrl(target.value)} 
+      handleFetchCalendar={handleIcsDownload}
+      />
       </div>
     </div>
   );

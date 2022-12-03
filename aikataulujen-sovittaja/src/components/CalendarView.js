@@ -5,12 +5,12 @@ import AddPrivateCalandar from "./AddPrivateCalandar";
 //Tänne tulee kaikki, mitä näytetään kun on kirjauduttu sisään kalenteriin
 const CalendarView = ({
   sharedCalendar,
-  kalenteriUrl,
-  setUrl,
-  name,
-  handleFetchCalendar,
   handleLogout,
-  setName
+  setName,
+  handleKalenteriUrlChange, 
+  handleFetchCalendar,
+  name,
+  kalenteriUrl
   }) => {
   if (sharedCalendar == null) {
     return;
@@ -20,12 +20,12 @@ const CalendarView = ({
         <DayPilotCalendar viewType="Week" />
         <div className="addPrivateCalendar">
         <AddPrivateCalandar //TESTAAMISTA VARTEN
-          kalenteriUrl={kalenteriUrl} 
           handleLogout={handleLogout}
-          handleKalenteriUrlChange={({ target }) => setUrl(target.value)} 
+          handleKalenteriUrlChange={handleKalenteriUrlChange} 
           handleFetchCalendar={handleFetchCalendar}
+          setName={setName}
           name={name}
-          setName={({ target }) => setName(target.value)}
+          kalenteriUrl={kalenteriUrl}
         />
         </div>
       </div>
