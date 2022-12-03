@@ -30,5 +30,5 @@ const CalendarView = ({
     );
   }
 };
-
+//{privates.map(pc => <div>{pc.name}</div>)}
 export default CalendarView;

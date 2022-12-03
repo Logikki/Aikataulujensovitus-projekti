@@ -1,9 +1,9 @@
 POST http://localhost:3003/api/privatecalendar
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaGFyZWRDYWxlbmRhcklEIjoiNjM3YTA1YjEwYTdhY2Y1ODE2ZWQ0Yzk2IiwiaWF0IjoxNjY4OTQxMjU4fQ.y7FdKkzvwHIjuJwrCRpo56NuL71tjVJIHHC5cupaJzs
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaGFyZWRDYWxlbmRhcklEIjoiNjM4YjIyZWQ2ZDU3OWZjN2U2MWY3YmY5IiwiaWF0IjoxNjcwMDYyODkxfQ.s5NDWc5FledMIrGPeztg2fGItAtxL8CKpZJjZstEKDM
 
 {
-    "sharedCalendarID": "636e3640b61822f643abdd8f",
+    "sharedCalendarID": "638b22ed6d579fc7e61f7bf9",
     "name": "thisiz testii",
     "events": [
         {
