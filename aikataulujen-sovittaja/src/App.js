@@ -126,8 +126,12 @@ const App = () => {
     }
   }
 
-  const handleDeletingPrivateCalendar = async () => {
-    //todo
+  const handleDeletingPrivateCalendar = async (id) => {
+    try {
+      const response = await calendarService.rem(id)
+    } catch {
+      setErrorMessage("Invalid id")
+    }
   }
 
   return (
