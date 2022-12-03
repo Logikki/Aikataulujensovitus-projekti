@@ -15,7 +15,7 @@ const CalendarView = ({
   } else {
     return (
       <div>
-
+        
         <div className="addPrivateCalendar">
         <AddPrivateCalandar //TESTAAMISTA VARTEN
           kalenteriUrl={kalenteriUrl} 
@@ -30,5 +30,5 @@ const CalendarView = ({
     );
   }
 };
-
+//{privates.map(pc => <div>{pc.name}</div>)} 
 export default CalendarView;

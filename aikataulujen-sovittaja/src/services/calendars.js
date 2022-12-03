@@ -34,7 +34,7 @@ const createPrivateCalendar = async (newObject, sharedCalendarID) => {
     }
     console.log(requestObj)
     const response = await axios.post(baseUrl, requestObj, config)
-    console.log(response)
+    console.log(response.data)
     return response.data
 }
 
