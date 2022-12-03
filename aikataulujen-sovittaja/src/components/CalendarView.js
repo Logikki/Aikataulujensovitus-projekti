@@ -8,24 +8,24 @@ const CalendarView = ({
   setUrl,
   handleDownload,
   name,
-  setName
-  }) => {
+  setName,
+}) => {
   if (sharedCalendar == null) {
     return;
   } else {
     return (
       <div>
-
         <div className="addPrivateCalendar">
-        <AddPrivateCalandar //TESTAAMISTA VARTEN
-          kalenteriUrl={kalenteriUrl} 
-          handleKalenteriUrlChange={({ target }) => setUrl(target.value)} 
-          handleFetchCalendar={handleDownload}
-          name={name}
-          setName={({ target }) => setName(target.value)}
-        />
+          <AddPrivateCalandar //TESTAAMISTA VARTEN
+            kalenteriUrl={kalenteriUrl}
+            handleKalenteriUrlChange={({ target }) => setUrl(target.value)}
+            handleFetchCalendar={handleDownload}
+            name={name}
+            setName={({ target }) => setName(target.value)}
+          />
         </div>
-        <DayPilotCalendar viewType="Week" />
+        calendarView
+        <DayPilotCalendar viewType="Week" locale="fi-fi" />
       </div>
     );
   }

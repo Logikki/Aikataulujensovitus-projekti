@@ -3,7 +3,7 @@ import getCalendar from "./services/getCalendar";
 import parseICS from "./services/parseICS";
 import { useState, useEffect } from "react";
 import Navbar from "./components/navbar";
-import FetchCalendarForm from './components/FetchCalendarForm' 
+import FetchCalendarForm from "./components/FetchCalendarForm";
 import calendarLoginService from "./services/calendarLogin";
 import Notification from "./components/Notification";
 import calendarService from "./services/calendars";
@@ -18,7 +18,9 @@ const App = () => {
   const [calendarPassword, setCalendarPassword] = useState("");
   const [creatingNewCalendarPassword, setNewCalendarPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
-  const [name, setName] = useState("")
+  const [name, setName] = useState("");
+  // Näytetään virheilmoitus
+  const [errorVisible, setErrorVisible] = useState(false);
 
   let privateCalendarJson = null;
 
@@ -96,40 +98,46 @@ const App = () => {
       );
       console.log("privaatit: ", sharedCal.privateCalendars);
       setPrivateCalendars(sharedCal.privateCalendars);
+      // Virheilmoitus pois?
+      setErrorVisible(false);
     } catch {
       //tähän voitaisiin laittaa error message
+      setErrorVisible(true);
       setErrorMessage(
         "Virhe kirjautumisessa. Salasana on väärin tai kalenteria ei löydy."
       );
     }
   };
-/**
- * Funktio hoitaa henkilön privaatin kalenterin lisäämisen tietokantaan
- * Lisätään olioon nimi, myöhemmässä vaiheessa myös jaetun kalenterin id
- */
+  /**
+   * Funktio hoitaa henkilön privaatin kalenterin lisäämisen tietokantaan
+   * Lisätään olioon nimi, myöhemmässä vaiheessa myös jaetun kalenterin id
+   */
   const handlePostingPrivateCalendar = async (event) => {
     event.preventDefault();
     try {
       await getCalendar.download(kalenteriUrl, setPrivateCalendars);
       privateCalendarJson = parseICS.parse(privateCalendars);
-      privateCalendarJson = {events: privateCalendarJson, name : name}
-      console.log(privateCalendarJson)
-      await calendarService.createPrivateCalendar(privateCalendarJson, sharedCalendar.sharedCalendarID)
-      setName("")
-      setUrl("")
-    }  catch {
-      setErrorMessage("Jokin meni pieleen")
+      privateCalendarJson = { events: privateCalendarJson, name: name };
+      console.log(privateCalendarJson);
+      await calendarService.createPrivateCalendar(
+        privateCalendarJson,
+        sharedCalendar.sharedCalendarID
+      );
+      setName("");
+      setUrl("");
+    } catch {
+      setErrorMessage("Jokin meni pieleen");
     }
-  }
+  };
 
-// TESTAAMISTA VARTEN
+  // TESTAAMISTA VARTEN
   const handleIcsDownload = async (event) => {
     event.preventDefault();
     getCalendar.download(kalenteriUrl, setPrivateCalendars);
     privateCalendarJson = parseICS.parse(privateCalendars);
     console.log(privateCalendarJson);
   };
-  
+
   //demon vuoksi laitetaan kasiteltavaKalenteri näkyviin sivulle
   return (
     <div>
@@ -144,20 +152,20 @@ const App = () => {
         calendarIDValue={calendarID}
       ></Navbar>
       <div>
-        <Notification message={errorMessage}></Notification>
-        <CalendarView 
-        sharedCalendar={sharedCalendar} 
-        kalenteriUrl={kalenteriUrl}
-        setUrl={setUrl}
-        handleDownload={handlePostingPrivateCalendar}
-        name={name}
-        setName={setName}
+        <div>{errorVisible && <Notification message={errorMessage}></Notification>}</div>
+        <CalendarView
+          sharedCalendar={sharedCalendar}
+          kalenteriUrl={kalenteriUrl}
+          setUrl={setUrl}
+          handleDownload={handlePostingPrivateCalendar}
+          name={name}
+          setName={setName}
         />
       </div>
-      <FetchCalendarForm //TESTAAMISTA VARTEN
-      kalenteriUrl={kalenteriUrl} 
-      handleKalenteriUrlChange={({ target }) => setUrl(target.value)} 
-      handleFetchCalendar={handleIcsDownload}
+      <FetchCalendarForm
+        kalenteriUrl={kalenteriUrl}
+        handleKalenteriUrlChange={({ target }) => setUrl(target.value)}
+        handleFetchCalendar={handleIcsDownload}
       />
     </div>
   );
