@@ -1,4 +1,4 @@
-import dayjs from 'dayjs'
+const dayjs = require('dayjs')
 
 var duration = require('dayjs/plugin/duration')
 dayjs.extend(duration);
@@ -118,3 +118,5 @@ function calculateAvailebleTimes(events) {
         console.log(myohinaika);
     }
 }
+
+module.exports = {calculateAvailebleTimes};
