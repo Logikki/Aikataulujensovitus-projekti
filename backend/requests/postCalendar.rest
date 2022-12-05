@@ -9,22 +9,22 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaGFyZWRDYWxlbmRhc
         {
         "start": "2023-03-07T10:30:00",
         "duration": "PT1H45M",
-        "timeZone": "jotain"
+        "timezone": "jotain"
       },
       {
         "start": "2023-03-08T09:30:00",
         "duration": "PT1H45M",
-        "timeZone": "jotain"
+        "timezone": "jotain"
       },
       {
         "start": "2023-03-08T12:00:00",
         "duration": "PT1H45M",
-        "timeZone": "jotain"
+        "timezone": "jotain"
       },
       {
         "start": "2023-03-06T11:30:00",
         "duration": "PT1H45M",
-        "timeZone": "jotain"
+        "timezone": "jotain"
       }
     ]
 }

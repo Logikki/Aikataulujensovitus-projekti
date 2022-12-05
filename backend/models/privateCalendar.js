@@ -7,7 +7,7 @@ const privateCalendarSchema = mongoose.Schema({
         { 
             start: String,
             duration: String,
-            timeZone: String
+            timezone: String
         }
     ]
 })

@@ -13,7 +13,7 @@ const App = () => {
   //tänne tallennetaan privaatit kalenterit, jotka liittyvät jaettuun kalenteriin
   //muodossa [{id, name}]
   const [pcNameAndID, setPcNID] = useState([]);
-  const [privateCalendars, setPrivateCalendars] = useState(null);
+  const [privateCalendars, setPrivateCalendars] = useState(null); //mikä tää on???
 
   const [kalenteriUrl, setUrl] = useState(""); //url laatikkoa varten
   const [sharedCalendar, setSharedCalendar] = useState(null); //{sharedCalendar.sharedCalendarID, sharedCalendar.token}
@@ -24,7 +24,7 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [name, setName] = useState("");
   // Näytetään virheilmoitus
-  const [errorVisible, setErrorVisible] = useState(false);
+  const [errorVisible, setErrorVisible] = useState(false); //stringi tai null
 
   let privateCalendarJson = null;
 
@@ -123,9 +123,9 @@ const App = () => {
    * Lisätään olioon nimi, myöhemmässä vaiheessa myös jaetun kalenterin id
    */
   const handlePostingPrivateCalendar = async (event) => {
-    event.preventDefault();
+    
     try {
-      console.log(kalenteriUrl);
+      console.log("lisätään tämä kalenteri: ", kalenteriUrl);
       console.log(name);
       await getCalendar.download(kalenteriUrl, setPrivateCalendars);
       privateCalendarJson = parseICS.parse(privateCalendars);

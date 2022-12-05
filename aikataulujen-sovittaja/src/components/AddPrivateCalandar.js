@@ -29,7 +29,7 @@ const AddPrivateCalendar = ({
         console.log(nameErr);
         if(!urlErr && !nameErr){
             togglePopup();
-            //handleFetchCalendar();
+            handleFetchCalendar();
         }
         // TODO: Viimeistele toiminnallisuus! joku await tai joku timeout.
     };
