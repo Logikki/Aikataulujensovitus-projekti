@@ -28,6 +28,7 @@ sharedCalendarRouter.post('/', async (req, res) => {
         sharedCalendars: []
     })
     const newsharedCalendar = await sharedCalendar.save()
+    console.log("tehdään uus jattu kalenteri")
     res.status(201).json(newsharedCalendar.id)
 })
 
@@ -41,7 +42,6 @@ sharedCalendarRouter.get('/:id', async (req, res) => {
     //const body = req.body
     //verifoidaan token
     console.log("suoritetaan jaetun kalenterin haku")
-    console.log(req.params.id)
     if (!req.token) {
         return res.status(401).json({error: 'token missing '})
     }
@@ -53,7 +53,6 @@ sharedCalendarRouter.get('/:id', async (req, res) => {
     const sharedCalendar = await SharedCalendar
             .findById(req.params.id)
             .populate('privateCalendars')
-    console.log(sharedCalendar.privateCalendars)
     res.json(sharedCalendar)
 })
 

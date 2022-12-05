@@ -19,10 +19,14 @@ privateCalendarRouter.post('/', async (req, res) => {
         name : body.name,
         events : body.events
     })
+    console.log("lisätään kalenteri")
     const savedCalendar = await calendar.save()
     sharedCalendar.privateCalendars = sharedCalendar.privateCalendars.concat(savedCalendar.id)
     await sharedCalendar.save()
-    res.status(201).json(savedCalendar)
+    await sharedCalendar
+        .populate('privateCalendars')
+    //tässä ajetaan algoritmi aikojen laskemiseksi ja palautetaan se
+    res.status(201).json(sharedCalendar)
 })
 
 privateCalendarRouter.delete('/:id', async (req, res) => {
@@ -45,7 +49,11 @@ privateCalendarRouter.delete('/:id', async (req, res) => {
     sharedCal.privateCalendars = sharedCal.privateCalendars.filter(cal =>cal !== calendarToDelete.id)
     //poistetaan jaetun kalenterista viite poistettavaan
     await sharedCal.save()
-    res.status(204).json({sharedCal})
+    await sharedCal
+        .populate('privateCalendars') 
+    //tässä ajetaan algoritmi aikojen laskemiseksi ja palautetaan se 
+
+    res.status(204).json(sharedCal)
 })
 
 module.exports = privateCalendarRouter

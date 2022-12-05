@@ -6,9 +6,11 @@ const Notification = ({ message }) => {
         return null;
     }
     return (
-        <div className="error">
-            {message}
-        </div>
+        <Alert key={"danger"} variant={"danger"}>
+            <p>
+                {message}
+            </p>
+        </Alert>
     );
 };
 
