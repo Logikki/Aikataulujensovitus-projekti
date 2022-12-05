@@ -3,6 +3,10 @@ const baseUrl = 'http://localhost:3003/api/privatecalendar'
 const SharedCalendarBaseUrl = 'http://localhost:3003/api/sharedcalendar'
 
 let token = null
+const config = {
+    headers: { Authorization: token }
+}
+
 //kirjautumisen jälkeen asetetaan tähän token
 const setToken = newToken => {
     token = `bearer ${newToken}`
@@ -29,9 +33,6 @@ const createPrivateCalendar = async (newObject, sharedCalendarID) => {
     sharedCalendarID: sharedCalendarID,
     ...newObject
    }
-   const config = {
-    headers: { Authorization: token }
-    }
     console.log(requestObj)
     const response = await axios.post(baseUrl, requestObj, config)
     console.log(response.data)
@@ -40,9 +41,7 @@ const createPrivateCalendar = async (newObject, sharedCalendarID) => {
 
 const getSharedCalendar = async (id) => {
     console.log("haetaan jaettu kalenteri", id)
-    const config = {
-        headers: { Authorization: token }
-    }
+    
     const request = axios.get(`${SharedCalendarBaseUrl}/${id}`, config)
     return request.then(response => response.data)
 }
@@ -52,12 +51,19 @@ const getSharedCalendar = async (id) => {
  * @param id kalenterin id
  * @returns uusi jaettu kalenteri
  */
-const rem = async (id) => {
-    const config = {
-        headers: { Authorization: token }
-    }
+const remPrivateCalendar = async (id) => {
     const request = axios.delete(`${SharedCalendarBaseUrl}/${id}`, config)
     return request.then(response => response.data)
 }
 
-export default { setToken, createSharedCalendar, createPrivateCalendar, getSharedCalendar, rem }
+/**
+ * Tämä funktio hoitaa jaetun kalenterin, sekä kaikkien siihen liitettyjen privaattien kalentereiden poistamisen 
+ * 
+ */
+const remSharedCalendar = async (id) => {
+    const request = axios.post(`${SharedCalendarBaseUrl}/${id}`, config)
+    return request.then(response => response.data)
+
+}
+
+export default { setToken, createSharedCalendar, createPrivateCalendar, getSharedCalendar, remPrivateCalendar, remSharedCalendar}

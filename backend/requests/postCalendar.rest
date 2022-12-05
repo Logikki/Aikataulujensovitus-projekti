@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/privatecalendar
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaGFyZWRDYWxlbmRhcklEIjoiNjM4YjIyZWQ2ZDU3OWZjN2U2MWY3YmY5IiwiaWF0IjoxNjcwMjQ0MTM0fQ.MzOJ_dCEg2rskCIRWTEd5P5DeVHeZ7EJvubvWKjMOsU
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaGFyZWRDYWxlbmRhcklEIjoiNjM4ZTAzYmI0MjRmYzhjNTA1OGNmODFiIiwiaWF0IjoxNjcwMjUxNDYzfQ.HhlxLPiKkkwGfNFjx_jcqfYoLZ0zrA-M1vKXrr8UMDE
 
 {
-    "sharedCalendarID": "638b22ed6d579fc7e61f7bf9",
-    "name": "tämä poistuu minuutin päästä",
+    "sharedCalendarID": "638e03bb424fc8c5058cf81b",
+    "name": "tämä poistuu kun poistetaan jaettu",
     "events": [
         {
         "start": "2023-03-07T10:30:00",

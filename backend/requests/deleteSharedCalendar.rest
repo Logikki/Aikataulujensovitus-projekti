@@ -1,0 +1,2 @@
+DELETE  http://localhost:3003/api/sharedcalendar/638e03bb424fc8c5058cf81b
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaGFyZWRDYWxlbmRhcklEIjoiNjM4ZTAzYmI0MjRmYzhjNTA1OGNmODFiIiwiaWF0IjoxNjcwMjUxNDYzfQ.HhlxLPiKkkwGfNFjx_jcqfYoLZ0zrA-M1vKXrr8UMDE

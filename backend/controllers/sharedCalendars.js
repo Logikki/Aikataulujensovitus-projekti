@@ -1,8 +1,10 @@
 const sharedCalendarRouter = require('express').Router()
 const SharedCalendar = require('../models/sharedCalendar')
+const PrivateCalendar = require('../models/privateCalendar')
 const bcrypt = require('bcrypt')
 const sharedCalendar = require('../models/sharedCalendar')
 const jwt = require('jsonwebtoken')
+const { findById } = require('../models/sharedCalendar')
 
 //testaamista varten, tämä ei pitäisi jäädä valmiiseen ohjelmaan
 sharedCalendarRouter.get('/', async (req,res) => {
@@ -55,6 +57,21 @@ sharedCalendarRouter.get('/:id', async (req, res) => {
     res.json(sharedCalendar)
 })
 
-sharedCalendarRouter.delete ('/:id')
+sharedCalendarRouter.delete ('/:id', async (req, res) => {
+    console.log("Deleting shared calendar")
+    if (!req.token) {
+        return res.status(401).json({error: 'token missing '})
+    }
+    const decodedToken = jwt.verify(req.token, process.env.SECRET)
+    if (decodedToken.sharedCalendarID !== req.params.id) {
+        return res.status(401).json({error: 'token invalid'})
+    }
+    const sharedCalendar = await SharedCalendar
+            .findById(req.params.id)
+    const privates = sharedCalendar.privateCalendars
+    privates.map( async (pc)=> {await PrivateCalendar.findByIdAndRemove(pc)})
+    await SharedCalendar.findByIdAndRemove(sharedCalendar.id)
+    res.status(204).end()
+}) 
 
 module.exports = sharedCalendarRouter
