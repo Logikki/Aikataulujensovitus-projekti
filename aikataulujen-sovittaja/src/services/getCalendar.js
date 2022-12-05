@@ -14,7 +14,7 @@ const download = async (url, setKasiteltavaKalenteri) => {
     } 
     const response = await axios.post(baseUrl, parameters)
     console.log(response.data)
-    await setKasiteltavaKalenteri(response.data)
+    return response.data
 }
 
 
