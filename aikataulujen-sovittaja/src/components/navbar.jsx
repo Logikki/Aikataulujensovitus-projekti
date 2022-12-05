@@ -3,13 +3,13 @@ import Popup from "./popup";
 
 function Navbar({
   calendarIDValue,
-  setCalendarPassword, 
-  setCalendarID, 
-  handleCalendarLogin, 
-  setNewCalendarPassword, 
+  setCalendarPassword,
+  setCalendarID,
+  handleCalendarLogin,
+  setNewCalendarPassword,
   createNewCalendarHandler,
-  sharedCalendar}) {
-    
+  sharedCalendar,
+}) {
   // window width/height on resize courtesy of Jake Trent
   // https://www.pluralsight.com/guides/re-render-react-component-on-window-resize
   const [dimensions, setDimensions] = React.useState({
@@ -48,10 +48,10 @@ function Navbar({
         type="text"
         value={calendarIDValue}
         placeholder="Kalenterin ID"
-        style={{ textAlign: "center"}}
+        style={{ textAlign: "center" }}
         onInput={(e) => setCalendarID(e.target.value)}
       ></input>
-       <input // Hae kalenteria input kenttä
+      <input // Hae kalenteria input kenttä
         type="text"
         placeholder="Salasana"
         style={{ textAlign: "center", marginLeft: "10px" }}
@@ -76,7 +76,7 @@ function Navbar({
         <button // Uusi kalenteri nappi
           className={nappiStyles}
           style={{
-            width: "130px"
+            width: "130px",
           }}
           type="button"
           onClick={togglePopup} // TODO: Avaa pupup ikkuna
@@ -123,11 +123,10 @@ function Navbar({
                       float: "right",
                     }} // Kalenterin luonti nappi
                     type="button"
-                    onClick={ ()=> {
-                      togglePopup() 
-                      createNewCalendarHandler()
-                      }
-                    } // TODO: Lähetä Inputtien arvo parametrina backendiin
+                    onClick={() => {
+                      togglePopup();
+                      createNewCalendarHandler();
+                    }} // TODO: Lähetä Inputtien arvo parametrina backendiin
                   >
                     Luo Kalenteri
                   </button>

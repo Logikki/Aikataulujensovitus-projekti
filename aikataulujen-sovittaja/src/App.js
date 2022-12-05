@@ -3,7 +3,6 @@ import getCalendar from "./services/getCalendar";
 import parseICS from "./services/parseICS";
 import { useState, useEffect } from "react";
 import Navbar from "./components/navbar";
-import FetchCalendarForm from "./components/FetchCalendarForm";
 import calendarLoginService from "./services/calendarLogin";
 import Notification from "./components/Notification";
 import calendarService from "./services/calendars";
@@ -34,9 +33,12 @@ const App = () => {
 
   useEffect(() => {
     const doThings = async () => {
-      console.log("use effect, katsotaan onko cachessa kirjauduttu kalenteriin");
-      const loggedSharedCalendarJSON =
-        window.localStorage.getItem("loggedSharedCalendar");
+      console.log(
+        "use effect, katsotaan onko cachessa kirjauduttu kalenteriin"
+      );
+      const loggedSharedCalendarJSON = window.localStorage.getItem(
+        "loggedSharedCalendar"
+      );
       if (loggedSharedCalendarJSON) {
         const calendar = JSON.parse(loggedSharedCalendarJSON);
         setSharedCalendar(calendar);
@@ -60,9 +62,7 @@ const App = () => {
    */
   const handleLogout = (event) => {
     event.preventDefault();
-    setErrorMessage(
-      null
-    );
+    setErrorMessage(null);
     window.localStorage.removeItem("loggedSharedCalendar");
     setSharedCalendar(null);
   };
@@ -84,7 +84,10 @@ const App = () => {
         sharedCalendarID: newCalendarID,
         password: creatingNewCalendarPassword,
       });
-      window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(sharedCalendar));
+      window.localStorage.setItem(
+        "loggedSharedCalendar",
+        JSON.stringify(sharedCalendar)
+      );
       calendarService.setToken(sharedCalendar.token);
       setSharedCalendar(sharedCalendar);
       setCalendarID("");
@@ -110,9 +113,7 @@ const App = () => {
    */
   const handleCalendarLogin = async (event) => {
     event.preventDefault();
-    setErrorMessage(
-      null
-    );
+    setErrorMessage(null);
     //jos ei olla vielä kirjauduttu sisään
     if (sharedCalendar) console.log("haetaan kalenteria");
     console.log(calendarID, calendarPassword);
@@ -121,7 +122,10 @@ const App = () => {
         sharedCalendarID: calendarID,
         password: calendarPassword,
       });
-      window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(sharedCalendar));
+      window.localStorage.setItem(
+        "loggedSharedCalendar",
+        JSON.stringify(sharedCalendar)
+      );
       calendarService.setToken(sharedCalendar.token);
       setSharedCalendar(sharedCalendar);
       setCalendarID("");
@@ -149,7 +153,9 @@ const App = () => {
       console.log("lisätään tämä kalenteri: ", kalenteriUrl);
       console.log(name);
       //ladataan kalenteri, ja annetaan ne parse funktiolle
-      privateCalendarJson = parseICS.parse(await getCalendar.download(kalenteriUrl));
+      privateCalendarJson = parseICS.parse(
+        await getCalendar.download(kalenteriUrl)
+      );
       privateCalendarJson = { events: privateCalendarJson, name: name };
       console.log(privateCalendarJson);
       await calendarService.createPrivateCalendar(
@@ -158,21 +164,28 @@ const App = () => {
       );
       setName("");
       setUrl("");
-    } catch(exception) {
-      console.log(exception)
+    } catch (exception) {
+      console.log(exception);
       setErrorMessage("Something went wrong");
     }
   };
 
-  
-
   const handleDeletingPrivateCalendar = async (id) => {
     try {
-      const response = await calendarService.remPrivateCalendar(id)
+      const response = await calendarService.remPrivateCalendar(id);
     } catch {
-      setErrorMessage("Invalid id")
+      setErrorMessage("Invalid id");
     }
-  }
+  };
+
+  // Poistamisen testaamista varten
+  const handleDeletingPrivateCalendarTest = async (id) => {
+    try {
+      console.log(id);
+    } catch {
+      setErrorMessage("Invalid id");
+    }
+  };
 
   return (
     <div>
@@ -187,15 +200,17 @@ const App = () => {
       ></Navbar>
       <div>
         <Notification message={errorMessage}></Notification>
-        <CalendarView 
-        sharedCalendar={sharedCalendar} 
-        handleLogout={handleLogout}
-        setName={({ target }) => setName(target.value)}
-        handleKalenteriUrlChange={({ target }) => setUrl(target.value)} 
-        handleFetchCalendar={handlePostingPrivateCalendar}
-        name={name}
-        kalenteriUrl={kalenteriUrl}
-        /> 
+        <CalendarView
+          sharedCalendar={sharedCalendar}
+          handleLogout={handleLogout}
+          setName={({ target }) => setName(target.value)}
+          handleKalenteriUrlChange={({ target }) => setUrl(target.value)}
+          handleFetchCalendar={handlePostingPrivateCalendar}
+          name={name}
+          kalenteriUrl={kalenteriUrl}
+          privateCals={pcNameAndID}
+          handleDelete={handleDeletingPrivateCalendarTest} //TODO: Muuta pois testistä!!!
+        />
         <div>
           {errorVisible && <Notification message={errorMessage}></Notification>}
         </div>

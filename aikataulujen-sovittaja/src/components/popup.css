@@ -32,6 +32,9 @@ import "bootstrap/dist/css/bootstrap.css";
     cursor: pointer;
     border: 1px solid #999;
     border-radius: 50%;
+}
+
+#popup-close {
     position: relative;
     left: 240px;
     top: -15px;

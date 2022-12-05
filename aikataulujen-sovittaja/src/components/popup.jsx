@@ -5,6 +5,7 @@ const Popup = (props) => {
     <div className="popup-box" clickable="false">
       <div className="box">
         <button
+          id="popup-close"
           className="btn-close btn btn-secondary"
           onClick={props.handleClose}
         ></button>
