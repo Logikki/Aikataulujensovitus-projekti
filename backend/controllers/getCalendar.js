@@ -9,11 +9,12 @@ const https = require('https')
  */
 downloadRouter.post("/", async (req, res) => {
     const url = req.body.osoite
-    const download = (url) => {
+    const download = async (url) => {
         return new Promise ((resolve, reject) => { 
             https.get(url, res => {
                 if (res.statusCode !== 200) {
                     reject(new Error(`Failed to get '${url}' (${res.statusCode})`));
+                    console.log("ongelmakohta 1")
                 }
                 let rawData = ''
                 res.on('data', chunk => {
@@ -25,6 +26,7 @@ downloadRouter.post("/", async (req, res) => {
                     }
                     catch (e) {
                         reject.message(e.message)
+                        console.log("ongelmakohta 2")
                     }
                 })
             })

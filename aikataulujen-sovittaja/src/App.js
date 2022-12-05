@@ -13,7 +13,7 @@ const App = () => {
   //tänne tallennetaan privaatit kalenterit, jotka liittyvät jaettuun kalenteriin
   //muodossa [{id, name}]
   const [pcNameAndID, setPcNID] = useState([]);
-  const [privateCalendars, setPrivateCalendars] = useState(null); //mikä tää on???
+  const [privateCalendars, setPrivateCalendars] = useState(null); //Tänne lisätään käsiteltävä private kalenteri, kun se ladataan
 
   const [kalenteriUrl, setUrl] = useState(""); //url laatikkoa varten
   const [sharedCalendar, setSharedCalendar] = useState(null); //{sharedCalendar.sharedCalendarID, sharedCalendar.token}
@@ -80,6 +80,30 @@ const App = () => {
     );
     //tässä vaiheessa voitaisiin ilmoittaa käyttäjälle, mikä on juuri luodun kalenterin id
     //myöskin sähköpostia voitaisiin kysyä, johon tämä id lähetettäisiin
+
+    try {
+      const sharedCalendar = await calendarLoginService.calendarLogin({
+        sharedCalendarID: newCalendarID,
+        password: creatingNewCalendarPassword,
+      });
+      window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(sharedCalendar));
+      calendarService.setToken(sharedCalendar.token);
+      setSharedCalendar(sharedCalendar);
+      setCalendarID("");
+      setCalendarPassword("");
+      const sharedCal = await calendarService.getSharedCalendar(
+        sharedCalendar.sharedCalendarID
+      );
+
+      // Virheilmoitus pois?
+      setErrorVisible(false);
+    } catch {
+      //tähän voitaisiin laittaa error message
+      setErrorVisible(true);
+      setErrorMessage(
+        "Virhe uuteen kalenteriin automaattisesti kirjautumisessa"
+      );
+    }
   };
 
   /**
@@ -123,11 +147,14 @@ const App = () => {
    * Lisätään olioon nimi, myöhemmässä vaiheessa myös jaetun kalenterin id
    */
   const handlePostingPrivateCalendar = async (event) => {
-    
     try {
       console.log("lisätään tämä kalenteri: ", kalenteriUrl);
       console.log(name);
       await getCalendar.download(kalenteriUrl, setPrivateCalendars);
+      console.log(privateCalendars)
+      if (privateCalendars == null) {
+        console.log("privaatit kalenterit on null")
+      }
       privateCalendarJson = parseICS.parse(privateCalendars);
       privateCalendarJson = { events: privateCalendarJson, name: name };
       console.log(privateCalendarJson);
@@ -137,8 +164,9 @@ const App = () => {
       );
       setName("");
       setUrl("");
-    } catch {
-      setErrorMessage("Wrong credentials");
+    } catch(exception) {
+      console.log(exception)
+      setErrorMessage("Something went wrong");
     }
   };
 

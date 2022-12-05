@@ -1,6 +1,6 @@
 POST http://localhost:3003/api/privatecalendar
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaGFyZWRDYWxlbmRhcklEIjoiNjM4YjIyZWQ2ZDU3OWZjN2U2MWY3YmY5IiwiaWF0IjoxNjcwMDYyODkxfQ.s5NDWc5FledMIrGPeztg2fGItAtxL8CKpZJjZstEKDM
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaGFyZWRDYWxlbmRhcklEIjoiNjM4YjIyZWQ2ZDU3OWZjN2U2MWY3YmY5IiwiaWF0IjoxNjcwMjQ0MTM0fQ.MzOJ_dCEg2rskCIRWTEd5P5DeVHeZ7EJvubvWKjMOsU
 
 {
     "sharedCalendarID": "638b22ed6d579fc7e61f7bf9",
