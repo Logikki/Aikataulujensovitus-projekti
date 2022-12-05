@@ -55,4 +55,6 @@ sharedCalendarRouter.get('/:id', async (req, res) => {
     res.json(sharedCalendar)
 })
 
+sharedCalendarRouter.delete ('/:id')
+
 module.exports = sharedCalendarRouter

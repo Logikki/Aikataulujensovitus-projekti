@@ -9,7 +9,9 @@ const privateCalendarSchema = mongoose.Schema({
             duration: String,
             timezone: String
         }
-    ]
+    ],
+    //poistuu 6kk jälkeen
+    createdAt: { type: Date, default: Date.now, expires: '15552000' },
 })
 
 privateCalendarSchema.set('toJSON', {

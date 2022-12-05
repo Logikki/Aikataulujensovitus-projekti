@@ -4,7 +4,7 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaGFyZWRDYWxlbmRhc
 
 {
     "sharedCalendarID": "638b22ed6d579fc7e61f7bf9",
-    "name": "thisiz testii",
+    "name": "tämä poistuu minuutin päästä",
     "events": [
         {
         "start": "2023-03-07T10:30:00",
