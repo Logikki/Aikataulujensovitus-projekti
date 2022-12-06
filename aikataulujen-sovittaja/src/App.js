@@ -23,7 +23,7 @@ const App = () => {
   // Näytetään virheilmoitus
   const [errorVisible, setErrorVisible] = useState(false); //stringi tai null
   //const [privateCalendarJson, setPrivateCalendarJson] = useState(null)
-  const [availableTimes, setAvailableTimes] = useState({})
+  const [availableTimes, setAvailableTimes] = useState({});
 
   let privateCalendarJson = null;
 
@@ -45,13 +45,18 @@ const App = () => {
         const sharedCal = await calendarService.getSharedCalendar(
           calendar.sharedCalendarID
         );
-        console.log(sharedCal)
+        console.log(sharedCal);
         let privates = [];
         sharedCal.privateCalendars.map(
           (pc) => (privates = privates.concat({ id: pc.id, name: pc.name }))
         );
         setPcNID(privates);
-        setAvailableTimes({events : sharedCal.availabletimes})
+        // Kalenterinäkymän asetukset
+        const calendarViewConfig = {
+          eventMoveHandling: "Disabled",
+          durationBarVisible: false,
+        };
+        setAvailableTimes({ ...calendarViewConfig, events: sharedCal.availabletimes });
       }
     };
     doThings();
@@ -147,14 +152,12 @@ const App = () => {
       //ladataan kalenteri, ja annetaan ne parse funktiolle
       privateCalendarJson = parseICS.parse(await getCalendar.download(kalenteriUrl));
       privateCalendarJson = { events: privateCalendarJson, name: name };
-      
+
       console.log(privateCalendarJson);
       const newShared = await calendarService.createPrivateCalendar(
         privateCalendarJson,
         sharedCalendar.sharedCalendarID
       );
-      const newPc = newShared.privateCalendars.filter((pc) => pc.name == name)
-      const addedPC = pcNameAndID.concat({id : addedPC.id, name : name })
 
       setName("");
       setUrl("");
@@ -182,8 +185,8 @@ const App = () => {
       setErrorMessage("Invalid id");
     }
   };
-  console.log(pcNameAndID)
-  console.log(availableTimes)
+  console.log(pcNameAndID);
+  console.log(availableTimes);
   return (
     <div>
       <Navbar

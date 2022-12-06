@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { DayPilot, DayPilotCalendar } from "daypilot-pro-react";
 import AddPrivateCalandar from "./AddPrivateCalandar";
 import PrivateCalendars from "./PrivateCalendars";
-// Ref hooks - testataan
-import { useRef, useEffect } from "react";
+import "./CalendarStyles.css";
 
 //Tänne tulee kaikki, mitä näytetään kun on kirjauduttu sisään kalenteriin
 const CalendarView = ({
@@ -16,7 +15,7 @@ const CalendarView = ({
   kalenteriUrl,
   privateCals,
   handleDelete,
-  availableTimes
+  availableTimes,
 }) => {
   // Eventin testausta ->
   // const [state, setState] = useState({
