@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { DayPilot, DayPilotCalendar } from "@daypilot/daypilot-lite-react";
 import AddPrivateCalandar from "./AddPrivateCalandar";
 import PrivateCalendars from "./PrivateCalendars";
-// Ref hooks - testataan
-import { useRef, useEffect } from "react";
 
 //Tänne tulee kaikki, mitä näytetään kun on kirjauduttu sisään kalenteriin
 const CalendarView = ({
@@ -16,19 +14,24 @@ const CalendarView = ({
   kalenteriUrl,
   privateCals,
   handleDelete,
+  availableTimes,
 }) => {
   // Eventin testausta ->
-  const [state, setState] = useState({
-    startDate: new DayPilot.Date.today(),
-    events: [
-      {
-        id: 1,
-        start: "2022-12-07T11:00:00",
-        end: "2022-12-07T13:30:00",
-      },
-    ],
-    durationBarVisible: false,
-  });
+  // const [state, setState] = useState({
+  //   events: [
+  //     {
+  //       id: 1,
+  //       start: "2022-12-07T11:00:00",
+  //       end: "2022-12-09T13:30:00",
+  //     },
+  //     {
+  //       id: 2,
+  //       start: "2022-12-10T11:00:00",
+  //       end: "2022-12-10T13:30:00",
+  //     },
+  //   ],
+  //   durationBarVisible: "false",
+  // });
 
   if (sharedCalendar == null) {
     return;
@@ -36,7 +39,7 @@ const CalendarView = ({
     return (
       <div>
         Kalenteri {sharedCalendar.sharedCalendarID}
-        <DayPilotCalendar viewType="Week" locale="fi-fi" {...state} />
+        <DayPilotCalendar viewType="Week" locale="fi-fi" {...availableTimes} />
         <div className="addPrivateCalendar">
           <AddPrivateCalandar //TESTAAMISTA VARTEN
             handleLogout={handleLogout}
