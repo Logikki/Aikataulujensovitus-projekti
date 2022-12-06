@@ -22,8 +22,9 @@ const App = () => {
   const [name, setName] = useState("");
   // Näytetään virheilmoitus
   const [errorVisible, setErrorVisible] = useState(false); //stringi tai null
-
+  //const [privateCalendarJson, setPrivateCalendarJson] = useState(null)
   let privateCalendarJson = null;
+
 
   /**
    * Tämä funktio suoritetaan aina uudelleenpäivityksessä
@@ -46,6 +47,7 @@ const App = () => {
         const sharedCal = await calendarService.getSharedCalendar(
           calendar.sharedCalendarID
         );
+        console.log(sharedCal)
         let privates = [];
         sharedCal.privateCalendars.map(
           (pc) => (privates = privates.concat({ id: pc.id, name: pc.name }))
@@ -151,14 +153,14 @@ const App = () => {
   const handlePostingPrivateCalendar = async (event) => {
     try {
       console.log("lisätään tämä kalenteri: ", kalenteriUrl);
-      console.log(name);
       //ladataan kalenteri, ja annetaan ne parse funktiolle
       privateCalendarJson = parseICS.parse(
         await getCalendar.download(kalenteriUrl)
       );
       privateCalendarJson = { events: privateCalendarJson, name: name };
+      
       console.log(privateCalendarJson);
-      await calendarService.createPrivateCalendar(
+      const newShared = await calendarService.createPrivateCalendar(
         privateCalendarJson,
         sharedCalendar.sharedCalendarID
       );
@@ -186,6 +188,7 @@ const App = () => {
       setErrorMessage("Invalid id");
     }
   };
+  console.log(pcNameAndID)
   return (
     <div>
       <Navbar

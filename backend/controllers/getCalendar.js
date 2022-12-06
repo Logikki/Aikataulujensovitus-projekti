@@ -14,7 +14,6 @@ downloadRouter.post("/", async (req, res) => {
             https.get(url, res => {
                 if (res.statusCode !== 200) {
                     reject(new Error(`Failed to get '${url}' (${res.statusCode})`));
-                    console.log("ongelmakohta 1")
                 }
                 let rawData = ''
                 res.on('data', chunk => {
@@ -26,7 +25,6 @@ downloadRouter.post("/", async (req, res) => {
                     }
                     catch (e) {
                         reject.message(e.message)
-                        console.log("ongelmakohta 2")
                     }
                 })
             })
