@@ -41,7 +41,11 @@ const CalendarView = ({
       <div>
         Kalenteri {sharedCalendar.sharedCalendarID}
         <DayPilotCalendar viewType="Week" locale="fi-fi" {...availableTimes} />
-        <div className="addPrivateCalendar">
+        <div className="addPrivateCalendar input-group p-3 mb-2 bg-dark">
+          <PrivateCalendars
+            privateCals={privateCals}
+            handleDelete={handleDelete} //TODO: Muuta pois testistä!!!
+          />
           <AddPrivateCalandar //TESTAAMISTA VARTEN
             handleLogout={handleLogout}
             handleKalenteriUrlChange={handleKalenteriUrlChange}
@@ -51,10 +55,6 @@ const CalendarView = ({
             kalenteriUrl={kalenteriUrl}
           />
         </div>
-        <PrivateCalendars
-          privateCals={privateCals}
-          handleDelete={handleDelete} //TODO: Muuta pois testistä!!!
-        />
       </div>
     );
   }

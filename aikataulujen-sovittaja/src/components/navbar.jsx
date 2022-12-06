@@ -104,7 +104,7 @@ function Navbar({
                   style={inputStyles}
                 ></input>
 
-                <div style={{ paddingTop: "170px" }}>
+                <div style={{ paddingTop: "230px" }}>
                   <button
                     className={nappiStyles}
                     style={{
