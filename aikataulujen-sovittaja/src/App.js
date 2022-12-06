@@ -55,6 +55,7 @@ const App = () => {
         const calendarViewConfig = {
           eventMoveHandling: "Disabled",
           durationBarVisible: false,
+          cellDuration: 15,
         };
         setAvailableTimes({ ...calendarViewConfig, events: sharedCal.availabletimes });
       }
@@ -158,8 +159,8 @@ const App = () => {
         privateCalendarJson,
         sharedCalendar.sharedCalendarID
       );
-      const newPc = newShared.privateCalendars.filter((pc) => pc.name == name)
-      const addedPC = pcNameAndID.concat({id : addedPC.id, name : name })
+      const newPc = newShared.privateCalendars.filter((pc) => pc.name == name);
+      const addedPC = pcNameAndID.concat({ id: addedPC.id, name: name });
       setName("");
       setUrl("");
     } catch (exception) {
@@ -171,8 +172,8 @@ const App = () => {
   const handleDeletingPrivateCalendar = async (id) => {
     try {
       const response = await calendarService.remPrivateCalendar(id);
-      const filtered = pcNameAndID.filter( (pc) => pc.id != id )
-      setPcNID(filtered)
+      const filtered = pcNameAndID.filter((pc) => pc.id != id);
+      setPcNID(filtered);
     } catch {
       setErrorMessage("Invalid id");
     }
