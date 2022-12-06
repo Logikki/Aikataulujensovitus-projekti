@@ -22,8 +22,9 @@ const App = () => {
   const [name, setName] = useState("");
   // Näytetään virheilmoitus
   const [errorVisible, setErrorVisible] = useState(false); //stringi tai null
-
+  //const [privateCalendarJson, setPrivateCalendarJson] = useState(null)
   let privateCalendarJson = null;
+
 
   /**
    * Tämä funktio suoritetaan aina uudelleenpäivityksessä
@@ -157,8 +158,9 @@ const App = () => {
         await getCalendar.download(kalenteriUrl)
       );
       privateCalendarJson = { events: privateCalendarJson, name: name };
+      
       console.log(privateCalendarJson);
-      await calendarService.createPrivateCalendar(
+      const newShared = await calendarService.createPrivateCalendar(
         privateCalendarJson,
         sharedCalendar.sharedCalendarID
       );
