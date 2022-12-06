@@ -7,6 +7,7 @@ import calendarLoginService from "./services/calendarLogin";
 import Notification from "./components/Notification";
 import calendarService from "./services/calendars";
 import CalendarView from "./components/CalendarView";
+import background from "./images/logo.png";
 
 const App = () => {
   //tänne tallennetaan privaatit kalenterit, jotka liittyvät jaettuun kalenteriin
@@ -25,6 +26,17 @@ const App = () => {
   //const [privateCalendarJson, setPrivateCalendarJson] = useState(null)
   const [availableTimes, setAvailableTimes] = useState({});
 
+  // Taustakuvan piirtäminen
+  function backgroundStyle() {
+    if (sharedCalendar !== null) return;
+    return {
+      backgroundImage: `url(${background})`,
+      backgroundSize: "cover",
+      height: "100vh",
+      width: "100vw",
+      backgroundRepeat: "no-repeat",
+    };
+  }
   let privateCalendarJson = null;
   const calendarViewConfig = {
     eventMoveHandling: "Disabled",
@@ -40,12 +52,9 @@ const App = () => {
 
   useEffect(() => {
     const doThings = async () => {
-      console.log(
-        "use effect, katsotaan onko cachessa kirjauduttu kalenteriin"
-      );
-      const loggedSharedCalendarJSON = window.localStorage.getItem(
-        "loggedSharedCalendar"
-      );
+      console.log("use effect, katsotaan onko cachessa kirjauduttu kalenteriin");
+      const loggedSharedCalendarJSON =
+        window.localStorage.getItem("loggedSharedCalendar");
       if (loggedSharedCalendarJSON) {
         const calendar = JSON.parse(loggedSharedCalendarJSON);
         setSharedCalendar(calendar);
@@ -60,8 +69,21 @@ const App = () => {
         )
         setPcNID(privates);
         // Kalenterinäkymän asetukset
-        
-        setAvailableTimes({ ...calendarViewConfig, events: sharedCal.availabletimes });
+        const calendarViewConfig = {
+          durationBarVisible: false,
+          cellDuration: 15,
+          cellHeight: 20,
+          headerDateFormat: "ddd d/M/yyyy",
+          timeRangeSelectedHandling: "Disabled",
+          eventMoveHandling: "Disabled",
+          eventClickHandling: "Disabled",
+          eventHoverHandling: "Disabled",
+          crosshairType: "Disabled",
+        };
+        setAvailableTimes({
+          ...calendarViewConfig,
+          events: sharedCal.availabletimes,
+        });
       }
     };
     doThings();
@@ -95,10 +117,7 @@ const App = () => {
         sharedCalendarID: newCalendarID,
         password: creatingNewCalendarPassword,
       });
-      window.localStorage.setItem(
-        "loggedSharedCalendar",
-        JSON.stringify(sharedCalendar)
-      );
+      window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(sharedCalendar));
       calendarService.setToken(sharedCalendar.token);
       setSharedCalendar(sharedCalendar);
       setCalendarID("");
@@ -112,9 +131,7 @@ const App = () => {
     } catch {
       //tähän voitaisiin laittaa error message
       setErrorVisible(true);
-      setErrorMessage(
-        "Virhe uuteen kalenteriin automaattisesti kirjautumisessa"
-      );
+      setErrorMessage("Virhe uuteen kalenteriin automaattisesti kirjautumisessa");
     }
   };
 
@@ -133,10 +150,7 @@ const App = () => {
         sharedCalendarID: calendarID,
         password: calendarPassword,
       });
-      window.localStorage.setItem(
-        "loggedSharedCalendar",
-        JSON.stringify(sharedCalendar)
-      );
+      window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(sharedCalendar));
       calendarService.setToken(sharedCalendar.token);
       setSharedCalendar(sharedCalendar);
       setCalendarID("");
@@ -163,9 +177,7 @@ const App = () => {
     try {
       console.log("lisätään tämä kalenteri: ", kalenteriUrl);
       //ladataan kalenteri, ja annetaan ne parse funktiolle
-      privateCalendarJson = parseICS.parse(
-        await getCalendar.download(kalenteriUrl)
-      );
+      privateCalendarJson = parseICS.parse(await getCalendar.download(kalenteriUrl));
       privateCalendarJson = { events: privateCalendarJson, name: name };
 
       console.log(privateCalendarJson);
@@ -206,7 +218,7 @@ const App = () => {
   console.log(pcNameAndID);
   console.log(availableTimes);
   return (
-    <div>
+    <div style={backgroundStyle()}>
       <Navbar
         setCalendarPassword={setCalendarPassword}
         setCalendarID={setCalendarID}
@@ -230,9 +242,7 @@ const App = () => {
           handleDelete={handleDeletingPrivateCalendar} //TODO: Muuta pois testistä!!!
           availableTimes={availableTimes}
         />
-        <div>
-          {errorVisible && <Notification message={errorMessage}></Notification>}
-        </div>
+        <div>{errorVisible && <Notification message={errorMessage}></Notification>}</div>
       </div>
     </div>
   );

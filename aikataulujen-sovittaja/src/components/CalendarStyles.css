@@ -3,10 +3,19 @@
 
 /* calendar event */
 .calendar_default_event_inner {
-    background: #2e78d6;
+    background: limegreen;
     color: #fff;
     border: none;
     border-radius: 5px;
     font-size: 10pt;
     opacity: 0.8;
+}
+
+.calendar_default_cell_inner
+{
+	background: red;
+}
+
+.calendar_default_cell_business .calendar_default_cell_inner {
+	background: red;
 }
