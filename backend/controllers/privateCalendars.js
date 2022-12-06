@@ -53,6 +53,7 @@ privateCalendarRouter.delete('/:id', async (req, res) => {
     await sharedCal
         .populate('privateCalendars') 
     sharedCal.availabletimes = availabletimes.calculateAvailebleTimes(sharedCal.privateCalendars)
+    console.log(sharedCal.availabletimes) 
     res.status(204).json(sharedCal)
 })
 

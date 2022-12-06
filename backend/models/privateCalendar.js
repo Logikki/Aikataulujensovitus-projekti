@@ -17,6 +17,7 @@ const privateCalendarSchema = mongoose.Schema({
 
 privateCalendarSchema.index({expireAt:1},{expireAfterSeconds:15552000})
 
+
 privateCalendarSchema.set('toJSON', {
     transform: (document, returnedObject) => {
       returnedObject.id = returnedObject._id.toString()
