@@ -47,12 +47,9 @@ const App = () => {
 
   useEffect(() => {
     const doThings = async () => {
-      console.log(
-        "use effect, katsotaan onko cachessa kirjauduttu kalenteriin"
-      );
-      const loggedSharedCalendarJSON = window.localStorage.getItem(
-        "loggedSharedCalendar"
-      );
+      console.log("use effect, katsotaan onko cachessa kirjauduttu kalenteriin");
+      const loggedSharedCalendarJSON =
+        window.localStorage.getItem("loggedSharedCalendar");
       if (loggedSharedCalendarJSON) {
         const calendar = JSON.parse(loggedSharedCalendarJSON);
         setSharedCalendar(calendar);
@@ -68,9 +65,15 @@ const App = () => {
         setPcNID(privates);
         // Kalenterinäkymän asetukset
         const calendarViewConfig = {
-          eventMoveHandling: "Disabled",
           durationBarVisible: false,
           cellDuration: 15,
+          cellHeight: 20,
+          headerDateFormat: "ddd d/M/yyyy",
+          timeRangeSelectedHandling: "Disabled",
+          eventMoveHandling: "Disabled",
+          eventClickHandling: "Disabled",
+          eventHoverHandling: "Disabled",
+          crosshairType: "Disabled",
         };
         setAvailableTimes({
           ...calendarViewConfig,
@@ -109,10 +112,7 @@ const App = () => {
         sharedCalendarID: newCalendarID,
         password: creatingNewCalendarPassword,
       });
-      window.localStorage.setItem(
-        "loggedSharedCalendar",
-        JSON.stringify(sharedCalendar)
-      );
+      window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(sharedCalendar));
       calendarService.setToken(sharedCalendar.token);
       setSharedCalendar(sharedCalendar);
       setCalendarID("");
@@ -126,9 +126,7 @@ const App = () => {
     } catch {
       //tähän voitaisiin laittaa error message
       setErrorVisible(true);
-      setErrorMessage(
-        "Virhe uuteen kalenteriin automaattisesti kirjautumisessa"
-      );
+      setErrorMessage("Virhe uuteen kalenteriin automaattisesti kirjautumisessa");
     }
   };
 
@@ -147,10 +145,7 @@ const App = () => {
         sharedCalendarID: calendarID,
         password: calendarPassword,
       });
-      window.localStorage.setItem(
-        "loggedSharedCalendar",
-        JSON.stringify(sharedCalendar)
-      );
+      window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(sharedCalendar));
       calendarService.setToken(sharedCalendar.token);
       setSharedCalendar(sharedCalendar);
       setCalendarID("");
@@ -177,9 +172,7 @@ const App = () => {
     try {
       console.log("lisätään tämä kalenteri: ", kalenteriUrl);
       //ladataan kalenteri, ja annetaan ne parse funktiolle
-      privateCalendarJson = parseICS.parse(
-        await getCalendar.download(kalenteriUrl)
-      );
+      privateCalendarJson = parseICS.parse(await getCalendar.download(kalenteriUrl));
       privateCalendarJson = { events: privateCalendarJson, name: name };
 
       console.log(privateCalendarJson);
@@ -235,9 +228,7 @@ const App = () => {
           handleDelete={handleDeletingPrivateCalendar} //TODO: Muuta pois testistä!!!
           availableTimes={availableTimes}
         />
-        <div>
-          {errorVisible && <Notification message={errorMessage}></Notification>}
-        </div>
+        <div>{errorVisible && <Notification message={errorMessage}></Notification>}</div>
       </div>
     </div>
   );
