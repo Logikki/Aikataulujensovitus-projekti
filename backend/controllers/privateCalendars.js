@@ -47,7 +47,9 @@ privateCalendarRouter.delete('/:id', async (req, res) => {
         return res.status(401).json({error: 'Could not find calendar with requested id'})
     }
     await PrivateCalendar.findByIdAndRemove(req.params.id)
+
     sharedCal.privateCalendars = sharedCal.privateCalendars.filter(cal =>cal !== calendarToDelete.id)
+    
     //poistetaan jaetun kalenterista viite poistettavaan
     await sharedCal.save()
     await sharedCal

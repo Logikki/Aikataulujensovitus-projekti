@@ -55,9 +55,9 @@ const App = () => {
         );
         console.log(sharedCal);
         let privates = [];
-        sharedCal.privateCalendars.map(
+        sharedCal.privateCalendars.filter((pc) => pc.name !== undefined).map(
           (pc) => (privates = privates.concat({ id: pc.id, name: pc.name }))
-        );
+        )
         setPcNID(privates);
         // Kalenterinäkymän asetukset
         
