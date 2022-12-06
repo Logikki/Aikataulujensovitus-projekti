@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { DayPilot, DayPilotCalendar } from "@daypilot/daypilot-lite-react";
 import AddPrivateCalandar from "./AddPrivateCalandar";
 import PrivateCalendars from "./PrivateCalendars";
-// Ref hooks - testataan
-import { useRef, useEffect } from "react";
 
 //Tänne tulee kaikki, mitä näytetään kun on kirjauduttu sisään kalenteriin
 const CalendarView = ({
