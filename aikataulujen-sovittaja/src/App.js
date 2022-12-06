@@ -24,7 +24,7 @@ const App = () => {
   const [errorVisible, setErrorVisible] = useState(false); //stringi tai null
   //const [privateCalendarJson, setPrivateCalendarJson] = useState(null)
   const [availableTimes, setAvailableTimes] = useState([])
-  
+
   let privateCalendarJson = null;
 
 
@@ -52,6 +52,7 @@ const App = () => {
           (pc) => (privates = privates.concat({ id: pc.id, name: pc.name }))
         );
         setPcNID(privates);
+        setAvailableTimes({events : sharedCal.availabletimes})
       }
     };
     doThings();
@@ -180,6 +181,7 @@ const App = () => {
     }
   };
   console.log(pcNameAndID)
+  console.log(availableTimes)
   return (
     <div>
       <Navbar
@@ -203,6 +205,7 @@ const App = () => {
           kalenteriUrl={kalenteriUrl}
           privateCals={pcNameAndID}
           handleDelete={handleDeletingPrivateCalendarTest} //TODO: Muuta pois testistä!!!
+          availableTimes={availableTimes}
         />
         <div>{errorVisible && <Notification message={errorMessage}></Notification>}</div>
       </div>
