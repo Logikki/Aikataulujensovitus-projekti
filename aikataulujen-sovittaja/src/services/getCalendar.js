@@ -13,7 +13,6 @@ const download = async (url, setKasiteltavaKalenteri) => {
       "osoite": url
     } 
     const response = await axios.post(baseUrl, parameters)
-    console.log(response.data)
     return response.data
 }
 

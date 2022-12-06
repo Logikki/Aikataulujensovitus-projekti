@@ -2,6 +2,11 @@ const mongoose = require('mongoose')
 
 const sharedCalendarSchema = mongoose.Schema({
    hashedPassword: String,
+   availabletimes: [{
+    start: String,
+    end: String,
+    id: Number
+   }],
    privateCalendars: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'PrivateCalendar'
