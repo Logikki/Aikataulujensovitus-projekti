@@ -23,7 +23,7 @@ const App = () => {
   // Näytetään virheilmoitus
   const [errorVisible, setErrorVisible] = useState(false); //stringi tai null
   //const [privateCalendarJson, setPrivateCalendarJson] = useState(null)
-  const [availableTimes, setAvailableTimes] = useState([])
+  const [availableTimes, setAvailableTimes] = useState({})
 
   let privateCalendarJson = null;
 
