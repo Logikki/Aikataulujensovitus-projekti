@@ -25,7 +25,6 @@ const App = () => {
   //const [privateCalendarJson, setPrivateCalendarJson] = useState(null)
   let privateCalendarJson = null;
 
-
   /**
    * Tämä funktio suoritetaan aina uudelleenpäivityksessä
    * Katsotaan, onko selaimessa tieto jaetusta kalenterista, jos sellainen on tuodaan se
@@ -34,9 +33,12 @@ const App = () => {
 
   useEffect(() => {
     const doThings = async () => {
-      console.log("use effect, katsotaan onko cachessa kirjauduttu kalenteriin");
-      const loggedSharedCalendarJSON =
-        window.localStorage.getItem("loggedSharedCalendar");
+      console.log(
+        "use effect, katsotaan onko cachessa kirjauduttu kalenteriin"
+      );
+      const loggedSharedCalendarJSON = window.localStorage.getItem(
+        "loggedSharedCalendar"
+      );
       if (loggedSharedCalendarJSON) {
         const calendar = JSON.parse(loggedSharedCalendarJSON);
         setSharedCalendar(calendar);
@@ -44,7 +46,7 @@ const App = () => {
         const sharedCal = await calendarService.getSharedCalendar(
           calendar.sharedCalendarID
         );
-        console.log(sharedCal)
+        console.log(sharedCal);
         let privates = [];
         sharedCal.privateCalendars.map(
           (pc) => (privates = privates.concat({ id: pc.id, name: pc.name }))
@@ -83,7 +85,10 @@ const App = () => {
         sharedCalendarID: newCalendarID,
         password: creatingNewCalendarPassword,
       });
-      window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(sharedCalendar));
+      window.localStorage.setItem(
+        "loggedSharedCalendar",
+        JSON.stringify(sharedCalendar)
+      );
       calendarService.setToken(sharedCalendar.token);
       setSharedCalendar(sharedCalendar);
       setCalendarID("");
@@ -97,7 +102,9 @@ const App = () => {
     } catch {
       //tähän voitaisiin laittaa error message
       setErrorVisible(true);
-      setErrorMessage("Virhe uuteen kalenteriin automaattisesti kirjautumisessa");
+      setErrorMessage(
+        "Virhe uuteen kalenteriin automaattisesti kirjautumisessa"
+      );
     }
   };
 
@@ -116,7 +123,10 @@ const App = () => {
         sharedCalendarID: calendarID,
         password: calendarPassword,
       });
-      window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(sharedCalendar));
+      window.localStorage.setItem(
+        "loggedSharedCalendar",
+        JSON.stringify(sharedCalendar)
+      );
       calendarService.setToken(sharedCalendar.token);
       setSharedCalendar(sharedCalendar);
       setCalendarID("");
@@ -143,9 +153,11 @@ const App = () => {
     try {
       console.log("lisätään tämä kalenteri: ", kalenteriUrl);
       //ladataan kalenteri, ja annetaan ne parse funktiolle
-      privateCalendarJson = parseICS.parse(await getCalendar.download(kalenteriUrl));
+      privateCalendarJson = parseICS.parse(
+        await getCalendar.download(kalenteriUrl)
+      );
       privateCalendarJson = { events: privateCalendarJson, name: name };
-      
+
       console.log(privateCalendarJson);
       const newShared = await calendarService.createPrivateCalendar(
         privateCalendarJson,
@@ -156,6 +168,8 @@ const App = () => {
     } catch (exception) {
       console.log(exception);
       setErrorMessage("Something went wrong");
+      setName("");
+      setUrl("");
     }
   };
 
@@ -175,7 +189,7 @@ const App = () => {
       setErrorMessage("Invalid id");
     }
   };
-  console.log(pcNameAndID)
+  console.log(pcNameAndID);
   return (
     <div>
       <Navbar
@@ -198,9 +212,11 @@ const App = () => {
           name={name}
           kalenteriUrl={kalenteriUrl}
           privateCals={pcNameAndID}
-          handleDelete={handleDeletingPrivateCalendarTest} //TODO: Muuta pois testistä!!!
+          handleDelete={handleDeletingPrivateCalendar} //TODO: Muuta pois testistä!!!
         />
-        <div>{errorVisible && <Notification message={errorMessage}></Notification>}</div>
+        <div>
+          {errorVisible && <Notification message={errorMessage}></Notification>}
+        </div>
       </div>
     </div>
   );
