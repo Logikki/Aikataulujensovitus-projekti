@@ -33,12 +33,12 @@ function sortDayjs(a, b) {
 // Muutetaan private kalenteri dayjs objekteiksi helppoa käsittelyä varten.
 // Palauttaa arrayn dayjs objekteja muodossa [aloitus, lopetus]
 function convertJsonToDayjs(data){
-    const today = dayjs(); 
+    const thismonth = dayjs().startOf('month'); 
     let result = [];
     for(const event of data) {
       let dayjsStartime = dayjs(event.start, "YYYYMMDD[T]HHmmss[Z]").utc('z').tz(event.timezone);
       let dayjsEndtime = calculateEndTime(event.start, event.duration, event.timezone);
-      if (dayjsStartime.isAfter(today)) {
+      if (dayjsStartime.isAfter(thismonth)) {
         result.push([dayjsStartime,dayjsEndtime]);
       }
     }

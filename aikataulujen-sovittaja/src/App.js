@@ -23,6 +23,8 @@ const App = () => {
   // Näytetään virheilmoitus
   const [errorVisible, setErrorVisible] = useState(false); //stringi tai null
   //const [privateCalendarJson, setPrivateCalendarJson] = useState(null)
+  const [availableTimes, setAvailableTimes] = useState({});
+
   let privateCalendarJson = null;
 
   /**
@@ -52,6 +54,16 @@ const App = () => {
           (pc) => (privates = privates.concat({ id: pc.id, name: pc.name }))
         );
         setPcNID(privates);
+        // Kalenterinäkymän asetukset
+        const calendarViewConfig = {
+          eventMoveHandling: "Disabled",
+          durationBarVisible: false,
+          cellDuration: 15,
+        };
+        setAvailableTimes({
+          ...calendarViewConfig,
+          events: sharedCal.availabletimes,
+        });
       }
     };
     doThings();
@@ -163,6 +175,8 @@ const App = () => {
         privateCalendarJson,
         sharedCalendar.sharedCalendarID
       );
+      const newPc = newShared.privateCalendars.filter((pc) => pc.name == name);
+      const addedPC = pcNameAndID.concat({ id: addedPC.id, name: name });
       setName("");
       setUrl("");
     } catch (exception) {
@@ -176,6 +190,8 @@ const App = () => {
   const handleDeletingPrivateCalendar = async (id) => {
     try {
       const response = await calendarService.remPrivateCalendar(id);
+      const filtered = pcNameAndID.filter((pc) => pc.id != id);
+      setPcNID(filtered);
     } catch {
       setErrorMessage("Invalid id");
     }
@@ -190,6 +206,7 @@ const App = () => {
     }
   };
   console.log(pcNameAndID);
+  console.log(availableTimes);
   return (
     <div>
       <Navbar
@@ -213,6 +230,7 @@ const App = () => {
           kalenteriUrl={kalenteriUrl}
           privateCals={pcNameAndID}
           handleDelete={handleDeletingPrivateCalendar} //TODO: Muuta pois testistä!!!
+          availableTimes={availableTimes}
         />
         <div>
           {errorVisible && <Notification message={errorMessage}></Notification>}
