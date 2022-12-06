@@ -158,7 +158,8 @@ const App = () => {
         privateCalendarJson,
         sharedCalendar.sharedCalendarID
       );
-
+      const newPc = newShared.privateCalendars.filter((pc) => pc.name == name)
+      const addedPC = pcNameAndID.concat({id : addedPC.id, name : name })
       setName("");
       setUrl("");
     } catch (exception) {
