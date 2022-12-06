@@ -45,7 +45,6 @@ const getSharedCalendar = async (id) => {
     const config = {
         headers: { Authorization: token }
     }
-    
     const request = axios.get(`${SharedCalendarBaseUrl}/${id}`, config)
     return request.then(response => response.data)
 }
