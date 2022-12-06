@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { DayPilot, DayPilotCalendar } from "@daypilot/daypilot-lite-react";
+import { DayPilot, DayPilotCalendar } from "daypilot-pro-react";
 import AddPrivateCalandar from "./AddPrivateCalandar";
 import PrivateCalendars from "./PrivateCalendars";
 // Ref hooks - testataan

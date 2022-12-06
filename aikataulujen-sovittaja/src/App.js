@@ -27,7 +27,6 @@ const App = () => {
 
   let privateCalendarJson = null;
 
-
   /**
    * Tämä funktio suoritetaan aina uudelleenpäivityksessä
    * Katsotaan, onko selaimessa tieto jaetusta kalenterista, jos sellainen on tuodaan se
@@ -154,7 +153,8 @@ const App = () => {
         privateCalendarJson,
         sharedCalendar.sharedCalendarID
       );
-      
+      const newPc = newShared.privateCalendars.filter((pc) => pc.name == name)
+      const addedPC = pcNameAndID.concat({id : addedPC.id, name : name })
 
       setName("");
       setUrl("");
@@ -167,6 +167,8 @@ const App = () => {
   const handleDeletingPrivateCalendar = async (id) => {
     try {
       const response = await calendarService.remPrivateCalendar(id);
+      const filtered = pcNameAndID.filter( (pc) => pc.id != id )
+      setPcNID(filtered)
     } catch {
       setErrorMessage("Invalid id");
     }
