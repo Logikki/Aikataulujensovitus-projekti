@@ -53,9 +53,15 @@ const App = () => {
         setPcNID(privates);
         // Kalenterinäkymän asetukset
         const calendarViewConfig = {
-          eventMoveHandling: "Disabled",
           durationBarVisible: false,
           cellDuration: 15,
+          cellHeight: 20,
+          headerDateFormat: "ddd d/M/yyyy",
+          timeRangeSelectedHandling: "Disabled",
+          eventMoveHandling: "Disabled",
+          eventClickHandling: "Disabled",
+          eventHoverHandling: "Disabled",
+          crosshair: "Disabled",
         };
         setAvailableTimes({ ...calendarViewConfig, events: sharedCal.availabletimes });
       }
