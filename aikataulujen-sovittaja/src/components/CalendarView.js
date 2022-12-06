@@ -27,7 +27,7 @@ const CalendarView = ({
         end: "2022-12-07T13:30:00",
       },
     ],
-    durationBarVisible: "false",
+    durationBarVisible: false,
   });
 
   if (sharedCalendar == null) {
