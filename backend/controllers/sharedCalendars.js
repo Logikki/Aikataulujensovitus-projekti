@@ -5,6 +5,8 @@ const bcrypt = require('bcrypt')
 const sharedCalendar = require('../models/sharedCalendar')
 const jwt = require('jsonwebtoken')
 const { findById } = require('../models/sharedCalendar')
+const availabletimes = require('./calculateAvailableTimes')
+
 
 //testaamista varten, tämä ei pitäisi jäädä valmiiseen ohjelmaan
 sharedCalendarRouter.get('/', async (req,res) => {
@@ -54,6 +56,7 @@ sharedCalendarRouter.get('/:id', async (req, res) => {
     const sharedCalendar = await SharedCalendar
             .findById(req.params.id)
             .populate('privateCalendars')
+    sharedCalendar.availabletimes = availabletimes.calculateAvailebleTimes(sharedCalendar.privateCalendars)
     res.json(sharedCalendar)
 })
 

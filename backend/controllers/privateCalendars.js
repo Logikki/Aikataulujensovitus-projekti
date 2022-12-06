@@ -52,8 +52,7 @@ privateCalendarRouter.delete('/:id', async (req, res) => {
     await sharedCal.save()
     await sharedCal
         .populate('privateCalendars') 
-    //tässä ajetaan algoritmi aikojen laskemiseksi ja palautetaan se 
-
+    sharedCal.availabletimes = availabletimes.calculateAvailebleTimes(sharedCal.privateCalendars)
     res.status(204).json(sharedCal)
 })
 
