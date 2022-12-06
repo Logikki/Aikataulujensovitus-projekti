@@ -2,6 +2,7 @@ const PrivateCalendar = require('../models/privateCalendar')
 const privateCalendarRouter = require('express').Router()
 const SharedCalendar = require('../models/sharedCalendar')
 const jwt = require('jsonwebtoken')
+const availabletimes = require('./calculateAvailableTimes')
 
 /**
  * tämä funktio huolehtii uusien private kalentereiden luonnista
@@ -25,7 +26,7 @@ privateCalendarRouter.post('/', async (req, res) => {
     await sharedCalendar.save()
     await sharedCalendar
         .populate('privateCalendars')
-    //tässä ajetaan algoritmi aikojen laskemiseksi ja palautetaan se
+    sharedCalendar.availabletimes = availabletimes.calculateAvailebleTimes(sharedCalendar.privateCalendars)
     res.status(201).json(sharedCalendar)
 })
 
