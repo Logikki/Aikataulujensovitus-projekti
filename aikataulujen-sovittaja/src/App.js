@@ -7,6 +7,7 @@ import calendarLoginService from "./services/calendarLogin";
 import Notification from "./components/Notification";
 import calendarService from "./services/calendars";
 import CalendarView from "./components/CalendarView";
+import background from "./images/logo.png";
 
 const App = () => {
   //tänne tallennetaan privaatit kalenterit, jotka liittyvät jaettuun kalenteriin
@@ -25,6 +26,17 @@ const App = () => {
   //const [privateCalendarJson, setPrivateCalendarJson] = useState(null)
   const [availableTimes, setAvailableTimes] = useState({});
 
+  // Taustakuvan piirtäminen
+  function backgroundStyle() {
+    if (sharedCalendar !== null) return;
+    return {
+      backgroundImage: `url(${background})`,
+      backgroundSize: "cover",
+      height: "100vh",
+      width: "100vw",
+      backgroundRepeat: "no-repeat",
+    };
+  }
   let privateCalendarJson = null;
 
   /**
@@ -197,18 +209,9 @@ const App = () => {
     }
   };
 
-  // Poistamisen testaamista varten
-  const handleDeletingPrivateCalendarTest = async (id) => {
-    try {
-      console.log(id);
-    } catch {
-      setErrorMessage("Invalid id");
-    }
-  };
-  console.log(pcNameAndID);
   console.log(availableTimes);
   return (
-    <div>
+    <div style={backgroundStyle()}>
       <Navbar
         setCalendarPassword={setCalendarPassword}
         setCalendarID={setCalendarID}
