@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt')
 const sharedCalendar = require('../models/sharedCalendar')
 const jwt = require('jsonwebtoken')
 
-
 //testaamista varten, tämä ei pitäisi jäädä valmiiseen ohjelmaan
 sharedCalendarRouter.get('/', async (req,res) => {
     const sharedCalendars = await SharedCalendar
