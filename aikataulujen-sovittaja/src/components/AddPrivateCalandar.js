@@ -13,21 +13,7 @@ const AddPrivateCalendar = ({
   const inputStyles = { width: "100%", textAlign: "center" };
   const errorStyles = () => {
     return {
-      color: "red",
-      marginTop: "5px",
-      textAlign: "center",
-      fontSize: "10px",
-      height: "12px",
       visibility: "hidden",
-    };
-  };
-  const noErrorStyles = () => {
-    return {
-      color: "red",
-      marginTop: "5px",
-      textAlign: "center",
-      fontSize: "10px",
-      height: "12px",
     };
   };
   const [popup, setPopup] = useState(false);
@@ -41,8 +27,6 @@ const AddPrivateCalendar = ({
   };
 
   const handleSubmit = () => {
-    console.log(name);
-    console.log(kalenteriUrl);
     kalenteriUrl == "" ? setUrlErr(true) : setUrlErr(false);
     name == "" ? setNameErr(true) : setNameErr(false);
     if (allowCal && allowNam) {
@@ -57,11 +41,21 @@ const AddPrivateCalendar = ({
   const handleCalendar = (e) => {
     handleKalenteriUrlChange(e);
     setAllowCal(true);
+    setUrlErr(false);
   };
 
   const handleName = (e) => {
     setName(e);
     setAllowNam(true);
+    setNameErr(false);
+  };
+
+  const close = () => {
+    togglePopup();
+    handleKalenteriUrlChange(null);
+    setName(null);
+    setUrlErr(false);
+    setNameErr(false);
   };
 
   return (
@@ -75,14 +69,14 @@ const AddPrivateCalendar = ({
         type="button"
         onClick={togglePopup}
       >
-        Lisää kalenteri
+        Lisää Varatut Ajat
       </button>
       <button //Kirjaudu ulos nappi
         className={nappiStyles}
         type="button"
         onClick={handleLogout}
       >
-        Poistu kalenterista
+        Poistu Kalenterista
       </button>
       {popup && ( //Privaatti kalenterin lisäyksen popup
         <Popup
@@ -90,7 +84,7 @@ const AddPrivateCalendar = ({
             <>
               <div>
                 <h1 style={{ fontSize: "30px", textAlign: "center" }}>
-                  Lisää Kalenteri
+                  Lisää Varatut Ajat
                 </h1>
                 <div style={{ marginTop: "5px", textAlign: "center" }}>Url</div>
                 <input // URL input kenttä
@@ -99,7 +93,7 @@ const AddPrivateCalendar = ({
                   onChange={(e) => handleCalendar(e)}
                   style={inputStyles}
                 ></input>
-                <p style={urlErr ? noErrorStyles() : errorStyles()}>
+                <p class="input-error" style={urlErr ? {} : errorStyles()}>
                   Aseta URL
                 </p>
 
@@ -113,38 +107,17 @@ const AddPrivateCalendar = ({
                   style={inputStyles}
                 ></input>
 
-                <p style={nameErr ? noErrorStyles() : errorStyles()}>
+                <p class="input-error" style={nameErr ? {} : errorStyles()}>
                   Aseta Nimi
                 </p>
-
-                <div style={{ paddingTop: "100px" }}>
-                  <button
-                    className={nappiStyles}
-                    style={{
-                      width: "120px",
-                      float: "left",
-                    }} // Kalenterin luonnin peruutus nappi
-                    type="button"
-                    onClick={togglePopup}
-                  >
-                    Peruuta
-                  </button>
-                  <button
-                    className={nappiStyles}
-                    style={{
-                      width: "120px",
-                      float: "right",
-                    }} // Kalenterin lisäys nappi
-                    type="button"
-                    onClick={handleSubmit}
-                  >
-                    Lisää
-                  </button>
-                </div>
               </div>
             </>
           }
-          handleClose={togglePopup}
+          left={"Peruuta"}
+          right={"Lisää"}
+          leftClick={close}
+          rightClick={handleSubmit}
+          handleClose={close}
         />
       )}
     </div>

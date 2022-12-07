@@ -1,22 +1,16 @@
 import React from "react";
 
-const Popup = (props) => {
+const seloste = (props) => {
   return (
     <div className="box" clickable="false">
-      <div className="popup-box">
-        <button
-          id="popup-close"
-          className="btn-close btn btn-secondary"
-          onClick={props.handleClose}
-        ></button>
-        {props.content}
+      <div className="seloste-box">
         <button
           className="btn btn-secondary"
           style={{
             right: "15px",
             position: "absolute",
-            bottom: "15px",
-            width: "130px",
+            top: "30px",
+            width: "120px",
           }}
           type="button"
           onClick={props.rightClick}
@@ -26,18 +20,19 @@ const Popup = (props) => {
         <button
           className="btn btn-secondary"
           style={{
-            left: "15px",
+            right: "145px",
             position: "absolute",
-            bottom: "15px",
-            width: "130px",
+            top: "30px",
+            width: "120px",
           }}
           type="button"
           onClick={props.leftClick}
         >
           {props.left}
         </button>
+        {props.content}
       </div>
     </div>
   );
 };
-export default Popup;
+export default seloste;
