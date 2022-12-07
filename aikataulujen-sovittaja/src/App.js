@@ -7,6 +7,7 @@ import calendarLoginService from "./services/calendarLogin";
 import Notification from "./components/Notification";
 import calendarService from "./services/calendars";
 import CalendarView from "./components/CalendarView";
+import background from "./images/logo.png";
 
 const App = () => {
   //tänne tallennetaan privaatit kalenterit, jotka liittyvät jaettuun kalenteriin
@@ -23,10 +24,20 @@ const App = () => {
   // Näytetään virheilmoitus
   const [errorVisible, setErrorVisible] = useState(false); //stringi tai null
   //const [privateCalendarJson, setPrivateCalendarJson] = useState(null)
-  const [availableTimes, setAvailableTimes] = useState([])
+  const [availableTimes, setAvailableTimes] = useState({});
 
+  // Taustakuvan piirtäminen
+  function backgroundStyle() {
+    if (sharedCalendar !== null) return;
+    return {
+      backgroundImage: `url(${background})`,
+      backgroundSize: "cover",
+      height: "100vh",
+      width: "100vw",
+      backgroundRepeat: "no-repeat",
+    };
+  }
   let privateCalendarJson = null;
-
 
   /**
    * Tämä funktio suoritetaan aina uudelleenpäivityksessä
@@ -46,13 +57,28 @@ const App = () => {
         const sharedCal = await calendarService.getSharedCalendar(
           calendar.sharedCalendarID
         );
-        console.log(sharedCal)
+        console.log(sharedCal);
         let privates = [];
         sharedCal.privateCalendars.map(
           (pc) => (privates = privates.concat({ id: pc.id, name: pc.name }))
         );
         setPcNID(privates);
-        setAvailableTimes({events : sharedCal.availabletimes})
+        // Kalenterinäkymän asetukset
+        const calendarViewConfig = {
+          durationBarVisible: false,
+          cellDuration: 15,
+          cellHeight: 20,
+          headerDateFormat: "ddd d/M/yyyy",
+          timeRangeSelectedHandling: "Disabled",
+          eventMoveHandling: "Disabled",
+          eventClickHandling: "Disabled",
+          eventHoverHandling: "Disabled",
+          crosshairType: "Disabled",
+        };
+        setAvailableTimes({
+          ...calendarViewConfig,
+          events: sharedCal.availabletimes,
+        });
       }
     };
     doThings();
@@ -148,42 +174,37 @@ const App = () => {
       //ladataan kalenteri, ja annetaan ne parse funktiolle
       privateCalendarJson = parseICS.parse(await getCalendar.download(kalenteriUrl));
       privateCalendarJson = { events: privateCalendarJson, name: name };
-      
+
       console.log(privateCalendarJson);
       const newShared = await calendarService.createPrivateCalendar(
         privateCalendarJson,
         sharedCalendar.sharedCalendarID
       );
-      
-
+      const newPc = newShared.privateCalendars.filter((pc) => pc.name == name);
+      const addedPC = pcNameAndID.concat({ id: addedPC.id, name: name });
       setName("");
       setUrl("");
     } catch (exception) {
       console.log(exception);
       setErrorMessage("Something went wrong");
+      setName("");
+      setUrl("");
     }
   };
 
   const handleDeletingPrivateCalendar = async (id) => {
     try {
       const response = await calendarService.remPrivateCalendar(id);
+      const filtered = pcNameAndID.filter((pc) => pc.id != id);
+      setPcNID(filtered);
     } catch {
       setErrorMessage("Invalid id");
     }
   };
 
-  // Poistamisen testaamista varten
-  const handleDeletingPrivateCalendarTest = async (id) => {
-    try {
-      console.log(id);
-    } catch {
-      setErrorMessage("Invalid id");
-    }
-  };
-  console.log(pcNameAndID)
-  console.log(availableTimes)
+  console.log(availableTimes);
   return (
-    <div>
+    <div style={backgroundStyle()}>
       <Navbar
         setCalendarPassword={setCalendarPassword}
         setCalendarID={setCalendarID}
@@ -204,7 +225,7 @@ const App = () => {
           name={name}
           kalenteriUrl={kalenteriUrl}
           privateCals={pcNameAndID}
-          handleDelete={handleDeletingPrivateCalendarTest} //TODO: Muuta pois testistä!!!
+          handleDelete={handleDeletingPrivateCalendar} //TODO: Muuta pois testistä!!!
           availableTimes={availableTimes}
         />
         <div>{errorVisible && <Notification message={errorMessage}></Notification>}</div>
