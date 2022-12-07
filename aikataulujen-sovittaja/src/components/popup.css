@@ -70,9 +70,17 @@ import "bootstrap/dist/css/bootstrap.css";
     height: 12px;
 }
 
-.spacer {
-    height: 50px;
-    margin: 0 0 -50px 0;
-    /* margin: 20px 0 -50px 0; use this if you want #container to have a 'bottom padding', in this case of 20px */
-    background: transparent; /* you'll need this if #container's parent element has a different background from #container itself */
+.poistuminen-box {
+    position: absolute;
+    bottom: 50%;
+    left:25%;
+    height: 140px;
+    background-color: #fff;
+    border: 1px solid #999;
+    border-radius: 4px;
+    margin: 20px auto;
+    padding: 20px;
+    overflow: auto;
+    color: #212529;
+    z-index: 998;
 }

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Popup from "./popup";
+import Poistuminen from "./Poistuminen";
 
 const AddPrivateCalendar = ({
   handleLogout,
@@ -17,6 +18,7 @@ const AddPrivateCalendar = ({
     };
   };
   const [popup, setPopup] = useState(false);
+  const [poistu, setPoistu] = useState(false);
   const [urlErr, setUrlErr] = useState(false);
   const [nameErr, setNameErr] = useState(false);
   const [allowCal, setAllowCal] = useState(false);
@@ -24,6 +26,10 @@ const AddPrivateCalendar = ({
 
   const togglePopup = () => {
     setPopup(!popup);
+  };
+
+  const togglePoistu = () => {
+    setPoistu(!poistu);
   };
 
   const handleSubmit = () => {
@@ -74,10 +80,25 @@ const AddPrivateCalendar = ({
       <button //Kirjaudu ulos nappi
         className={nappiStyles}
         type="button"
-        onClick={handleLogout}
+        onClick={togglePoistu}
       >
         Poistu Kalenterista
       </button>
+
+      {poistu && ( //Privaatti kalenterin lisäyksen popup
+        <Poistuminen
+          content={
+            <>
+              <h1>Haluatko varmasti poistua kalenterista?</h1>
+            </>
+          }
+          left={"Peruuta"}
+          right={"Poistu"}
+          leftClick={togglePoistu}
+          rightClick={handleLogout}
+          handleClose={togglePoistu}
+        />
+      )}
       {popup && ( //Privaatti kalenterin lisäyksen popup
         <Popup
           content={
