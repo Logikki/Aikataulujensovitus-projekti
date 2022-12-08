@@ -47,9 +47,9 @@ const CalendarView = forwardRef(function (
         <div className="addPrivateCalendar input-group p-3 mb-2 bg-dark">
           <PrivateCalendars
             privateCals={privateCals}
-            handleDelete={handleDelete} //TODO: Muuta pois testistä!!!
+            handleDelete={handleDelete}
           />
-          <AddPrivateCalandar //TESTAAMISTA VARTEN
+          <AddPrivateCalandar
             handleLogout={handleLogout}
             handleKalenteriUrlChange={handleKalenteriUrlChange}
             handleFetchCalendar={handleFetchCalendar}

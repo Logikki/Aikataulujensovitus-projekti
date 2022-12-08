@@ -56,7 +56,10 @@ const App = () => {
       console.log("use effect, katsotaan onko cachessa kirjauduttu kalenteriin");
       const loggedSharedCalendarJSON =
         window.localStorage.getItem("loggedSharedCalendar");
-      if (loggedSharedCalendarJSON) {
+
+      const TSS = window.localStorage.getItem("TSSAcc") == 1 ? true : false; //onko tietosuojaseloste täytetty?
+      if (loggedSharedCalendarJSON && TSS) {
+        // Mikäli tietosuojaseloste ei ole täytetty, ei myöskään lataa valmista kalenteria.
         const calendar = JSON.parse(loggedSharedCalendarJSON);
         setSharedCalendar(calendar);
         calendarService.setToken(calendar.token);
@@ -236,6 +239,7 @@ const App = () => {
   return (
     <div style={backgroundStyle()}>
       <Navbar
+        calendarPassword={calendarPassword}
         setCalendarPassword={setCalendarPassword}
         setCalendarID={setCalendarID}
         handleCalendarLogin={handleCalendarLogin}

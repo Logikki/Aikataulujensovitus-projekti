@@ -5,12 +5,13 @@ const PrivateCalendars = ({ privateCals, handleDelete }) => {
   return (
     <div
       className="p-3 mb-2 bg-dark text-white border border-light rounded"
-      style={{ marginTop: "10px", width: "250px" }}
+      style={{ marginTop: "10px", width: "250px", textAlign: "center" }}
     >
-      Yksityiset kalenterit
+      Sisu kalenterit
       <div>
         {privateCals.map((privateCal) => (
           <PrivateCal
+            style={{ textAlign: "center" }}
             key={privateCal.id}
             cal={privateCal}
             handleDelete={handleDelete}

@@ -4,7 +4,7 @@ import "./components/popup.css";
 import "bootstrap/dist/css/bootstrap.css"; 
 */
 
-.popup-box {
+.box {
     position: fixed;
     background-color: rgba(0, 0, 0, 0.5);
     left: 0;
@@ -14,9 +14,9 @@ import "bootstrap/dist/css/bootstrap.css";
     z-index: 997;
 }
 
-.box {
+.popup-box {
     position: relative;
-    width: 300px;
+    width: 305px;
     height: 450px;
     background-color: #fff;
     border: 1px solid #999;
@@ -36,8 +36,51 @@ import "bootstrap/dist/css/bootstrap.css";
 
 #popup-close {
     position: relative;
-    left: 240px;
+    float: right;
     top: -15px;
     z-index: 999;
 }
 
+.seloste-box {
+    position: absolute;
+    height: 200px;
+    bottom: 0px;
+    background-color: #fff;
+    border: 1px solid #999;
+    border-radius: 4px;
+    margin: 20px auto;
+    padding: 20px;
+    overflow: auto;
+    color: #212529;
+    z-index: 998;
+}
+
+#seloste-close {
+    position: relative;
+    float: right;
+    top: -15px;
+    z-index: 999;
+}
+
+.input-error{
+    color: red;
+    margin-top: 5px;
+    text-align: center;
+    font-size: 10px;
+    height: 12px;
+}
+
+.poistuminen-box {
+    position: absolute;
+    bottom: 50%;
+    left:25%;
+    height: 140px;
+    background-color: #fff;
+    border: 1px solid #999;
+    border-radius: 4px;
+    margin: 20px auto;
+    padding: 20px;
+    overflow: auto;
+    color: #212529;
+    z-index: 998;
+}

@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import Popup from "./popup";
+import Seloste from "./seloste";
 
 function Navbar({
+  calendarPassword,
   calendarIDValue,
   setCalendarPassword,
   setCalendarID,
   handleCalendarLogin,
   setNewCalendarPassword,
   createNewCalendarHandler,
-  sharedCalendar,
 }) {
   // window width/height on resize courtesy of Jake Trent
   // https://www.pluralsight.com/guides/re-render-react-component-on-window-resize
@@ -29,16 +30,80 @@ function Navbar({
     return (_) => {
       window.removeEventListener("resize", handleResize);
     };
-  });
+  }, []);
 
   // Omaa koodia
-  const [haku, setHaku] = useState("");
   const nappiStyles = "btn btn-secondary";
   const inputStyles = { width: "100%", textAlign: "center" };
   const [popup, setPopup] = useState(false);
+  const [seloste, setSeloste] = useState(
+    window.localStorage.getItem("TSSAcc") == 1 ? false : true
+  );
+  const [passErr, setPassErr] = useState(false);
+  const [allowCal, setAllowCal] = useState(false);
+  const tietoseloste =
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. \
+    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. \
+    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. \
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. \
+    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. \
+    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. \
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. \
+    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. \
+    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. \
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. \
+    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. \
+    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. \
+    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+  const errorStyles = () => {
+    return {
+      visibility: "hidden",
+    };
+  };
 
   const togglePopup = () => {
-    setPopup(!popup);
+    window.localStorage.getItem("TSSAcc") == 1
+      ? setPopup(!popup)
+      : console.log("Hyväksy tietosuojaseloste!");
+  };
+
+  const handleSelosteOk = () => {
+    window.localStorage.setItem("TSSAcc", 1);
+    setSeloste(window.localStorage.getItem("TSSAcc") == 1 ? false : true);
+  };
+
+  const handleSelosteNotOk = () => {
+    window.localStorage.setItem("TSSAcc", 0);
+    setSeloste(window.localStorage.getItem("TSSAcc") == 0 ? false : true);
+  };
+
+  const close = () => {
+    togglePopup();
+    setNewCalendarPassword(null);
+    setPassErr(false);
+    setAllowCal(false);
+  };
+
+  const handleInput = (e) => {
+    setNewCalendarPassword(e.target.value);
+    setPassErr(false);
+    setAllowCal(true);
+  };
+
+  const handleSubmit = () => {
+    calendarPassword == "" ? setPassErr(true) : setPassErr(false);
+    if (allowCal) {
+      togglePopup();
+      createNewCalendarHandler();
+      setAllowCal(false);
+    }
+  };
+
+  const handleLogin = () => {
+    window.localStorage.getItem("TSSAcc") == 1
+      ? handleCalendarLogin()
+      : console.log("Hyväksy tietosuojaseloste!");
   };
 
   return (
@@ -62,9 +127,21 @@ function Navbar({
           style={{ marginLeft: "10px" }}
           className={nappiStyles}
           type="button"
-          onClick={handleCalendarLogin}
+          onClick={handleLogin}
         >
           Hae Kalenteria
+        </button>
+      </div>
+      <div>
+        <button // Uusi kalenteri nappi
+          className={nappiStyles}
+          style={{
+            marginLeft: "10px",
+          }}
+          type="button"
+          onClick={() => setSeloste(!seloste)}
+        >
+          Tietosuojaseloste
         </button>
       </div>
       <span
@@ -79,13 +156,13 @@ function Navbar({
             width: "130px",
           }}
           type="button"
-          onClick={togglePopup} // TODO: Avaa pupup ikkuna
+          onClick={togglePopup}
         >
           Uusi kalenteri
         </button>
       </span>
 
-      {popup && (
+      {popup && ( // Uusi kalenteri popup
         <Popup
           content={
             <>
@@ -100,41 +177,35 @@ function Navbar({
                   className="form-control"
                   type="text"
                   placeholder="********"
-                  onInput={(e) => setNewCalendarPassword(e.target.value)}
+                  onInput={(e) => handleInput(e)}
                   style={inputStyles}
                 ></input>
-
-                <div style={{ paddingTop: "230px" }}>
-                  <button
-                    className={nappiStyles}
-                    style={{
-                      width: "120px",
-                      float: "left",
-                    }} // Kalenterin luonnin peruutus nappi
-                    type="button"
-                    onClick={togglePopup}
-                  >
-                    Peruuta
-                  </button>
-                  <button
-                    className={nappiStyles}
-                    style={{
-                      width: "120px",
-                      float: "right",
-                    }} // Kalenterin luonti nappi
-                    type="button"
-                    onClick={() => {
-                      togglePopup();
-                      createNewCalendarHandler();
-                    }} // TODO: Lähetä Inputtien arvo parametrina backendiin
-                  >
-                    Luo Kalenteri
-                  </button>
-                </div>
+                <p className="input-error" style={passErr ? {} : errorStyles()}>
+                  Aseta Salasana
+                </p>
               </div>
             </>
           }
-          handleClose={togglePopup}
+          left={"Peruuta"}
+          right={"Luo Kalenteri"}
+          leftClick={close}
+          rightClick={handleSubmit}
+          handleClose={close}
+        />
+      )}
+
+      {seloste && ( // Uusi kalenteri popup
+        <Seloste
+          content={
+            <>
+              <h1>Tietosuojaseloste</h1>
+              <div>{tietoseloste}</div>
+            </>
+          }
+          left={"En Hyväksy"}
+          right={"Hyväksyn"}
+          leftClick={handleSelosteNotOk}
+          rightClick={handleSelosteOk}
         />
       )}
     </div>
