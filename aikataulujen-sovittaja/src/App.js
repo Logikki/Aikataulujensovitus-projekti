@@ -25,19 +25,58 @@ const App = () => {
   const [errorVisible, setErrorVisible] = useState(false); //stringi tai null
   //const [privateCalendarJson, setPrivateCalendarJson] = useState(null)
   const [availableTimes, setAvailableTimes] = useState({});
+  const [navHeight, setNavHeight] = useState(70);
+  const [otsHeight, setOtsHeight] = useState(36);
+  const [dimensions, setDimensions] = useState({
+    height: window.innerHeight,
+    width: window.innerWidth,
+  });
+  const [BGI, setBGI] = useState({
+    height: 0,
+    width: 0,
+  });
+
+  var img = new Image();
+  img.onload = function () {
+    setBGI({
+      height: img.height,
+      width: img.width,
+    });
+  };
+  img.src = background;
 
   // Taustakuvan piirtäminen
   function backgroundStyle() {
     if (sharedCalendar !== null) return;
+    else return "bg-secondary";
+  }
+  function backgroundImageStyle() {
+    if (sharedCalendar !== null) return;
+    let h = (dimensions.height - navHeight - otsHeight - 16).toString() + "px";
+    let w = dimensions.width / 2 - BGI.width / 2;
     return {
+      marginLeft: w,
       backgroundImage: `url(${background})`,
-      backgroundSize: "cover",
-      height: "100vh",
-      width: "100vw",
+      height: h,
+      width: BGI.width,
       backgroundRepeat: "no-repeat",
     };
   }
   let privateCalendarJson = null;
+
+  window.addEventListener("load", function () {
+    setDimensions({
+      height: window.innerHeight,
+      width: window.innerWidth,
+    });
+    setNavHeight(
+      document.getElementsByClassName("input-group")[0].getBoundingClientRect()
+        .height
+    );
+    setOtsHeight(
+      document.getElementById("etusivuOtsikko").getBoundingClientRect().height
+    );
+  });
 
   /**
    * Tämä funktio suoritetaan aina uudelleenpäivityksessä
@@ -46,6 +85,21 @@ const App = () => {
    */
 
   useEffect(() => {
+    // Ikkunan resize funktio
+    function handleResize() {
+      setDimensions({
+        height: window.innerHeight,
+        width: window.innerWidth,
+      });
+      setNavHeight(
+        document
+          .getElementsByClassName("input-group")[0]
+          .getBoundingClientRect().height
+      );
+      setOtsHeight(
+        document.getElementById("etusivuOtsikko").getBoundingClientRect().height
+      );
+    }
     const doThings = async () => {
       console.log(
         "use effect, katsotaan onko cachessa kirjauduttu kalenteriin"
@@ -86,6 +140,13 @@ const App = () => {
           events: sharedCal.availabletimes,
         });
       }
+
+      // Ikkunan resize funktio
+      window.addEventListener("resize", handleResize);
+
+      return (_) => {
+        window.removeEventListener("resize", handleResize);
+      };
     };
     doThings();
   }, []);
@@ -219,7 +280,10 @@ const App = () => {
   };
 
   return (
-    <div style={backgroundStyle()}>
+    <div
+      className={backgroundStyle()}
+      style={{ height: "100%", width: "100%" }}
+    >
       <Navbar
         calendarPassword={calendarPassword}
         setCalendarPassword={setCalendarPassword}
@@ -230,6 +294,14 @@ const App = () => {
         sharedCalendar={sharedCalendar}
         calendarIDValue={calendarID}
       ></Navbar>
+      <div>
+        {sharedCalendar == null && (
+          <h1 id="etusivuOtsikko" className="Otsikko">
+            SISU KALENTERIEN SOVITTAJA
+          </h1>
+        )}
+      </div>
+      <div style={backgroundImageStyle()}></div>
       <div>
         <Notification message={errorMessage}></Notification>
         <CalendarView

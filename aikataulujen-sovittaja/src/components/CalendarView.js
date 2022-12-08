@@ -38,8 +38,8 @@ const CalendarView = ({
     return;
   } else {
     return (
-      <div>
-        Kalenteri {sharedCalendar.sharedCalendarID}
+      <div className="Otsikko">
+        Kalenteri: {sharedCalendar.sharedCalendarID}
         <DayPilotCalendar viewType="Week" locale="fi-fi" {...availableTimes} />
         <div className="addPrivateCalendar input-group p-3 mb-2 bg-dark">
           <PrivateCalendars

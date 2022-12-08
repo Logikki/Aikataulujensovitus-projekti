@@ -21,3 +21,8 @@ code {
   width: 100vw;
   background-repeat:repeat; 
 }
+
+.Otsikko{
+  text-align: center;
+  font-size: 30px;
+}

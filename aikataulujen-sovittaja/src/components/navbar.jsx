@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Popup from "./popup";
 import Seloste from "./seloste";
 
@@ -13,11 +13,11 @@ function Navbar({
 }) {
   // window width/height on resize courtesy of Jake Trent
   // https://www.pluralsight.com/guides/re-render-react-component-on-window-resize
-  const [dimensions, setDimensions] = React.useState({
+  const [dimensions, setDimensions] = useState({
     height: window.innerHeight,
     width: window.innerWidth,
   });
-  React.useEffect(() => {
+  useEffect(() => {
     function handleResize() {
       setDimensions({
         height: window.innerHeight,
@@ -117,7 +117,7 @@ function Navbar({
         onInput={(e) => setCalendarID(e.target.value)}
       ></input>
       <input // Hae kalenteria input kenttä
-        type="text"
+        type="password"
         placeholder="Salasana"
         style={{ textAlign: "center", marginLeft: "10px" }}
         onInput={(e) => setCalendarPassword(e.target.value)}
@@ -175,7 +175,7 @@ function Navbar({
                 </div>
                 <input // Salasanan input kenttä
                   className="form-control"
-                  type="text"
+                  type="password"
                   placeholder="********"
                   onInput={(e) => handleInput(e)}
                   style={inputStyles}
