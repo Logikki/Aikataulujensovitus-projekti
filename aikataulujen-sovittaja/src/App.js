@@ -9,8 +9,6 @@ import calendarService from "./services/calendars";
 import CalendarView from "./components/CalendarView";
 import background from "./images/logo.png";
 import { DayPilot } from "daypilot-pro-react";
-// Napit viikkoselausta varten. Mahd. oma komp.
-import Button from "react-bootstrap/Button";
 
 const App = () => {
   //tänne tallennetaan privaatit kalenterit, jotka liittyvät jaettuun kalenteriin
@@ -83,24 +81,18 @@ const App = () => {
         width: window.innerWidth,
       });
       setNavHeight(
-        document
-          .getElementsByClassName("input-group")[0]
-          .getBoundingClientRect().height
+        document.getElementsByClassName("input-group")[0].getBoundingClientRect().height
       );
       try {
         setOtsHeight(
-          document.getElementById("etusivuOtsikko").getBoundingClientRect()
-            .height
+          document.getElementById("etusivuOtsikko").getBoundingClientRect().height
         );
       } catch {}
     }
     const doThings = async () => {
-      console.log(
-        "use effect, katsotaan onko cachessa kirjauduttu kalenteriin"
-      );
-      const loggedSharedCalendarJSON = window.localStorage.getItem(
-        "loggedSharedCalendar"
-      );
+      console.log("use effect, katsotaan onko cachessa kirjauduttu kalenteriin");
+      const loggedSharedCalendarJSON =
+        window.localStorage.getItem("loggedSharedCalendar");
 
       const TSS = window.localStorage.getItem("TSSAcc") == 1 ? true : false; //onko tietosuojaseloste täytetty?
       if (loggedSharedCalendarJSON && TSS) {
@@ -175,10 +167,7 @@ const App = () => {
         sharedCalendarID: newCalendarID,
         password: creatingNewCalendarPassword,
       });
-      window.localStorage.setItem(
-        "loggedSharedCalendar",
-        JSON.stringify(sharedCalendar)
-      );
+      window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(sharedCalendar));
       calendarService.setToken(sharedCalendar.token);
       setSharedCalendar(sharedCalendar);
       setCalendarID("");
@@ -190,9 +179,7 @@ const App = () => {
       // Virheilmoitus pois?
     } catch {
       //tähän voitaisiin laittaa error message
-      setErrorMessage(
-        "Virhe uuteen kalenteriin automaattisesti kirjautumisessa"
-      );
+      setErrorMessage("Virhe uuteen kalenteriin automaattisesti kirjautumisessa");
       setTimeout(() => {
         setErrorMessage(null);
       }, 5000);
@@ -214,10 +201,7 @@ const App = () => {
         sharedCalendarID: calendarID,
         password: calendarPassword,
       });
-      window.localStorage.setItem(
-        "loggedSharedCalendar",
-        JSON.stringify(sharedCalendar)
-      );
+      window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(sharedCalendar));
       calendarService.setToken(sharedCalendar.token);
       setSharedCalendar(sharedCalendar);
       setCalendarID("");
@@ -243,9 +227,7 @@ const App = () => {
     try {
       console.log("lisätään tämä kalenteri: ", kalenteriUrl);
       //ladataan kalenteri, ja annetaan ne parse funktiolle
-      privateCalendarJson = parseICS.parse(
-        await getCalendar.download(kalenteriUrl)
-      );
+      privateCalendarJson = parseICS.parse(await getCalendar.download(kalenteriUrl));
       privateCalendarJson = { events: privateCalendarJson, name: name };
 
       console.log(privateCalendarJson);
@@ -304,10 +286,7 @@ const App = () => {
   };
 
   return (
-    <div
-      className={backgroundStyle()}
-      style={{ height: "100%", width: "100%" }}
-    >
+    <div className={backgroundStyle()} style={{ height: "100%", width: "100%" }}>
       <Navbar
         calendarPassword={calendarPassword}
         setCalendarPassword={setCalendarPassword}
