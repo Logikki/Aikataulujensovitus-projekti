@@ -9,6 +9,7 @@ import calendarService from "./services/calendars";
 import CalendarView from "./components/CalendarView";
 import background from "./images/logo.png";
 import { DayPilot } from "daypilot-pro-react";
+import Ohjeteksti from "./components/Ohjeteksti";
 
 const App = () => {
   //tänne tallennetaan privaatit kalenterit, jotka liittyvät jaettuun kalenteriin
@@ -66,6 +67,10 @@ const App = () => {
     };
   }
   let privateCalendarJson = null;
+
+  // Ohjeteksti, joka näytetään kun ei näkyvissä kalenteria
+  const ohje = `Aloita kirjautumalla yhteiseen kalenteriin. 
+    Voit myös luoda uuden kalenterin uusi kalenteri -painikkeesta.`;
 
   /**
    * Tämä funktio suoritetaan aina uudelleenpäivityksessä
@@ -303,6 +308,7 @@ const App = () => {
             SISU KALENTERIEN SOVITTAJA
           </h1>
         )}
+        {sharedCalendar == null && <Ohjeteksti teksti={ohje} />}
       </div>
       <div style={backgroundImageStyle()}></div>
       <div>
