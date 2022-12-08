@@ -24,8 +24,6 @@ const App = () => {
   const [creatingNewCalendarPassword, setNewCalendarPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const [name, setName] = useState("");
-  // Näytetään virheilmoitus
-  const [errorVisible, setErrorVisible] = useState(false); //stringi tai null
   //const [privateCalendarJson, setPrivateCalendarJson] = useState(null)
   const [availableTimes, setAvailableTimes] = useState({});
   // Kalenterin viikon aloituspäivä
@@ -135,11 +133,12 @@ const App = () => {
       );
 
       // Virheilmoitus pois?
-      setErrorVisible(false);
     } catch {
       //tähän voitaisiin laittaa error message
-      setErrorVisible(true);
       setErrorMessage("Virhe uuteen kalenteriin automaattisesti kirjautumisessa");
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
     }
   };
 
@@ -166,15 +165,14 @@ const App = () => {
       const sharedCal = await calendarService.getSharedCalendar(
         sharedCalendar.sharedCalendarID
       );
-
-      // Virheilmoitus pois?
-      setErrorVisible(false);
     } catch {
       //tähän voitaisiin laittaa error message
-      setErrorVisible(true);
       setErrorMessage(
         "Virhe kirjautumisessa. Salasana on väärin tai kalenteria ei löydy."
       );
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
     }
   };
   /**
@@ -200,6 +198,9 @@ const App = () => {
     } catch (exception) {
       console.log(exception);
       setErrorMessage("Something went wrong");
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
       setName("");
       setUrl("");
     }
@@ -212,6 +213,9 @@ const App = () => {
       setPcNID(filtered);
     } catch {
       setErrorMessage("Invalid id");
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
     }
   };
 
@@ -278,7 +282,9 @@ const App = () => {
           availableTimes={availableTimes}
           ref={calendarRef} // Tämä mahdollistaa daypilot metodikutsut
         />
-        <div>{errorVisible && <Notification message={errorMessage}></Notification>}</div>
+        <div>
+          <Notification message={errorMessage}></Notification>
+        </div>
       </div>
     </div>
   );
