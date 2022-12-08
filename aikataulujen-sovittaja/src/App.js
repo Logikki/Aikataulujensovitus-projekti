@@ -9,6 +9,8 @@ import calendarService from "./services/calendars";
 import CalendarView from "./components/CalendarView";
 import background from "./images/logo.png";
 import { DayPilot } from "daypilot-pro-react";
+// Napit viikkoselausta varten. Mahd. oma komp.
+import Button from "react-bootstrap/Button";
 
 const App = () => {
   //tänne tallennetaan privaatit kalenterit, jotka liittyvät jaettuun kalenteriin
@@ -252,8 +254,15 @@ const App = () => {
         <div>
           <p>
             Viikko
-            <button onClick={handlePrevWeekClick}>Edellinen</button>
-            <button onClick={handleNextWeekClick}>Seuraava</button>
+            <>
+              {" "}
+              <Button variant={"primary"} onClick={handlePrevWeekClick} size={"sm"}>
+                Edellinen
+              </Button>{" "}
+              <Button variant={"primary"} onClick={handleNextWeekClick} size={"sm"}>
+                Seuraava
+              </Button>
+            </>
           </p>
         </div>
         <CalendarView
