@@ -235,7 +235,6 @@ const App = () => {
     calendarRef.current.control.update({ startDate: uusiPvmObj });
   };
 
-  console.log(availableTimes);
   return (
     <div style={backgroundStyle()}>
       <Navbar
