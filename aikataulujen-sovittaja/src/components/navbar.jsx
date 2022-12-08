@@ -27,7 +27,8 @@ function Navbar({
 
     window.addEventListener("resize", handleResize);
 
-    return (_) => {
+    handleResize();
+    return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
@@ -108,7 +109,7 @@ function Navbar({
 
   return (
     //HAE KALENTERIA
-    <div className="input-group p-3 mb-2 bg-dark text-black">
+    <div className="input-group p-3 bg-dark text-black">
       <input // Hae kalenteria input kenttä
         type="text"
         value={calendarIDValue}

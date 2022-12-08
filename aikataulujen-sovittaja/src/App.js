@@ -36,7 +36,11 @@ const App = () => {
     height: 0,
     width: 0,
   });
-
+  // Ref kalenterille, viittausta tarvitaan kalenterin funktioiden kutsuihin
+  const calendarRef = useRef(null);
+  // Kalenterin viikon aloituspäivä
+  const [startDate, setStartDate] = useState(DayPilot.Date.today());
+  const backgroundStyles = "bg-primary"; // valinnainen tausta kaikkialla
   var img = new Image();
   img.onload = function () {
     setBGI({
@@ -45,11 +49,6 @@ const App = () => {
     });
   };
   img.src = background;
-  // Kalenterin viikon aloituspäivä
-  const [startDate, setStartDate] = useState(DayPilot.Date.today());
-
-  // Ref kalenterille, viittausta tarvitaan kalenterin funktioiden kutsuihin
-  const calendarRef = useRef(null);
 
   // Taustakuvan piirtäminen
   function backgroundStyle() {
@@ -58,7 +57,7 @@ const App = () => {
   }
   function backgroundImageStyle() {
     if (sharedCalendar !== null) return;
-    let h = (dimensions.height - navHeight - otsHeight - 16).toString() + "px";
+    let h = (dimensions.height - navHeight - otsHeight - 8).toString() + "px";
     let w = dimensions.width / 2 - BGI.width / 2;
     return {
       marginLeft: w,
@@ -69,20 +68,6 @@ const App = () => {
     };
   }
   let privateCalendarJson = null;
-
-  window.addEventListener("load", function () {
-    setDimensions({
-      height: window.innerHeight,
-      width: window.innerWidth,
-    });
-    setNavHeight(
-      document.getElementsByClassName("input-group")[0].getBoundingClientRect()
-        .height
-    );
-    setOtsHeight(
-      document.getElementById("etusivuOtsikko").getBoundingClientRect().height
-    );
-  });
 
   /**
    * Tämä funktio suoritetaan aina uudelleenpäivityksessä
@@ -102,9 +87,12 @@ const App = () => {
           .getElementsByClassName("input-group")[0]
           .getBoundingClientRect().height
       );
-      setOtsHeight(
-        document.getElementById("etusivuOtsikko").getBoundingClientRect().height
-      );
+      try {
+        setOtsHeight(
+          document.getElementById("etusivuOtsikko").getBoundingClientRect()
+            .height
+        );
+      } catch {}
     }
     const doThings = async () => {
       console.log(
@@ -151,12 +139,12 @@ const App = () => {
 
       // Ikkunan resize funktio
       window.addEventListener("resize", handleResize);
-
-      return (_) => {
+      return () => {
         window.removeEventListener("resize", handleResize);
       };
     };
     doThings();
+    handleResize();
   }, []);
 
   /**
@@ -340,28 +328,6 @@ const App = () => {
       <div style={backgroundImageStyle()}></div>
       <div>
         <Notification message={errorMessage}></Notification>
-        <div>
-          <p>
-            Viikko
-            <>
-              {" "}
-              <Button
-                variant={"primary"}
-                onClick={handlePrevWeekClick}
-                size={"sm"}
-              >
-                Edellinen
-              </Button>{" "}
-              <Button
-                variant={"primary"}
-                onClick={handleNextWeekClick}
-                size={"sm"}
-              >
-                Seuraava
-              </Button>
-            </>
-          </p>
-        </div>
         <CalendarView
           sharedCalendar={sharedCalendar}
           handleLogout={handleLogout}
@@ -374,6 +340,8 @@ const App = () => {
           handleDelete={handleDeletingPrivateCalendar} //TODO: Muuta pois testistä!!!
           availableTimes={availableTimes}
           ref={calendarRef} // Tämä mahdollistaa daypilot metodikutsut
+          handlePrevWeekClick={handlePrevWeekClick}
+          handleNextWeekClick={handleNextWeekClick}
         />
         <div>
           <Notification message={errorMessage}></Notification>

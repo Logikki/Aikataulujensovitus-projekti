@@ -17,6 +17,8 @@ const CalendarView = forwardRef(function (
     privateCals,
     handleDelete,
     availableTimes,
+    handlePrevWeekClick,
+    handleNextWeekClick,
   },
   ref
 ) {
@@ -36,12 +38,37 @@ const CalendarView = forwardRef(function (
   //   ],
   //   durationBarVisible: "false",
   // });
+  const nappiStyles = "btn btn-secondary";
 
   if (sharedCalendar == null) {
     return;
   } else {
     return (
       <div>
+        <div>
+          <p>
+            Viikko
+            <>
+              {" "}
+              <button
+                className={nappiStyles}
+                variant={"primary"}
+                onClick={handlePrevWeekClick}
+                size={"sm"}
+              >
+                Edellinen
+              </button>{" "}
+              <button
+                className={nappiStyles}
+                variant={"primary"}
+                onClick={handleNextWeekClick}
+                size={"sm"}
+              >
+                Seuraava
+              </button>
+            </>
+          </p>
+        </div>
         Kalenteri {sharedCalendar.sharedCalendarID}
         <DayPilotCalendar
           viewType="Week"
@@ -49,7 +76,7 @@ const CalendarView = forwardRef(function (
           {...availableTimes}
           ref={ref}
         />
-        <div className="addPrivateCalendar input-group p-3 mb-2 bg-dark">
+        <div className="addPrivateCalendar input-group p-3 bg-dark">
           <PrivateCalendars
             privateCals={privateCals}
             handleDelete={handleDelete}
