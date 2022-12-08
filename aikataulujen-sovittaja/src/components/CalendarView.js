@@ -45,6 +45,7 @@ const CalendarView = forwardRef(function (
   } else {
     return (
       <div>
+        Kalenteri {sharedCalendar.sharedCalendarID}
         <div>
           <p className="ms-1">
             Viikko
@@ -59,10 +60,17 @@ const CalendarView = forwardRef(function (
             </>
           </p>
         </div>
-        Kalenteri {sharedCalendar.sharedCalendarID}
-        <DayPilotCalendar viewType="Week" locale="fi-fi" {...availableTimes} ref={ref} />
+        <DayPilotCalendar
+          viewType="Week"
+          locale="fi-fi"
+          {...availableTimes}
+          ref={ref}
+        />
         <div className="addPrivateCalendar input-group p-3 bg-dark">
-          <PrivateCalendars privateCals={privateCals} handleDelete={handleDelete} />
+          <PrivateCalendars
+            privateCals={privateCals}
+            handleDelete={handleDelete}
+          />
           <AddPrivateCalandar
             handleLogout={handleLogout}
             handleKalenteriUrlChange={handleKalenteriUrlChange}

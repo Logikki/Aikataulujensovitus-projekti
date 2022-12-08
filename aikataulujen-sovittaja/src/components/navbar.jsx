@@ -10,30 +10,8 @@ function Navbar({
   handleCalendarLogin,
   setNewCalendarPassword,
   createNewCalendarHandler,
+  dimensions,
 }) {
-  // window width/height on resize courtesy of Jake Trent
-  // https://www.pluralsight.com/guides/re-render-react-component-on-window-resize
-  const [dimensions, setDimensions] = useState({
-    height: window.innerHeight,
-    width: window.innerWidth,
-  });
-  useEffect(() => {
-    function handleResize() {
-      setDimensions({
-        height: window.innerHeight,
-        width: window.innerWidth,
-      });
-    }
-
-    window.addEventListener("resize", handleResize);
-
-    handleResize();
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  // Omaa koodia
   const nappiStyles = "btn btn-secondary";
   const inputStyles = { width: "100%", textAlign: "center" };
   const [popup, setPopup] = useState(false);

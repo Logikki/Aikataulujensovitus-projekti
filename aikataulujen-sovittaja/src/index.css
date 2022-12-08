@@ -12,18 +12,10 @@ code {
     monospace;
 }
 
-.app{
-  background-image:
-  url(
-    "https://static.displate.com/857x1200/displate/2019-12-28/ce21ba3e185cc3de17ffb01a99dbb37f_09cb4fc4c481d98d05ad128b02e55af3.jpg");
-  background-size: "cover";
-  height: 100vh;
-  width: 100vw;
-  background-repeat:repeat; 
-}
-
-.Otsikko{
+#etusivuOtsikko{
   text-align: center;
+  margin-bottom: 10px;
+}
+.Otsikko{
   font-size: 30px;
 }
-

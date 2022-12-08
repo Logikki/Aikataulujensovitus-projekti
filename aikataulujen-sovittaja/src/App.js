@@ -26,10 +26,6 @@ const App = () => {
   const [availableTimes, setAvailableTimes] = useState({});
   const [navHeight, setNavHeight] = useState(70);
   const [otsHeight, setOtsHeight] = useState(36);
-  const [dimensions, setDimensions] = useState({
-    height: window.innerHeight,
-    width: window.innerWidth,
-  });
   const [BGI, setBGI] = useState({
     height: 0,
     width: 0,
@@ -55,7 +51,7 @@ const App = () => {
   }
   function backgroundImageStyle() {
     if (sharedCalendar !== null) return;
-    let h = (dimensions.height - navHeight - otsHeight - 8).toString() + "px";
+    let h = (dimensions.height - navHeight - otsHeight).toString() + "px";
     let w = dimensions.width / 2 - BGI.width / 2;
     return {
       marginLeft: w,
@@ -74,6 +70,8 @@ const App = () => {
   const resetInputs = () => {
     setCalendarPassword("");
     setCalendarID("");
+    setName("");
+    setUrl("");
   };
   /**
    * Tämä funktio suoritetaan aina uudelleenpäivityksessä
@@ -81,25 +79,35 @@ const App = () => {
    * muuttujaan {sharedCalendar}
    */
 
+  const [dimensions, setDimensions] = useState({
+    height: window.innerHeight,
+    width: window.innerWidth,
+  });
+
   useEffect(() => {
-    // Ikkunan resize funktio
+    // Ikkunan resize funktio, Hoitaa UI:n Dynaamisuutta!!!
     function handleResize() {
+      let nav = document.getElementsByClassName("input-group")[0];
+      let ots = document.getElementById("etusivuOtsikko");
+
       setDimensions({
         height: window.innerHeight,
         width: window.innerWidth,
       });
       setNavHeight(
-        document
-          .getElementsByClassName("input-group")[0]
-          .getBoundingClientRect().height
+        nav.offsetHeight +
+          parseFloat(getComputedStyle(nav).getPropertyValue("margin-top")) +
+          parseFloat(getComputedStyle(nav).getPropertyValue("margin-bottom"))
       );
       try {
         setOtsHeight(
-          document.getElementById("etusivuOtsikko").getBoundingClientRect()
-            .height
+          ots.offsetHeight +
+            parseFloat(getComputedStyle(ots).getPropertyValue("margin-top")) +
+            parseFloat(getComputedStyle(ots).getPropertyValue("margin-bottom"))
         );
       } catch {}
     }
+
     const doThings = async () => {
       console.log(
         "use effect, katsotaan onko cachessa kirjauduttu kalenteriin"
@@ -142,16 +150,16 @@ const App = () => {
           events: sharedCal.availabletimes,
         });
       }
-
-      // Ikkunan resize funktio
-      window.addEventListener("resize", handleResize);
       return () => {
         window.removeEventListener("resize", handleResize);
       };
     };
-    doThings();
+    if (sharedCalendar == null) {
+      doThings();
+    }
+
     handleResize();
-  }, []);
+  }, [window.innerHeight, window.innerWidth]); // Eslint herjaa tästä, mutta ilman näitä dynaamisuus ei toimi!!!
 
   /**
    * Tämä funktio hoitaa uloskirjautumisen.
@@ -250,13 +258,11 @@ const App = () => {
       );
       const newPc = newShared.privateCalendars.filter((pc) => pc.name == name);
       const addedPC = pcNameAndID.concat({ id: addedPC.id, name: name });
-      setName("");
-      setUrl("");
+      resetInputs();
     } catch (exception) {
       console.log(exception);
       alert("Something went wrong");
-      setName("");
-      setUrl("");
+      resetInputs();
     }
   };
 
@@ -306,15 +312,16 @@ const App = () => {
         createNewCalendarHandler={handleCreatingNewCalendar}
         sharedCalendar={sharedCalendar}
         calendarIDValue={calendarID}
+        dimensions={dimensions}
       ></Navbar>
-      <div>
-        {sharedCalendar == null && (
-          <h1 id="etusivuOtsikko" className="Otsikko">
+      {sharedCalendar == null && (
+        <div id="etusivuOtsikko">
+          <h1 id="Otsikko" className="Otsikko">
             SISU KALENTERIEN SOVITTAJA
           </h1>
-        )}
-        {sharedCalendar == null && <Ohjeteksti teksti={ohje} />}
-      </div>
+          <Ohjeteksti teksti={ohje} id={"etusivuOhje"} />
+        </div>
+      )}
       <div style={backgroundImageStyle()}></div>
       <div>
         <CalendarView
