@@ -22,7 +22,6 @@ const App = () => {
   const [calendarID, setCalendarID] = useState("");
   const [calendarPassword, setCalendarPassword] = useState("");
   const [creatingNewCalendarPassword, setNewCalendarPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState(null);
   const [name, setName] = useState("");
   //const [privateCalendarJson, setPrivateCalendarJson] = useState(null)
   const [availableTimes, setAvailableTimes] = useState({});
@@ -69,6 +68,10 @@ const App = () => {
   }
   let privateCalendarJson = null;
 
+  const resetInputs = () => {
+    setCalendarPassword("");
+    setCalendarID("");
+  };
   /**
    * Tämä funktio suoritetaan aina uudelleenpäivityksessä
    * Katsotaan, onko selaimessa tieto jaetusta kalenterista, jos sellainen on tuodaan se
@@ -153,7 +156,6 @@ const App = () => {
    */
   const handleLogout = (event) => {
     event.preventDefault();
-    setErrorMessage(null);
     window.localStorage.removeItem("loggedSharedCalendar");
     setSharedCalendar(null);
   };
@@ -181,8 +183,7 @@ const App = () => {
       );
       calendarService.setToken(sharedCalendar.token);
       setSharedCalendar(sharedCalendar);
-      setCalendarID("");
-      setCalendarPassword("");
+      resetInputs();
       const sharedCal = await calendarService.getSharedCalendar(
         sharedCalendar.sharedCalendarID
       );
@@ -190,12 +191,8 @@ const App = () => {
       // Virheilmoitus pois?
     } catch {
       //tähän voitaisiin laittaa error message
-      setErrorMessage(
-        "Virhe uuteen kalenteriin automaattisesti kirjautumisessa"
-      );
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 5000);
+      resetInputs();
+      alert("Virhe uuteen kalenteriin automaattisesti kirjautumisessa");
     }
   };
 
@@ -203,9 +200,7 @@ const App = () => {
    * Funktio hoitaa kirjautumisen.
    * Kirjautumisen jälkeen tallennetaan selaimeen jaettu kalenteri
    */
-  const handleCalendarLogin = async (event) => {
-    event.preventDefault();
-    setErrorMessage(null);
+  const handleCalendarLogin = async () => {
     //jos ei olla vielä kirjauduttu sisään
     if (sharedCalendar) console.log("haetaan kalenteria");
     console.log(calendarID, calendarPassword);
@@ -220,19 +215,16 @@ const App = () => {
       );
       calendarService.setToken(sharedCalendar.token);
       setSharedCalendar(sharedCalendar);
-      setCalendarID("");
-      setCalendarPassword("");
+      resetInputs();
       const sharedCal = await calendarService.getSharedCalendar(
         sharedCalendar.sharedCalendarID
       );
     } catch {
       //tähän voitaisiin laittaa error message
-      setErrorMessage(
+      resetInputs();
+      alert(
         "Virhe kirjautumisessa. Salasana on väärin tai kalenteria ei löydy."
       );
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 5000);
     }
   };
   /**
@@ -259,10 +251,7 @@ const App = () => {
       setUrl("");
     } catch (exception) {
       console.log(exception);
-      setErrorMessage("Something went wrong");
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 5000);
+      alert("Something went wrong");
       setName("");
       setUrl("");
     }
@@ -274,10 +263,7 @@ const App = () => {
       const filtered = pcNameAndID.filter((pc) => pc.id != id);
       setPcNID(filtered);
     } catch {
-      setErrorMessage("Invalid id");
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 5000);
+      alert("Invalid id");
     }
   };
 
@@ -327,7 +313,6 @@ const App = () => {
       </div>
       <div style={backgroundImageStyle()}></div>
       <div>
-        <Notification message={errorMessage}></Notification>
         <CalendarView
           sharedCalendar={sharedCalendar}
           handleLogout={handleLogout}
@@ -343,9 +328,6 @@ const App = () => {
           handlePrevWeekClick={handlePrevWeekClick}
           handleNextWeekClick={handleNextWeekClick}
         />
-        <div>
-          <Notification message={errorMessage}></Notification>
-        </div>
       </div>
     </div>
   );

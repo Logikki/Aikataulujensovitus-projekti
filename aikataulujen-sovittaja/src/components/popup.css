@@ -84,3 +84,7 @@ import "bootstrap/dist/css/bootstrap.css";
     color: #212529;
     z-index: 998;
 }
+
+.error-message {
+    position: absolute;
+}

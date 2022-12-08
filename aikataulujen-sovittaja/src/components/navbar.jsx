@@ -118,8 +118,10 @@ function Navbar({
         onInput={(e) => setCalendarID(e.target.value)}
       ></input>
       <input // Hae kalenteria input kenttä
+        id="pwdfield"
         type="password"
-        placeholder="Salasana"
+        value={calendarPassword}
+        placeholder="********"
         style={{ textAlign: "center", marginLeft: "10px" }}
         onInput={(e) => setCalendarPassword(e.target.value)}
       ></input>
