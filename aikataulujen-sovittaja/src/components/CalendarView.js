@@ -1,22 +1,25 @@
-import React, { useState } from "react";
-import { DayPilot, DayPilotCalendar } from "daypilot-pro-react";
+import React, { forwardRef } from "react";
+import { DayPilotCalendar } from "daypilot-pro-react";
 import AddPrivateCalandar from "./AddPrivateCalandar";
 import PrivateCalendars from "./PrivateCalendars";
 import "./CalendarStyles.css";
 
 //Tänne tulee kaikki, mitä näytetään kun on kirjauduttu sisään kalenteriin
-const CalendarView = ({
-  sharedCalendar,
-  handleLogout,
-  setName,
-  handleKalenteriUrlChange,
-  handleFetchCalendar,
-  name,
-  kalenteriUrl,
-  privateCals,
-  handleDelete,
-  availableTimes,
-}) => {
+const CalendarView = forwardRef(function (
+  {
+    sharedCalendar,
+    handleLogout,
+    setName,
+    handleKalenteriUrlChange,
+    handleFetchCalendar,
+    name,
+    kalenteriUrl,
+    privateCals,
+    handleDelete,
+    availableTimes,
+  },
+  ref
+) {
   // Eventin testausta ->
   // const [state, setState] = useState({
   //   events: [
@@ -38,9 +41,14 @@ const CalendarView = ({
     return;
   } else {
     return (
-      <div className="Otsikko">
-        Kalenteri: {sharedCalendar.sharedCalendarID}
-        <DayPilotCalendar viewType="Week" locale="fi-fi" {...availableTimes} />
+      <div>
+        Kalenteri {sharedCalendar.sharedCalendarID}
+        <DayPilotCalendar
+          viewType="Week"
+          locale="fi-fi"
+          {...availableTimes}
+          ref={ref}
+        />
         <div className="addPrivateCalendar input-group p-3 mb-2 bg-dark">
           <PrivateCalendars
             privateCals={privateCals}
@@ -58,6 +66,6 @@ const CalendarView = ({
       </div>
     );
   }
-};
+});
 //{privates.map(pc => <div>{pc.name}</div>)}
 export default CalendarView;
