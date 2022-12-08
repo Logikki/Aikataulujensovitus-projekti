@@ -1,13 +1,14 @@
 import React from "react";
 import getCalendar from "./services/getCalendar";
 import parseICS from "./services/parseICS";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Navbar from "./components/navbar";
 import calendarLoginService from "./services/calendarLogin";
 import Notification from "./components/Notification";
 import calendarService from "./services/calendars";
 import CalendarView from "./components/CalendarView";
 import background from "./images/logo.png";
+import { DayPilot } from "daypilot-pro-react";
 
 const App = () => {
   //tänne tallennetaan privaatit kalenterit, jotka liittyvät jaettuun kalenteriin
@@ -25,6 +26,11 @@ const App = () => {
   const [errorVisible, setErrorVisible] = useState(false); //stringi tai null
   //const [privateCalendarJson, setPrivateCalendarJson] = useState(null)
   const [availableTimes, setAvailableTimes] = useState({});
+  // Kalenterin viikon aloituspäivä
+  const [startDate, setStartDate] = useState(DayPilot.Date.today());
+
+  // Ref kalenterille, viittausta tarvitaan kalenterin funktioiden kutsuihin
+  const calendarRef = useRef(null);
 
   // Taustakuvan piirtäminen
   function backgroundStyle() {
@@ -73,7 +79,9 @@ const App = () => {
           eventMoveHandling: "Disabled",
           eventClickHandling: "Disabled",
           eventHoverHandling: "Disabled",
+          eventResizeHandling: "Disabled",
           crosshairType: "Disabled",
+          businessBeginsHour: 8,
         };
         setAvailableTimes({
           ...calendarViewConfig,
@@ -202,6 +210,28 @@ const App = () => {
     }
   };
 
+  // Napin painallus joka vie edelliseen viikkoon
+  const handlePrevWeekClick = function (e) {
+    // Lasketaan uusi pvm, otetaan siitä vain teksti
+    let uusiPvm = startDate.addDays(-7).value;
+    // Luodaan siitä uusi olio
+    let uusiPvmObj = DayPilot.Date(uusiPvm);
+    // Asetetaan se uudeksi tilaksi
+    setStartDate(uusiPvmObj);
+    calendarRef.current.control.update({ startDate: uusiPvmObj });
+  };
+
+  // Käsittelijä, joka Siirtää seuraavaan viikkoon
+  const handleNextWeekClick = function (e) {
+    // Lasketaan uusi pvm, otetaan siitä vain teksti
+    let uusiPvm = startDate.addDays(7).value;
+    // Luodaan siitä uusi olio
+    let uusiPvmObj = DayPilot.Date(uusiPvm);
+    // Asetetaan se uudeksi tilaksi
+    setStartDate(uusiPvmObj);
+    calendarRef.current.control.update({ startDate: uusiPvmObj });
+  };
+
   console.log(availableTimes);
   return (
     <div style={backgroundStyle()}>
@@ -216,6 +246,13 @@ const App = () => {
       ></Navbar>
       <div>
         <Notification message={errorMessage}></Notification>
+        <div>
+          <p>
+            Viikko
+            <button onClick={handlePrevWeekClick}>Edellinen</button>
+            <button onClick={handleNextWeekClick}>Seuraava</button>
+          </p>
+        </div>
         <CalendarView
           sharedCalendar={sharedCalendar}
           handleLogout={handleLogout}
@@ -227,6 +264,7 @@ const App = () => {
           privateCals={pcNameAndID}
           handleDelete={handleDeletingPrivateCalendar} //TODO: Muuta pois testistä!!!
           availableTimes={availableTimes}
+          ref={calendarRef} // Tämä mahdollistaa daypilot metodikutsut
         />
         <div>{errorVisible && <Notification message={errorMessage}></Notification>}</div>
       </div>
