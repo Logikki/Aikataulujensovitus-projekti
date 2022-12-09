@@ -12,6 +12,7 @@ const baseUrl = 'http://localhost:3003/api/logincalendar'
  * myöhemmissä pyynnöissä.
  */
 const calendarLogin = async calendarCredentials => {
+  console.log("kirjaudutaan kalenteriin")
   const response = await axios.post(baseUrl, calendarCredentials)
   return response.data
 }

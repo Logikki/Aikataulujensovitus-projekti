@@ -139,7 +139,7 @@ const App = () => {
     }
     window.addEventListener("resize", handleResize);
     handleResize();
-  }, []); 
+  }, []);
 
   /**
    * Tämä funktio hoitaa uloskirjautumisen.
@@ -180,10 +180,10 @@ const App = () => {
       );
 
       // Virheilmoitus pois?
-    } catch {
+    } catch(e) {
       //tähän voitaisiin laittaa error message
       resetInputs();
-      alert("Virhe uuteen kalenteriin automaattisesti kirjautumisessa");
+      alert(e);
     }
   };
 
@@ -193,25 +193,41 @@ const App = () => {
    */
   const handleCalendarLogin = async () => {
     //jos ei olla vielä kirjauduttu sisään
-    if (sharedCalendar) console.log("haetaan kalenteria");
+    console.log("haetaan kalenteria");
     console.log(calendarID, calendarPassword);
     try {
-      const newSharedCalendar = await calendarLoginService.calendarLogin({
+      let newSharedCalendar = await calendarLoginService.calendarLogin({
         sharedCalendarID: calendarID,
         password: calendarPassword,
       });
-      window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(newSharedCalendar));
-      calendarService.setToken(sharedCalendar.token);
-      setSharedCalendar(sharedCalendar);
-      resetInputs();
-      const sharedCal = await calendarService.getSharedCalendar(
-        sharedCalendar.sharedCalendarID
-      );
-    } catch {
+      console.log(newSharedCalendar)
+    setSharedCalendar(newSharedCalendar)
+    calendarService.setToken(newSharedCalendar.token)
+    window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(sharedCalendar));
+    }
+    catch(e) {
       //tähän voitaisiin laittaa error message
+      console.log(e)
       resetInputs();
       alert("Virhe kirjautumisessa. Salasana on väärin tai kalenteria ei löydy.");
     }
+    console.log(sharedCalendar)
+    console.log("taa")
+      const sharedCal = await calendarService.getSharedCalendar( //ongelma on tässä
+        sharedCalendar.sharedCalendarID
+      );
+
+      console.log("tässä 1")
+      let privates = [];
+      sharedCal.privateCalendars.map(
+        (pc) => (privates = privates.concat({ id: pc.id, name: pc.name }))
+      );
+      setPcNID(privates);
+      setAvailableTimes({
+      events: sharedCal.availabletimes
+    });
+    resetInputs(); 
+    
   };
   /**
    * Funktio hoitaa henkilön privaatin kalenterin lisäämisen tietokantaan
