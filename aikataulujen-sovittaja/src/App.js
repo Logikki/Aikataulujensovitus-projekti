@@ -131,6 +131,7 @@ const App = () => {
       const sharedCal = await calendarService.getSharedCalendar(
         sharedCalendar.sharedCalendarID
       );
+      setAvailableTimes({ ...calendarViewConfig, events: sharedCal.availabletimes })
 
       // Virheilmoitus pois?
       setErrorVisible(false);
