@@ -205,11 +205,11 @@ const App = () => {
       console.log(newSharedCalendar)
     setSharedCalendar(newSharedCalendar)
     calendarService.setToken(newSharedCalendar.token)
-    window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(sharedCalendar));
+    window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(newSharedCalendar));
     console.log(sharedCalendar)
     console.log("taa")
       const sharedCal = await calendarService.getSharedCalendar( //ongelma on tässä
-        newSharedCalendar.id
+        newSharedCalendar.sharedCalendarID
       );
 
       console.log("tässä 1")
