@@ -172,15 +172,10 @@ const App = () => {
         sharedCalendarID: newCalendarID,
         password: creatingNewCalendarPassword,
       });
-      window.localStorage.removeItem("loggedSharedCalendar");
-      setSharedCalendar(null)
       window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(newSharedCalendar));
       calendarService.setToken(newSharedCalendar.token);
       setSharedCalendar(newSharedCalendar);
-      setAvailableTimes({events: []})
-      setAvailableTimes(availableTimes)
       console.log("5")
-      setPcNID([])
       resetInputs();
       const sharedCal = await calendarService.getSharedCalendar(
         newSharedCalendar.sharedCalendarID
