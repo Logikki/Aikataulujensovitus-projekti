@@ -30,14 +30,12 @@ const App = () => {
     height: window.innerHeight,
     width: window.innerWidth,
   });
+
   const [BGI, setBGI] = useState({
     height: 0,
     width: 0,
   });
-  const [dimensions, setDimensions] = useState({
-    height: window.innerHeight,
-    width: window.innerWidth,
-  });
+  
   // Ref kalenterille, viittausta tarvitaan kalenterin funktioiden kutsuihin
   const calendarRef = useRef(null);
   // Kalenterin viikon aloituspäivä
@@ -146,7 +144,7 @@ const App = () => {
     }
     window.addEventListener("resize", handleResize);
     handleResize();
-  }, []); // Eslint herjaa tästä, mutta ilman näitä dynaamisuus ei toimi!!!
+  }, []); 
 
   /**
    * Tämä funktio hoitaa uloskirjautumisen.
@@ -167,8 +165,7 @@ const App = () => {
     const newCalendarID = await calendarService.createSharedCalendar(
       creatingNewCalendarPassword
     );
-    //tässä vaiheessa voitaisiin ilmoittaa käyttäjälle, mikä on juuri luodun kalenterin id
-    //myöskin sähköpostia voitaisiin kysyä, johon tämä id lähetettäisiin
+    //sähköpostia voitaisiin kysyä, johon tämä id lähetettäisiin
 
     try {
       const sharedCalendar = await calendarLoginService.calendarLogin({
@@ -200,11 +197,11 @@ const App = () => {
     if (sharedCalendar) console.log("haetaan kalenteria");
     console.log(calendarID, calendarPassword);
     try {
-      const sharedCalendar = await calendarLoginService.calendarLogin({
+      const newSharedCalendar = await calendarLoginService.calendarLogin({
         sharedCalendarID: calendarID,
         password: calendarPassword,
       });
-      window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(sharedCalendar));
+      window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(newSharedCalendar));
       calendarService.setToken(sharedCalendar.token);
       setSharedCalendar(sharedCalendar);
       resetInputs();
