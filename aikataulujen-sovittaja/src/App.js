@@ -227,10 +227,12 @@ const App = () => {
         privateCalendarJson,
         sharedCalendar.sharedCalendarID
       );
-      const newPc = newShared.privateCalendars.filter((pc) => pc.name === name);
-      const addedPC = pcNameAndID.concat({ id: newPc.id, name: name });
+
+      const newPc = {id : newShared.newCalendarID, name : name}
+      const addedPC = pcNameAndID.concat(newPc);
+      console.log("uusi pncid: ", addedPC)
       setPcNID(addedPC)
-      setAvailableTimes({events: newShared.availabletimes })
+      setAvailableTimes({events: newShared.sharedCalendar.availabletimes })
       resetInputs();
     } catch (exception) {
       console.log(exception);
@@ -242,8 +244,10 @@ const App = () => {
   const handleDeletingPrivateCalendar = async (id) => {
     try {
       const response = await calendarService.remPrivateCalendar(id);
-      const filtered = pcNameAndID.filter((pc) => pc.id != id);
-      setPcNID(filtered);
+      console.log(response)
+      const filtered = pcNameAndID.filter((pc) => pc.id !== id);
+      setPcNID(filtered)
+      setAvailableTimes({events: response.availabletimes})
     } catch {
       alert("Invalid id");
     }

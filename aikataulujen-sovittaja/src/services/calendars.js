@@ -60,7 +60,7 @@ const remPrivateCalendar = async (id) => {
     }
     
     const request = axios.delete(`${baseUrl}/${id}`, config)
-    return request.then(response => response.data)
+    return request.then((response) => response.data)
 }
 
 /**
