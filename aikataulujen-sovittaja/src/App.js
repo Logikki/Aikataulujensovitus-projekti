@@ -4,7 +4,7 @@ import parseICS from "./services/parseICS";
 import { useState, useEffect, useRef } from "react";
 import Navbar from "./components/navbar";
 import calendarLoginService from "./services/calendarLogin";
-import Notification from "./components/Notification";
+// import Notification from "./components/Notification"; Aiempi virheilmoitustapa
 import calendarService from "./services/calendars";
 import CalendarView from "./components/CalendarView";
 import background from "./images/logo.png";
@@ -26,7 +26,10 @@ const App = () => {
   const [availableTimes, setAvailableTimes] = useState({});
   const [navHeight, setNavHeight] = useState(70);
   const [otsHeight, setOtsHeight] = useState(36);
-  const [startDate, setStartDate] = useState(DayPilot.Date.today());
+  const [dimensions, setDimensions] = useState({
+    height: window.innerHeight,
+    width: window.innerWidth,
+  });
   const [BGI, setBGI] = useState({
     height: 0,
     width: 0,
@@ -38,7 +41,11 @@ const App = () => {
   // Ref kalenterille, viittausta tarvitaan kalenterin funktioiden kutsuihin
   const calendarRef = useRef(null);
   // Kalenterin viikon aloituspäivä
-  
+  const [startDate, setStartDate] = useState(DayPilot.Date.today());
+  const backgroundStyles = "bg-primary"; // valinnainen tausta kaikkialla
+
+  var img = new Image();
+  img.src = background;
   // Taustakuvan piirtäminen
   function backgroundStyle() {
     if (sharedCalendar !== null) return;
@@ -74,31 +81,6 @@ const App = () => {
    * muuttujaan {sharedCalendar}
    */
 
-  
-  const calendarViewConfig = {
-    durationBarVisible: false,
-    cellDuration: 15,
-    cellHeight: 20,
-    headerDateFormat: "ddd d/M/yyyy",
-    timeRangeSelectedHandling: "Disabled",
-    eventMoveHandling: "Disabled",
-    eventClickHandling: "Disabled",
-    eventHoverHandling: "Disabled",
-    eventResizeHandling: "Disabled",
-    crosshairType: "Disabled",
-    businessBeginsHour: 8,
-  };
-  useEffect(() => {
-    console.log('suoritetaan setBGI')
-    const backgroundStyles = "bg-primary"; // valinnainen tausta kaikkialla
-    const img = new Image();
-    img.src = background
-    setBGI({
-      height: img.height,
-      width: img.width,
-    });
-  }, [])
-  
   useEffect(() => {
     console.log("useEffect")
     // Ikkunan resize funktio, Hoitaa UI:n Dynaamisuutta!!!
@@ -107,6 +89,11 @@ const App = () => {
       console.log("tarkistetaan ikkunan koko")
       let nav = document.getElementsByClassName("input-group")[0];
       let ots = document.getElementById("etusivuOtsikko");
+
+      setBGI({
+        height: img.height,
+        width: img.width,
+      });
 
       setDimensions({
         height: window.innerHeight,
@@ -127,12 +114,9 @@ const App = () => {
     }
 
     const doThings = async () => {
-      console.log(
-        "use effect, katsotaan onko cachessa kirjauduttu kalenteriin"
-      );
-      const loggedSharedCalendarJSON = window.localStorage.getItem(
-        "loggedSharedCalendar"
-      );
+      console.log("use effect, katsotaan onko cachessa kirjauduttu kalenteriin");
+      const loggedSharedCalendarJSON =
+        window.localStorage.getItem("loggedSharedCalendar");
 
       const TSS = window.localStorage.getItem("TSSAcc") == 1 ? true : false; //onko tietosuojaseloste täytetty?
       if (loggedSharedCalendarJSON && TSS) {
@@ -149,10 +133,7 @@ const App = () => {
           (pc) => (privates = privates.concat({ id: pc.id, name: pc.name }))
         );
         setPcNID(privates);
-        // Kalenterinäkymän asetukset
-        
         setAvailableTimes({
-          ...calendarViewConfig,
           events: sharedCal.availabletimes,
         });
       }
@@ -163,8 +144,9 @@ const App = () => {
     if (sharedCalendar == null) {
       doThings();
     }
+    window.addEventListener("resize", handleResize);
     handleResize();
-  }, [window.innerHeight, window.innerWidth]); // Eslint herjaa tästä, mutta ilman näitä dynaamisuus ei toimi!!!
+  }, []); // Eslint herjaa tästä, mutta ilman näitä dynaamisuus ei toimi!!!
 
   /**
    * Tämä funktio hoitaa uloskirjautumisen.
@@ -193,10 +175,7 @@ const App = () => {
         sharedCalendarID: newCalendarID,
         password: creatingNewCalendarPassword,
       });
-      window.localStorage.setItem(
-        "loggedSharedCalendar",
-        JSON.stringify(sharedCalendar)
-      );
+      window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(sharedCalendar));
       calendarService.setToken(sharedCalendar.token);
       setSharedCalendar(sharedCalendar);
       resetInputs();
@@ -225,10 +204,7 @@ const App = () => {
         sharedCalendarID: calendarID,
         password: calendarPassword,
       });
-      window.localStorage.setItem(
-        "loggedSharedCalendar",
-        JSON.stringify(sharedCalendar)
-      );
+      window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(sharedCalendar));
       calendarService.setToken(sharedCalendar.token);
       setSharedCalendar(sharedCalendar);
       resetInputs();
@@ -238,9 +214,7 @@ const App = () => {
     } catch {
       //tähän voitaisiin laittaa error message
       resetInputs();
-      alert(
-        "Virhe kirjautumisessa. Salasana on väärin tai kalenteria ei löydy."
-      );
+      alert("Virhe kirjautumisessa. Salasana on väärin tai kalenteria ei löydy.");
     }
   };
   /**
@@ -251,9 +225,7 @@ const App = () => {
     try {
       console.log("lisätään tämä kalenteri: ", kalenteriUrl);
       //ladataan kalenteri, ja annetaan ne parse funktiolle
-      privateCalendarJson = parseICS.parse(
-        await getCalendar.download(kalenteriUrl)
-      );
+      privateCalendarJson = parseICS.parse(await getCalendar.download(kalenteriUrl));
       privateCalendarJson = { events: privateCalendarJson, name: name };
 
       console.log(privateCalendarJson);
@@ -305,10 +277,7 @@ const App = () => {
   };
   
   return (
-    <div
-      className={backgroundStyle()}
-      style={{ height: "100%", width: "100%" }}
-    >
+    <div className={backgroundStyle()} style={{ height: "100%", width: "100%" }}>
       <Navbar
         calendarPassword={calendarPassword}
         setCalendarPassword={setCalendarPassword}

@@ -40,6 +40,21 @@ const CalendarView = forwardRef(function (
   // });
   const nappiStyles = "btn btn-secondary btn-sm mt-1";
 
+  // Kalenterinäkymän asetukset
+  const calendarViewConfig = {
+    durationBarVisible: false,
+    cellDuration: 15,
+    cellHeight: 20,
+    headerDateFormat: "ddd d/M/yyyy",
+    timeRangeSelectedHandling: "Disabled",
+    eventMoveHandling: "Disabled",
+    eventClickHandling: "Disabled",
+    eventHoverHandling: "Disabled",
+    eventResizeHandling: "Disabled",
+    crosshairType: "Disabled",
+    businessBeginsHour: 8,
+  };
+
   if (sharedCalendar == null) {
     return;
   } else {
@@ -64,13 +79,11 @@ const CalendarView = forwardRef(function (
           viewType="Week"
           locale="fi-fi"
           {...availableTimes}
+          {...calendarViewConfig}
           ref={ref}
         />
         <div className="addPrivateCalendar input-group p-3 bg-dark">
-          <PrivateCalendars
-            privateCals={privateCals}
-            handleDelete={handleDelete}
-          />
+          <PrivateCalendars privateCals={privateCals} handleDelete={handleDelete} />
           <AddPrivateCalandar
             handleLogout={handleLogout}
             handleKalenteriUrlChange={handleKalenteriUrlChange}
