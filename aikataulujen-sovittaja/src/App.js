@@ -170,11 +170,14 @@ const App = () => {
         sharedCalendarID: newCalendarID,
         password: creatingNewCalendarPassword,
       });
-      
+      window.localStorage.removeItem("loggedSharedCalendar");
+      setSharedCalendar(null)
       window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(newSharedCalendar));
       calendarService.setToken(newSharedCalendar.token);
       setSharedCalendar(newSharedCalendar);
-      setAvailableTimes({})
+      setAvailableTimes({events: []})
+      setAvailableTimes(availableTimes)
+      console.log("5")
       setPcNID([])
       resetInputs();
       const sharedCal = await calendarService.getSharedCalendar(
@@ -183,6 +186,7 @@ const App = () => {
 
       // Virheilmoitus pois?
     } catch(e) {
+      console.log("error tapahtu")
       //tähän voitaisiin laittaa error message
       resetInputs();
       alert(e);
@@ -271,7 +275,7 @@ const App = () => {
       alert("Invalid id");
     }
   };
-
+console.log(availableTimes)
   return (
     <div className={backgroundStyle()} style={{ height: "100%", width: "100%" }}>
       <Navbar
