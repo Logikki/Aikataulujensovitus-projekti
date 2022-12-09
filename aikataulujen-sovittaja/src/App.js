@@ -8,7 +8,6 @@ import calendarLoginService from "./services/calendarLogin";
 import calendarService from "./services/calendars";
 import CalendarView from "./components/CalendarView";
 import background from "./images/logo.png";
-import { DayPilot } from "daypilot-pro-react";
 import Ohjeteksti from "./components/Ohjeteksti";
 
 const App = () => {
@@ -35,11 +34,7 @@ const App = () => {
     height: 0,
     width: 0,
   });
-  
-  // Ref kalenterille, viittausta tarvitaan kalenterin funktioiden kutsuihin
-  const calendarRef = useRef(null);
-  // Kalenterin viikon aloituspäivä
-  const [startDate, setStartDate] = useState(DayPilot.Date.today());
+
   const backgroundStyles = "bg-primary"; // valinnainen tausta kaikkialla
 
   var img = new Image();
@@ -254,28 +249,6 @@ const App = () => {
     }
   };
 
-  // Napin painallus joka vie edelliseen viikkoon
-  const handlePrevWeekClick = function (e) {
-    // Lasketaan uusi pvm, otetaan siitä vain teksti
-    let uusiPvm = startDate.addDays(-7).value;
-    // Luodaan siitä uusi olio
-    let uusiPvmObj = DayPilot.Date(uusiPvm);
-    // Asetetaan se uudeksi tilaksi
-    setStartDate(uusiPvmObj);
-    calendarRef.current.control.update({ startDate: uusiPvmObj });
-  };
-
-  // Käsittelijä, joka Siirtää seuraavaan viikkoon
-  const handleNextWeekClick = function (e) {
-    // Lasketaan uusi pvm, otetaan siitä vain teksti
-    let uusiPvm = startDate.addDays(7).value;
-    // Luodaan siitä uusi olio
-    let uusiPvmObj = DayPilot.Date(uusiPvm);
-    // Asetetaan se uudeksi tilaksi
-    setStartDate(uusiPvmObj);
-    calendarRef.current.control.update({ startDate: uusiPvmObj });
-  };
-  
   return (
     <div className={backgroundStyle()} style={{ height: "100%", width: "100%" }}>
       <Navbar
@@ -310,9 +283,6 @@ const App = () => {
           privateCals={pcNameAndID}
           handleDelete={handleDeletingPrivateCalendar} //TODO: Muuta pois testistä!!!
           availableTimes={availableTimes}
-          ref={calendarRef} // Tämä mahdollistaa daypilot metodikutsut
-          handlePrevWeekClick={handlePrevWeekClick}
-          handleNextWeekClick={handleNextWeekClick}
         />
       </div>
     </div>
