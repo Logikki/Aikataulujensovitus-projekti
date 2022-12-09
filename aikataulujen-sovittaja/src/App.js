@@ -235,6 +235,7 @@ const App = () => {
       const newPc = newShared.privateCalendars.filter((pc) => pc.name === name);
       const addedPC = pcNameAndID.concat({ id: newPc.id, name: name });
       setPcNID(addedPC)
+      setAvailableTimes({events: newShared.availabletimes })
       resetInputs();
     } catch (exception) {
       console.log(exception);
