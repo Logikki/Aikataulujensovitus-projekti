@@ -32,7 +32,10 @@ const App = () => {
    * Katsotaan, onko selaimessa tieto jaetusta kalenterista, jos sellainen on tuodaan se
    * muuttujaan {sharedCalendar}
    */
-
+  const calendarViewConfig = {
+    eventMoveHandling: "Disabled",
+    durationBarVisible: false,
+  };
   useEffect(() => {
     const doThings = async () => {
       console.log("use effect, katsotaan onko cachessa kirjauduttu kalenteriin");
@@ -52,10 +55,7 @@ const App = () => {
         );
         setPcNID(privates);
         // Kalenterinäkymän asetukset
-        const calendarViewConfig = {
-          eventMoveHandling: "Disabled",
-          durationBarVisible: false,
-        };
+        
         setAvailableTimes({ ...calendarViewConfig, events: sharedCal.availabletimes });
       }
     };
@@ -158,8 +158,10 @@ const App = () => {
         privateCalendarJson,
         sharedCalendar.sharedCalendarID
       );
-      const newPc = newShared.privateCalendars.filter((pc) => pc.name == name)
-      const addedPC = pcNameAndID.concat({id : addedPC.id, name : name })
+      const newPc = newShared.privateCalendars.filter((pc) => pc.name === name)
+      const addedPC = pcNameAndID.concat({id : newPc.id, name : name })
+      setPcNID(addedPC)
+      setAvailableTimes({ ...calendarViewConfig, events: newShared.availabletimes });
       setName("");
       setUrl("");
     } catch (exception) {
@@ -169,23 +171,16 @@ const App = () => {
   };
 
   const handleDeletingPrivateCalendar = async (id) => {
+    console.log("poistetaan id:llä: ", id)
     try {
       const response = await calendarService.remPrivateCalendar(id);
-      const filtered = pcNameAndID.filter( (pc) => pc.id != id )
+      const filtered = pcNameAndID.filter( (pc) => pc.id !== id )
       setPcNID(filtered)
     } catch {
       setErrorMessage("Invalid id");
     }
   };
 
-  // Poistamisen testaamista varten
-  const handleDeletingPrivateCalendarTest = async (id) => {
-    try {
-      console.log(id);
-    } catch {
-      setErrorMessage("Invalid id");
-    }
-  };
   console.log(pcNameAndID);
   console.log(availableTimes);
   return (
@@ -210,7 +205,7 @@ const App = () => {
           name={name}
           kalenteriUrl={kalenteriUrl}
           privateCals={pcNameAndID}
-          handleDelete={handleDeletingPrivateCalendarTest} //TODO: Muuta pois testistä!!!
+          handleDelete={handleDeletingPrivateCalendar} //TODO: Muuta pois testistä!!!
           availableTimes={availableTimes}
         />
         <div>{errorVisible && <Notification message={errorMessage}></Notification>}</div>

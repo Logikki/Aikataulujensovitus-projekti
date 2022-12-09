@@ -59,7 +59,7 @@ const remPrivateCalendar = async (id) => {
         headers: { Authorization: token }
     }
     
-    const request = axios.delete(`${SharedCalendarBaseUrl}/${id}`, config)
+    const request = axios.delete(`${baseUrl}/${id}`, config)
     return request.then(response => response.data)
 }
 
