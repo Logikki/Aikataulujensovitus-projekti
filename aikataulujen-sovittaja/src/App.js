@@ -26,24 +26,19 @@ const App = () => {
   const [availableTimes, setAvailableTimes] = useState({});
   const [navHeight, setNavHeight] = useState(70);
   const [otsHeight, setOtsHeight] = useState(36);
+  const [startDate, setStartDate] = useState(DayPilot.Date.today());
   const [BGI, setBGI] = useState({
     height: 0,
     width: 0,
   });
+  const [dimensions, setDimensions] = useState({
+    height: window.innerHeight,
+    width: window.innerWidth,
+  });
   // Ref kalenterille, viittausta tarvitaan kalenterin funktioiden kutsuihin
   const calendarRef = useRef(null);
   // Kalenterin viikon aloituspäivä
-  const [startDate, setStartDate] = useState(DayPilot.Date.today());
-  const backgroundStyles = "bg-primary"; // valinnainen tausta kaikkialla
-  var img = new Image();
-  img.onload = function () {
-    setBGI({
-      height: img.height,
-      width: img.width,
-    });
-  };
-  img.src = background;
-
+  
   // Taustakuvan piirtäminen
   function backgroundStyle() {
     if (sharedCalendar !== null) return;
@@ -79,14 +74,36 @@ const App = () => {
    * muuttujaan {sharedCalendar}
    */
 
-  const [dimensions, setDimensions] = useState({
-    height: window.innerHeight,
-    width: window.innerWidth,
-  });
-
+  
+  const calendarViewConfig = {
+    durationBarVisible: false,
+    cellDuration: 15,
+    cellHeight: 20,
+    headerDateFormat: "ddd d/M/yyyy",
+    timeRangeSelectedHandling: "Disabled",
+    eventMoveHandling: "Disabled",
+    eventClickHandling: "Disabled",
+    eventHoverHandling: "Disabled",
+    eventResizeHandling: "Disabled",
+    crosshairType: "Disabled",
+    businessBeginsHour: 8,
+  };
   useEffect(() => {
+    console.log('suoritetaan setBGI')
+    const backgroundStyles = "bg-primary"; // valinnainen tausta kaikkialla
+    const img = new Image();
+    img.src = background
+    setBGI({
+      height: img.height,
+      width: img.width,
+    });
+  }, [])
+  
+  useEffect(() => {
+    console.log("useEffect")
     // Ikkunan resize funktio, Hoitaa UI:n Dynaamisuutta!!!
     function handleResize() {
+     
       console.log("tarkistetaan ikkunan koko")
       let nav = document.getElementsByClassName("input-group")[0];
       let ots = document.getElementById("etusivuOtsikko");
@@ -133,19 +150,7 @@ const App = () => {
         );
         setPcNID(privates);
         // Kalenterinäkymän asetukset
-        const calendarViewConfig = {
-          durationBarVisible: false,
-          cellDuration: 15,
-          cellHeight: 20,
-          headerDateFormat: "ddd d/M/yyyy",
-          timeRangeSelectedHandling: "Disabled",
-          eventMoveHandling: "Disabled",
-          eventClickHandling: "Disabled",
-          eventHoverHandling: "Disabled",
-          eventResizeHandling: "Disabled",
-          crosshairType: "Disabled",
-          businessBeginsHour: 8,
-        };
+        
         setAvailableTimes({
           ...calendarViewConfig,
           events: sharedCal.availabletimes,
@@ -256,8 +261,9 @@ const App = () => {
         privateCalendarJson,
         sharedCalendar.sharedCalendarID
       );
-      const newPc = newShared.privateCalendars.filter((pc) => pc.name == name);
-      const addedPC = pcNameAndID.concat({ id: addedPC.id, name: name });
+      const newPc = newShared.privateCalendars.filter((pc) => pc.name === name);
+      const addedPC = pcNameAndID.concat({ id: newPc.id, name: name });
+      setPcNID(addedPC)
       resetInputs();
     } catch (exception) {
       console.log(exception);
@@ -297,7 +303,7 @@ const App = () => {
     setStartDate(uusiPvmObj);
     calendarRef.current.control.update({ startDate: uusiPvmObj });
   };
-
+  
   return (
     <div
       className={backgroundStyle()}
