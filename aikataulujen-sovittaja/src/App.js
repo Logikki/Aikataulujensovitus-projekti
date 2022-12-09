@@ -171,13 +171,13 @@ const App = () => {
         password: creatingNewCalendarPassword,
       });
       window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(newSharedCalendar));
-      calendarService.setToken(sharedCalendar.token);
-      setSharedCalendar(sharedCalendar);
+      calendarService.setToken(newSharedCalendar.token);
+      setSharedCalendar(newSharedCalendar);
       setAvailableTimes({})
       setPcNID([])
       resetInputs();
       const sharedCal = await calendarService.getSharedCalendar(
-        sharedCalendar.sharedCalendarID
+        newSharedCalendar.sharedCalendarID
       );
 
       // Virheilmoitus pois?
@@ -207,7 +207,6 @@ const App = () => {
     calendarService.setToken(newSharedCalendar.token)
     window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(newSharedCalendar));
     console.log(sharedCalendar)
-    console.log("taa")
       const sharedCal = await calendarService.getSharedCalendar( //ongelma on tässä
         newSharedCalendar.sharedCalendarID
       );
