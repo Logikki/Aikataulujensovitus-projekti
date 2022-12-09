@@ -165,13 +165,15 @@ const App = () => {
     //sähköpostia voitaisiin kysyä, johon tämä id lähetettäisiin
 
     try {
-      const sharedCalendar = await calendarLoginService.calendarLogin({
+      const newSharedCalendar = await calendarLoginService.calendarLogin({
         sharedCalendarID: newCalendarID,
         password: creatingNewCalendarPassword,
       });
-      window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(sharedCalendar));
+      window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(newSharedCalendar));
       calendarService.setToken(sharedCalendar.token);
       setSharedCalendar(sharedCalendar);
+      setAvailableTimes({})
+      setPcNID([])
       resetInputs();
       const sharedCal = await calendarService.getSharedCalendar(
         sharedCalendar.sharedCalendarID
