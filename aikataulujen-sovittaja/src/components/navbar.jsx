@@ -79,9 +79,9 @@ function Navbar({
     }
   };
 
-  const handleLogin = () => {
+  const handleLogin = (e) => {
     window.localStorage.getItem("TSSAcc") == 1
-      ? handleCalendarLogin()
+      ? handleCalendarLogin(e)
       : console.log("Hyväksy tietosuojaseloste!");
   };
 

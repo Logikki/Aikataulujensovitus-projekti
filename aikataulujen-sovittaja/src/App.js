@@ -116,6 +116,7 @@ const App = () => {
         // Mikäli tietosuojaseloste ei ole täytetty, ei myöskään lataa valmista kalenteria.
         const calendar = JSON.parse(loggedSharedCalendarJSON);
         setSharedCalendar(calendar);
+        console.log(calendar)
         calendarService.setToken(calendar.token);
         const sharedCal = await calendarService.getSharedCalendar(
           calendar.sharedCalendarID
@@ -191,12 +192,13 @@ const App = () => {
    * Funktio hoitaa kirjautumisen.
    * Kirjautumisen jälkeen tallennetaan selaimeen jaettu kalenteri
    */
-  const handleCalendarLogin = async () => {
+  const handleCalendarLogin = async (event) => {
+    event.preventDefault()
     //jos ei olla vielä kirjauduttu sisään
     console.log("haetaan kalenteria");
     console.log(calendarID, calendarPassword);
     try {
-      let newSharedCalendar = await calendarLoginService.calendarLogin({
+      const newSharedCalendar = await calendarLoginService.calendarLogin({
         sharedCalendarID: calendarID,
         password: calendarPassword,
       });
@@ -204,17 +206,10 @@ const App = () => {
     setSharedCalendar(newSharedCalendar)
     calendarService.setToken(newSharedCalendar.token)
     window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(sharedCalendar));
-    }
-    catch(e) {
-      //tähän voitaisiin laittaa error message
-      console.log(e)
-      resetInputs();
-      alert("Virhe kirjautumisessa. Salasana on väärin tai kalenteria ei löydy.");
-    }
     console.log(sharedCalendar)
     console.log("taa")
       const sharedCal = await calendarService.getSharedCalendar( //ongelma on tässä
-        sharedCalendar.sharedCalendarID
+        newSharedCalendar.id
       );
 
       console.log("tässä 1")
@@ -227,7 +222,13 @@ const App = () => {
       events: sharedCal.availabletimes
     });
     resetInputs(); 
-    
+  }
+    catch(e) {
+      //tähän voitaisiin laittaa error message
+      console.log(e)
+      resetInputs();
+      alert("Virhe kirjautumisessa. Salasana on väärin tai kalenteria ei löydy.");
+    }
   };
   /**
    * Funktio hoitaa henkilön privaatin kalenterin lisäämisen tietokantaan
