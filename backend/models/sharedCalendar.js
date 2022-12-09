@@ -13,6 +13,8 @@ const sharedCalendarSchema = mongoose.Schema({
    }]
 })
 
+sharedCalendarSchema.index({expireAt:1},{expireAfterSeconds:15552000})
+
 sharedCalendarSchema.set('toJSON', {
     transform: (document, returnedObject) => {
       returnedObject.id = returnedObject._id.toString()
