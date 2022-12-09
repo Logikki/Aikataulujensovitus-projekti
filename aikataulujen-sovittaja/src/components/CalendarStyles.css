@@ -11,11 +11,14 @@
     opacity: 0.8;
 }
 
+/* Kalenterin solujen muotoilut */
 .calendar_default_cell_inner
 {
-	background: red;
+	background: purple;
+    opacity: 0.8;
 }
 
 .calendar_default_cell_business .calendar_default_cell_inner {
 	background: red;
 }
+

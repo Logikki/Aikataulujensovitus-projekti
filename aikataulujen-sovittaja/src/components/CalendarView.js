@@ -1,22 +1,27 @@
-import React, { useState } from "react";
-import { DayPilot, DayPilotCalendar } from "daypilot-pro-react";
+import React, { forwardRef } from "react";
+import { DayPilotCalendar } from "daypilot-pro-react";
 import AddPrivateCalandar from "./AddPrivateCalandar";
 import PrivateCalendars from "./PrivateCalendars";
 import "./CalendarStyles.css";
 
 //Tänne tulee kaikki, mitä näytetään kun on kirjauduttu sisään kalenteriin
-const CalendarView = ({
-  sharedCalendar,
-  handleLogout,
-  setName,
-  handleKalenteriUrlChange,
-  handleFetchCalendar,
-  name,
-  kalenteriUrl,
-  privateCals,
-  handleDelete,
-  availableTimes,
-}) => {
+const CalendarView = forwardRef(function (
+  {
+    sharedCalendar,
+    handleLogout,
+    setName,
+    handleKalenteriUrlChange,
+    handleFetchCalendar,
+    name,
+    kalenteriUrl,
+    privateCals,
+    handleDelete,
+    availableTimes,
+    handlePrevWeekClick,
+    handleNextWeekClick,
+  },
+  ref
+) {
   // Eventin testausta ->
   // const [state, setState] = useState({
   //   events: [
@@ -33,6 +38,7 @@ const CalendarView = ({
   //   ],
   //   durationBarVisible: "false",
   // });
+  const nappiStyles = "btn btn-secondary btn-sm mt-1";
 
   if (sharedCalendar == null) {
     return;
@@ -40,13 +46,32 @@ const CalendarView = ({
     return (
       <div>
         Kalenteri {sharedCalendar.sharedCalendarID}
-        <DayPilotCalendar viewType="Week" locale="fi-fi" {...availableTimes} />
-        <div className="addPrivateCalendar input-group p-3 mb-2 bg-dark">
+        <div>
+          <p className="ms-1">
+            Viikko
+            <>
+              {" "}
+              <button className={nappiStyles} onClick={handlePrevWeekClick}>
+                Edellinen
+              </button>{" "}
+              <button className={nappiStyles} onClick={handleNextWeekClick}>
+                Seuraava
+              </button>
+            </>
+          </p>
+        </div>
+        <DayPilotCalendar
+          viewType="Week"
+          locale="fi-fi"
+          {...availableTimes}
+          ref={ref}
+        />
+        <div className="addPrivateCalendar input-group p-3 bg-dark">
           <PrivateCalendars
             privateCals={privateCals}
-            handleDelete={handleDelete} //TODO: Muuta pois testistä!!!
+            handleDelete={handleDelete}
           />
-          <AddPrivateCalandar //TESTAAMISTA VARTEN
+          <AddPrivateCalandar
             handleLogout={handleLogout}
             handleKalenteriUrlChange={handleKalenteriUrlChange}
             handleFetchCalendar={handleFetchCalendar}
@@ -58,6 +83,6 @@ const CalendarView = ({
       </div>
     );
   }
-};
+});
 //{privates.map(pc => <div>{pc.name}</div>)}
 export default CalendarView;
