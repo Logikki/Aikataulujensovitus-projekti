@@ -31,6 +31,9 @@ privateCalendarRouter.post('/', async (req, res) => {
 })
 
 privateCalendarRouter.delete('/:id', async (req, res) => {
+    if (!req.params.id) {
+        return res.status(401).json({error: 'No ID in request'})
+    }
     if (!req.token) {
         return res.status(401).json({error: 'token missing '})
     }

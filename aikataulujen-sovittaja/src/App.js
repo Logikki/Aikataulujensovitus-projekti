@@ -154,6 +154,8 @@ const App = () => {
     event.preventDefault();
     window.localStorage.removeItem("loggedSharedCalendar");
     setSharedCalendar(null);
+    setAvailableTimes({})
+    setPcNID([])
   };
 
   /**
