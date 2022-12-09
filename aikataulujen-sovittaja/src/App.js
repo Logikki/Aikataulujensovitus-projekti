@@ -26,6 +26,10 @@ const App = () => {
   const [availableTimes, setAvailableTimes] = useState({});
   const [navHeight, setNavHeight] = useState(70);
   const [otsHeight, setOtsHeight] = useState(36);
+  const [dimensions, setDimensions] = useState({
+    height: window.innerHeight,
+    width: window.innerWidth,
+  });
   const [BGI, setBGI] = useState({
     height: 0,
     width: 0,
@@ -35,15 +39,9 @@ const App = () => {
   // Kalenterin viikon aloituspäivä
   const [startDate, setStartDate] = useState(DayPilot.Date.today());
   const backgroundStyles = "bg-primary"; // valinnainen tausta kaikkialla
-  var img = new Image();
-  img.onload = function () {
-    setBGI({
-      height: img.height,
-      width: img.width,
-    });
-  };
-  img.src = background;
 
+  var img = new Image();
+  img.src = background;
   // Taustakuvan piirtäminen
   function backgroundStyle() {
     if (sharedCalendar !== null) return;
@@ -79,16 +77,16 @@ const App = () => {
    * muuttujaan {sharedCalendar}
    */
 
-  const [dimensions, setDimensions] = useState({
-    height: window.innerHeight,
-    width: window.innerWidth,
-  });
-
   useEffect(() => {
     // Ikkunan resize funktio, Hoitaa UI:n Dynaamisuutta!!!
     function handleResize() {
       let nav = document.getElementsByClassName("input-group")[0];
       let ots = document.getElementById("etusivuOtsikko");
+
+      setBGI({
+        height: img.height,
+        width: img.width,
+      });
 
       setDimensions({
         height: window.innerHeight,
@@ -157,9 +155,9 @@ const App = () => {
     if (sharedCalendar == null) {
       doThings();
     }
-
+    window.addEventListener("resize", handleResize);
     handleResize();
-  }, [window.innerHeight, window.innerWidth]); // Eslint herjaa tästä, mutta ilman näitä dynaamisuus ei toimi!!!
+  }, []); // Eslint herjaa tästä, mutta ilman näitä dynaamisuus ei toimi!!!
 
   /**
    * Tämä funktio hoitaa uloskirjautumisen.
