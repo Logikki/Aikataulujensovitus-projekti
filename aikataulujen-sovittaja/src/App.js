@@ -62,11 +62,6 @@ const App = () => {
     };
   }
   let privateCalendarJson = null;
-  const calendarViewConfig = {
-    eventMoveHandling: "Disabled",
-    durationBarVisible: false,
-    cellDuration: 15,
-  };
 
   // Ohjeteksti, joka näytetään kun ei näkyvissä kalenteria
   const ohje = `Aloita kirjautumalla yhteiseen kalenteriin. 
@@ -92,6 +87,7 @@ const App = () => {
   useEffect(() => {
     // Ikkunan resize funktio, Hoitaa UI:n Dynaamisuutta!!!
     function handleResize() {
+      console.log("tarkistetaan ikkunan koko")
       let nav = document.getElementsByClassName("input-group")[0];
       let ots = document.getElementById("etusivuOtsikko");
 
@@ -132,9 +128,9 @@ const App = () => {
         );
         console.log(sharedCal);
         let privates = [];
-        sharedCal.privateCalendars.filter((pc) => pc.name !== undefined).map(
+        sharedCal.privateCalendars.map(
           (pc) => (privates = privates.concat({ id: pc.id, name: pc.name }))
-        )
+        );
         setPcNID(privates);
         // Kalenterinäkymän asetukset
         const calendarViewConfig = {
@@ -162,7 +158,6 @@ const App = () => {
     if (sharedCalendar == null) {
       doThings();
     }
-
     handleResize();
   }, [window.innerHeight, window.innerWidth]); // Eslint herjaa tästä, mutta ilman näitä dynaamisuus ei toimi!!!
 
@@ -261,10 +256,8 @@ const App = () => {
         privateCalendarJson,
         sharedCalendar.sharedCalendarID
       );
-      const newPc = newShared.privateCalendars.filter((pc) => pc.name === name);
-      const newPcNID = pcNameAndID.concat({ id: newPc[0].id, name: name });
-      setAvailableTimes({ ...calendarViewConfig, events: newShared.availabletimes });
-      setPcNID(newPcNID)
+      const newPc = newShared.privateCalendars.filter((pc) => pc.name == name);
+      const addedPC = pcNameAndID.concat({ id: addedPC.id, name: name });
       resetInputs();
     } catch (exception) {
       console.log(exception);
@@ -274,16 +267,10 @@ const App = () => {
   };
 
   const handleDeletingPrivateCalendar = async (id) => {
-    console.log("poistetaan pc id:llä: ", id)
     try {
       const response = await calendarService.remPrivateCalendar(id);
-      const filtered = pcNameAndID.filter((pc) => pc.id !== id);
+      const filtered = pcNameAndID.filter((pc) => pc.id != id);
       setPcNID(filtered);
-      const newShared = await calendarService.createPrivateCalendar(
-        privateCalendarJson,
-        sharedCalendar.sharedCalendarID
-      );
-      setAvailableTimes({ ...calendarViewConfig, events: newShared.availabletimes });
     } catch {
       alert("Invalid id");
     }
