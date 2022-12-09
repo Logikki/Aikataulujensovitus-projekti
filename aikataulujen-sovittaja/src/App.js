@@ -159,7 +159,9 @@ const App = () => {
    * salasana otetaan muuttujasta {creatingNewCalendarPassword}
    *
    */
-  const handleCreatingNewCalendar = async () => {
+  const handleCreatingNewCalendar = async (event) => {
+    event.preventDefault()
+    handleLogout(event);
     const newCalendarID = await calendarService.createSharedCalendar(
       creatingNewCalendarPassword
     );
@@ -193,7 +195,8 @@ const App = () => {
    * Kirjautumisen jälkeen tallennetaan selaimeen jaettu kalenteri
    */
   const handleCalendarLogin = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
+    handleLogout(event);
     //jos ei olla vielä kirjauduttu sisään
     console.log("haetaan kalenteria");
     console.log(calendarID, calendarPassword);
