@@ -70,11 +70,11 @@ function Navbar({
     setAllowCal(true);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
     calendarPassword == "" ? setPassErr(true) : setPassErr(false);
     if (allowCal) {
       togglePopup();
-      createNewCalendarHandler();
+      createNewCalendarHandler(e);
       setAllowCal(false);
     }
   };
@@ -170,7 +170,7 @@ function Navbar({
           left={"Peruuta"}
           right={"Luo Kalenteri"}
           leftClick={close}
-          rightClick={handleSubmit}
+          rightClick={(e) => handleSubmit(e)}
           handleClose={close}
         />
       )}

@@ -159,7 +159,9 @@ const App = () => {
    * salasana otetaan muuttujasta {creatingNewCalendarPassword}
    *
    */
-  const handleCreatingNewCalendar = async () => {
+  const handleCreatingNewCalendar = async (event) => {
+    event.preventDefault()
+    handleLogout(event);
     const newCalendarID = await calendarService.createSharedCalendar(
       creatingNewCalendarPassword
     );
@@ -198,7 +200,8 @@ const App = () => {
    * Kirjautumisen jälkeen tallennetaan selaimeen jaettu kalenteri
    */
   const handleCalendarLogin = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
+    handleLogout(event);
     //jos ei olla vielä kirjauduttu sisään
     console.log("haetaan kalenteria");
     console.log(calendarID, calendarPassword);
@@ -207,11 +210,9 @@ const App = () => {
         sharedCalendarID: calendarID,
         password: calendarPassword,
       });
-      console.log(newSharedCalendar)
     setSharedCalendar(newSharedCalendar)
     calendarService.setToken(newSharedCalendar.token)
     window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(newSharedCalendar));
-    console.log(sharedCalendar)
       const sharedCal = await calendarService.getSharedCalendar( //ongelma on tässä
         newSharedCalendar.sharedCalendarID
       );
