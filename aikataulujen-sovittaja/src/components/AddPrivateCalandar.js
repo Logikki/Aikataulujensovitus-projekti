@@ -21,8 +21,8 @@ const AddPrivateCalendar = ({
   const [poistu, setPoistu] = useState(false);
   const [urlErr, setUrlErr] = useState(false);
   const [nameErr, setNameErr] = useState(false);
-  const [allowCal, setAllowCal] = useState(false);
-  const [allowNam, setAllowNam] = useState(false);
+  var allowCal = false;
+  var allowNam = false;
 
   const togglePopup = () => {
     setPopup(!popup);
@@ -33,26 +33,40 @@ const AddPrivateCalendar = ({
   };
 
   const handleSubmit = () => {
-    kalenteriUrl == "" ? setUrlErr(true) : setUrlErr(false);
-    name == "" ? setNameErr(true) : setNameErr(false);
+    console.log(kalenteriUrl);
+    if (kalenteriUrl !== "" && kalenteriUrl.includes("https://sisu.jyu.fi:")) {
+      setUrlErr(false);
+      allowCal = true;
+    } else {
+      setUrlErr(true);
+      allowCal = false;
+    }
+
+    if (name == "") {
+      setNameErr(true);
+      allowNam = false;
+    } else {
+      setNameErr(false);
+      allowNam = true;
+    }
     if (allowCal && allowNam) {
       togglePopup();
       handleFetchCalendar();
-      setAllowCal(false);
-      setAllowNam(false);
+      allowCal = false;
+      allowNam = false;
     }
     // TODO: Viimeistele toiminnallisuus!
   };
 
   const handleCalendar = (e) => {
     handleKalenteriUrlChange(e);
-    setAllowCal(true);
+    if (kalenteriUrl !== "") allowCal = true;
     setUrlErr(false);
   };
 
   const handleName = (e) => {
     setName(e);
-    setAllowNam(true);
+    if (name !== "") allowNam = true;
     setNameErr(false);
   };
 
@@ -107,22 +121,30 @@ const AddPrivateCalendar = ({
                 <h1 style={{ fontSize: "30px", textAlign: "center" }}>
                   Lisää Varatut Ajat
                 </h1>
-                <div style={{ marginTop: "5px", textAlign: "center" }}>Url</div>
+                <div style={{ marginTop: "5px", textAlign: "center" }}>
+                  Sisu kalenterin URL
+                </div>
                 <input // URL input kenttä
                   className="form-control"
-                  type="text"
+                  type="URL"
+                  pattern="https://sisu.jyu.fi:./*"
+                  placeholder="URL"
                   onChange={(e) => handleCalendar(e)}
                   style={inputStyles}
                 ></input>
                 <p className="input-error" style={urlErr ? {} : errorStyles()}>
-                  Aseta URL
+                  Tarkista URL
                 </p>
 
-                <div style={{ marginTop: "5px", textAlign: "center" }}>Nimi</div>
+                <div style={{ marginTop: "5px", textAlign: "center" }}>
+                  Nimi (1-20 merkkiä)
+                </div>
                 <input // Nimen input kenttä
                   className="form-control"
                   type="text"
+                  maxLength="20"
                   onChange={(e) => handleName(e)}
+                  placeholder="Nimi"
                   style={inputStyles}
                 ></input>
 

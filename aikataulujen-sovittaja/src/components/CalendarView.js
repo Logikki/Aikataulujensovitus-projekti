@@ -16,6 +16,7 @@ const CalendarView = function ({
   privateCals,
   handleDelete,
   availableTimes,
+  dimensions,
 }) {
   // Napin painallus joka vie edelliseen viikkoon
   const handlePrevWeekClick = function (e) {
@@ -83,9 +84,8 @@ const CalendarView = function ({
   } else {
     return (
       <div>
-        Kalenteri {sharedCalendar.sharedCalendarID}
-        <div>
-          <p className="ms-1">
+        <div id="kal-ylä">
+          <p id="viikkoNapit" className="ms-1">
             Viikko
             <>
               {" "}
@@ -97,6 +97,9 @@ const CalendarView = function ({
               </button>
             </>
           </p>
+          <label id="kalenteri-nimi">
+            Kalenterin ID: {sharedCalendar.sharedCalendarID}
+          </label>
         </div>
         <DayPilotCalendar
           viewType="Week"
@@ -106,7 +109,10 @@ const CalendarView = function ({
           ref={calendarRef}
         />
         <div className="addPrivateCalendar input-group p-3 bg-dark">
-          <PrivateCalendars privateCals={privateCals} handleDelete={handleDelete} />
+          <PrivateCalendars
+            privateCals={privateCals}
+            handleDelete={handleDelete}
+          />
           <AddPrivateCalandar
             handleLogout={handleLogout}
             handleKalenteriUrlChange={handleKalenteriUrlChange}
