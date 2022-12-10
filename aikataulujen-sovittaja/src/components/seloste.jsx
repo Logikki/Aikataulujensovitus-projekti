@@ -1,16 +1,19 @@
 import React from "react";
 
 const seloste = (props) => {
+  const buttonWidth = 120;
+  const right = 15;
+
   return (
     <div className="box" clickable="false">
       <div className="seloste-box">
         <button
           className="btn btn-secondary"
           style={{
-            right: "15px",
+            right: right,
             position: "absolute",
             top: "30px",
-            width: "120px",
+            width: buttonWidth,
           }}
           type="button"
           onClick={props.rightClick}
@@ -20,10 +23,10 @@ const seloste = (props) => {
         <button
           className="btn btn-secondary"
           style={{
-            right: "145px",
+            right: buttonWidth + right + 10,
             position: "absolute",
             top: "30px",
-            width: "120px",
+            width: buttonWidth,
           }}
           type="button"
           onClick={props.leftClick}
