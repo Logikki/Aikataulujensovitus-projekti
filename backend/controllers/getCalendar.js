@@ -9,6 +9,9 @@ const https = require('https')
  */
 downloadRouter.post("/", async (req, res) => {
     const url = req.body.osoite
+    if (url == "undefined") {
+        return res.status(401).json({error: 'token missing '})
+    }
     const download = async (url) => {
         return new Promise ((resolve, reject) => { 
             https.get(url, res => {

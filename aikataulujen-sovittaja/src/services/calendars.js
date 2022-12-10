@@ -33,16 +33,12 @@ const createPrivateCalendar = async (newObject, sharedCalendarID) => {
   const config = {
     headers: { Authorization: token },
   };
-
-  console.log(requestObj);
   const response = await axios.post(baseUrl, requestObj, config);
-  console.log(response.data);
   return response.data;
 };
 
 const getSharedCalendar = async (id) => {
   console.log("haetaan jaettu kalenteri", id);
-  console.log("token on: ", token)
   const config = {
     headers: { Authorization: token },
   };

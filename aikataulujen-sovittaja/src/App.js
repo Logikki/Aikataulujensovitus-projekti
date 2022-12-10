@@ -56,7 +56,7 @@ const App = () => {
       backgroundRepeat: "no-repeat",
     };
   }
-  let privateCalendarJson = null;
+  
 
   // Ohjeteksti, joka näytetään kun ei näkyvissä kalenteria
   const ohje = `Aloita kirjautumalla yhteiseen kalenteriin. 
@@ -209,7 +209,6 @@ const App = () => {
         //ongelma on tässä
         newSharedCalendar.sharedCalendarID
       );
-
       let privates = [];
       sharedCal.privateCalendars.map(
         (pc) => (privates = privates.concat({ id: pc.id, name: pc.name }))
@@ -232,7 +231,8 @@ const App = () => {
    * Lisätään olioon nimi, myöhemmässä vaiheessa myös jaetun kalenterin id
    */
   const handlePostingPrivateCalendar = async (event) => {
-    try {
+    let privateCalendarJson = null;
+    try { 
       //ladataan kalenteri, ja annetaan ne parse funktiolle
       privateCalendarJson = parseICS.parse(
         await getCalendar.download(kalenteriUrl)
@@ -250,19 +250,32 @@ const App = () => {
       setAvailableTimes({ events: newShared.sharedCalendar.availabletimes });
       resetInputs();
     } catch (exception) {
-      alert("Something went wrong");
+      alert(exception);
       resetInputs();
     }
   };
 
   const handleDeletingPrivateCalendar = async (id) => {
+    console.log(id)
     try {
-      const response = await calendarService.remPrivateCalendar(id);
       const filtered = pcNameAndID.filter((pc) => pc.id !== id);
       setPcNID(filtered);
+      const response = await calendarService.remPrivateCalendar(id);
       setAvailableTimes({ events: response.availabletimes });
-    } catch {
-      alert("Invalid id");
+    } catch(e) {
+      const sharedCal = await calendarService.getSharedCalendar(
+        sharedCalendar.sharedCalendarID
+      );
+      let privates = [];
+      sharedCal.privateCalendars.map(
+        (pc) => (privates = privates.concat({ id: pc.id, name: pc.name }))
+      );
+      setPcNID(privates);
+      setAvailableTimes({
+        events: sharedCal.availabletimes,
+      });
+
+      alert(e);
     }
   };
   return (
