@@ -72,8 +72,8 @@ const AddPrivateCalendar = ({
 
   const close = () => {
     togglePopup();
-    handleKalenteriUrlChange(null);
-    setName(null);
+    handleKalenteriUrlChange("");
+    setName("");
     setUrlErr(false);
     setNameErr(false);
   };
@@ -131,6 +131,7 @@ const AddPrivateCalendar = ({
                   placeholder="URL"
                   onChange={(e) => handleCalendar(e)}
                   style={inputStyles}
+                  value={kalenteriUrl}
                 ></input>
                 <p className="input-error" style={urlErr ? {} : errorStyles()}>
                   Tarkista URL
@@ -145,6 +146,7 @@ const AddPrivateCalendar = ({
                   maxLength="20"
                   onChange={(e) => handleName(e)}
                   placeholder="Nimi"
+                  value={name}
                   style={inputStyles}
                 ></input>
 
