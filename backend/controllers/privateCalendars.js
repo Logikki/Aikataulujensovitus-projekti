@@ -46,12 +46,13 @@ privateCalendarRouter.delete('/:id', async (req, res) => {
       .findById(req.params.id)
     //katsotaan, löytyykö jaetusta kalenterista tällä token id:llä kalenteria, joka pyydettiin poistamaan
     //jos ei, niin käyttäjällä ei ole oikeuksia poistaa kalenteria
-    console.log("jaetut: ", sharedCal.privateCalendars)
-    console.log("pyydetty ", calendarToDelete)
+    //console.log("jaetut: ", sharedCal.privateCalendars)
+    //console.log("pyydetty ", calendarToDelete)
     if (!sharedCal.privateCalendars.includes(req.params.id)) {
         return res.status(401).json({error: 'Could not find calendar with requested id'})
     }
-    await PrivateCalendar.findByIdAndRemove(req.params.id)
+    await PrivateCalendar.findByIdAndRemove(req.params.id) // poistetaan sisu kalenteri 
+    await sharedCal.privateCalendars.remove(req.params.id) // poistetaan yhteisestä kalenterista viite sisu kanlenteriin
     //poistetaan jaetun kalenterista viite poistettavaan
     await sharedCal.save()
     await sharedCal
