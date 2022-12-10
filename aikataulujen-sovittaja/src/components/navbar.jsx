@@ -11,6 +11,7 @@ function Navbar({
   setNewCalendarPassword,
   createNewCalendarHandler,
   dimensions,
+  setSharedCalendar,
 }) {
   const nappiStyles = "btn btn-secondary";
   const inputStyles = { width: "100%", textAlign: "center" };
@@ -20,7 +21,7 @@ function Navbar({
   );
   const [passErr, setPassErr] = useState(false);
   const [allowCal, setAllowCal] = useState(false);
-  
+
   const errorStyles = () => {
     return {
       visibility: "hidden",
@@ -36,9 +37,11 @@ function Navbar({
   const handleSelosteOk = () => {
     window.localStorage.setItem("TSSAcc", 1);
     setSeloste(window.localStorage.getItem("TSSAcc") == 1 ? false : true);
+    document.location.reload();
   };
 
   const handleSelosteNotOk = () => {
+    setSharedCalendar(null);
     window.localStorage.setItem("TSSAcc", 0);
     setSeloste(window.localStorage.getItem("TSSAcc") == 0 ? false : true);
   };

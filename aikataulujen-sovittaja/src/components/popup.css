@@ -43,7 +43,7 @@ import "bootstrap/dist/css/bootstrap.css";
 
 .seloste-box {
     position: absolute;
-    height: 200px;
+    height: 50%;
     bottom: 0px;
     background-color: #fff;
     border: 1px solid #999;
@@ -77,6 +77,15 @@ import "bootstrap/dist/css/bootstrap.css";
     z-index: 998;
 }
 
+.seloste-btn{
+    float: right;
+    margin-right: 10px;
+    width: 120px;
+}
+
+.seloste-text{
+    margin-bottom: 0px;
+}
 .error-message {
     position: absolute;
 }
