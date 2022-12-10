@@ -70,18 +70,18 @@ function Navbar({
     setAllowCal(true);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
     calendarPassword == "" ? setPassErr(true) : setPassErr(false);
     if (allowCal) {
       togglePopup();
-      createNewCalendarHandler();
+      createNewCalendarHandler(e);
       setAllowCal(false);
     }
   };
 
-  const handleLogin = () => {
+  const handleLogin = (e) => {
     window.localStorage.getItem("TSSAcc") == 1
-      ? handleCalendarLogin()
+      ? handleCalendarLogin(e)
       : console.log("Hyväksy tietosuojaseloste!");
   };
 
@@ -170,7 +170,7 @@ function Navbar({
           left={"Peruuta"}
           right={"Luo Kalenteri"}
           leftClick={close}
-          rightClick={handleSubmit}
+          rightClick={(e) => handleSubmit(e)}
           handleClose={close}
         />
       )}

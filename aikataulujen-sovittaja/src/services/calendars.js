@@ -42,6 +42,7 @@ const createPrivateCalendar = async (newObject, sharedCalendarID) => {
 
 const getSharedCalendar = async (id) => {
   console.log("haetaan jaettu kalenteri", id);
+  console.log("token on: ", token)
   const config = {
     headers: { Authorization: token },
   };
@@ -55,13 +56,13 @@ const getSharedCalendar = async (id) => {
  * @returns uusi jaettu kalenteri
  */
 const remPrivateCalendar = async (id) => {
-  const config = {
-    headers: { Authorization: token },
-  };
-
-  const request = axios.delete(`${SharedCalendarBaseUrl}/${id}`, config);
-  return request.then((response) => response.data);
-};
+    const config = {
+        headers: { Authorization: token }
+    }
+    
+    const request = axios.delete(`${baseUrl}/${id}`, config)
+    return request.then((response) => response.data)
+}
 
 /**
  * Tämä funktio hoitaa jaetun kalenterin, sekä kaikkien siihen liitettyjen privaattien kalentereiden poistamisen

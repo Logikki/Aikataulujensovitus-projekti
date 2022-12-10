@@ -20,6 +20,7 @@ privateCalendarRouter.post('/', async (req, res) => {
         name : body.name,
         events : body.events
     })
+    console.log("new calendar id : ", calendar.id)
     console.log("lisätään kalenteri")
     const savedCalendar = await calendar.save()
     sharedCalendar.privateCalendars = sharedCalendar.privateCalendars.concat(savedCalendar.id)
@@ -27,33 +28,39 @@ privateCalendarRouter.post('/', async (req, res) => {
     await sharedCalendar
         .populate('privateCalendars')
     sharedCalendar.availabletimes = availabletimes.calculateAvailebleTimes(sharedCalendar.privateCalendars)
-    res.status(201).json(sharedCalendar)
+    res.status(201).json({sharedCalendar, newCalendarID : calendar.id})
 })
 
 privateCalendarRouter.delete('/:id', async (req, res) => {
+    if (req.params.id == "undefined" || !(req.params.id)) {
+        return res.status(401).json({error: 'No ID in request'})
+    }
     if (!req.token) {
         return res.status(401).json({error: 'token missing '})
     }
     const decodedToken = jwt.verify(req.token, process.env.SECRET)
     const sharedCal = await SharedCalendar
       .findById(decodedToken.sharedCalendarID)
+    console.log("poistetaan idllä: ", req.params.id)
     const calendarToDelete = await PrivateCalendar
       .findById(req.params.id)
     //katsotaan, löytyykö jaetusta kalenterista tällä token id:llä kalenteria, joka pyydettiin poistamaan
     //jos ei, niin käyttäjällä ei ole oikeuksia poistaa kalenteria
-    console.log("jaetut: ", sharedCal.privateCalendars)
-    console.log("pyydetty ", calendarToDelete)
+    //console.log("jaetut: ", sharedCal.privateCalendars)
+    //console.log("pyydetty ", calendarToDelete)
     if (!sharedCal.privateCalendars.includes(req.params.id)) {
         return res.status(401).json({error: 'Could not find calendar with requested id'})
     }
-    await PrivateCalendar.findByIdAndRemove(req.params.id)
-    sharedCal.privateCalendars = sharedCal.privateCalendars.filter(cal =>cal !== calendarToDelete.id)
+    await PrivateCalendar.findByIdAndRemove(req.params.id) // poistetaan sisu kalenteri 
+    await sharedCal.privateCalendars.remove(req.params.id) // poistetaan yhteisestä kalenterista viite sisu kanlenteriin
     //poistetaan jaetun kalenterista viite poistettavaan
     await sharedCal.save()
     await sharedCal
         .populate('privateCalendars') 
+    console.log("shared after populate: ", sharedCal)
     sharedCal.availabletimes = availabletimes.calculateAvailebleTimes(sharedCal.privateCalendars)
-    res.status(204).json(sharedCal)
+    console.log(sharedCal) 
+    res.status(200).json(sharedCal)
 })
 
 module.exports = privateCalendarRouter

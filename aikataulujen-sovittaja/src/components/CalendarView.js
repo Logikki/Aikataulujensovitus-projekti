@@ -1,27 +1,44 @@
-import React, { forwardRef } from "react";
-import { DayPilotCalendar } from "daypilot-pro-react";
+import React, { useState, useRef } from "react";
+import { DayPilot, DayPilotCalendar } from "daypilot-pro-react";
 import AddPrivateCalandar from "./AddPrivateCalandar";
 import PrivateCalendars from "./PrivateCalendars";
 import "./CalendarStyles.css";
 
 //Tänne tulee kaikki, mitä näytetään kun on kirjauduttu sisään kalenteriin
-const CalendarView = forwardRef(function (
-  {
-    sharedCalendar,
-    handleLogout,
-    setName,
-    handleKalenteriUrlChange,
-    handleFetchCalendar,
-    name,
-    kalenteriUrl,
-    privateCals,
-    handleDelete,
-    availableTimes,
-    handlePrevWeekClick,
-    handleNextWeekClick,
-  },
-  ref
-) {
+const CalendarView = function ({
+  sharedCalendar,
+  handleLogout,
+  setName,
+  handleKalenteriUrlChange,
+  handleFetchCalendar,
+  name,
+  kalenteriUrl,
+  privateCals,
+  handleDelete,
+  availableTimes,
+}) {
+  // Napin painallus joka vie edelliseen viikkoon
+  const handlePrevWeekClick = function (e) {
+    // Lasketaan uusi pvm, otetaan siitä vain teksti
+    let uusiPvm = startDate.addDays(-7).value;
+    // Luodaan siitä uusi olio
+    let uusiPvmObj = DayPilot.Date(uusiPvm);
+    // Asetetaan se uudeksi tilaksi
+    setStartDate(uusiPvmObj);
+    calendarRef.current.control.update({ startDate: uusiPvmObj });
+  };
+
+  // Käsittelijä, joka Siirtää seuraavaan viikkoon
+  const handleNextWeekClick = function (e) {
+    // Lasketaan uusi pvm, otetaan siitä vain teksti
+    let uusiPvm = startDate.addDays(7).value;
+    // Luodaan siitä uusi olio
+    let uusiPvmObj = DayPilot.Date(uusiPvm);
+    // Asetetaan se uudeksi tilaksi
+    setStartDate(uusiPvmObj);
+    calendarRef.current.control.update({ startDate: uusiPvmObj });
+  };
+
   // Eventin testausta ->
   // const [state, setState] = useState({
   //   events: [
@@ -38,7 +55,28 @@ const CalendarView = forwardRef(function (
   //   ],
   //   durationBarVisible: "false",
   // });
+
+  // Ref kalenterille, viittausta tarvitaan kalenterin funktioiden kutsuihin
+  const calendarRef = useRef(null);
+  // Kalenterin viikon aloituspäivä
+  const [startDate, setStartDate] = useState(DayPilot.Date.today());
+
   const nappiStyles = "btn btn-secondary btn-sm mt-1";
+
+  // Kalenterinäkymän asetukset
+  const calendarViewConfig = {
+    durationBarVisible: false,
+    cellDuration: 15,
+    cellHeight: 20,
+    headerDateFormat: "ddd d/M/yyyy",
+    timeRangeSelectedHandling: "Disabled",
+    eventMoveHandling: "Disabled",
+    eventClickHandling: "Disabled",
+    eventHoverHandling: "Disabled",
+    eventResizeHandling: "Disabled",
+    crosshairType: "Disabled",
+    businessBeginsHour: 8,
+  };
 
   if (sharedCalendar == null) {
     return;
@@ -64,13 +102,11 @@ const CalendarView = forwardRef(function (
           viewType="Week"
           locale="fi-fi"
           {...availableTimes}
-          ref={ref}
+          {...calendarViewConfig}
+          ref={calendarRef}
         />
         <div className="addPrivateCalendar input-group p-3 bg-dark">
-          <PrivateCalendars
-            privateCals={privateCals}
-            handleDelete={handleDelete}
-          />
+          <PrivateCalendars privateCals={privateCals} handleDelete={handleDelete} />
           <AddPrivateCalandar
             handleLogout={handleLogout}
             handleKalenteriUrlChange={handleKalenteriUrlChange}
@@ -83,6 +119,6 @@ const CalendarView = forwardRef(function (
       </div>
     );
   }
-});
+};
 //{privates.map(pc => <div>{pc.name}</div>)}
 export default CalendarView;

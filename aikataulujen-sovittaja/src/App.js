@@ -4,11 +4,10 @@ import parseICS from "./services/parseICS";
 import { useState, useEffect, useRef } from "react";
 import Navbar from "./components/navbar";
 import calendarLoginService from "./services/calendarLogin";
-import Notification from "./components/Notification";
+// import Notification from "./components/Notification"; Aiempi virheilmoitustapa
 import calendarService from "./services/calendars";
 import CalendarView from "./components/CalendarView";
 import background from "./images/logo.png";
-import { DayPilot } from "daypilot-pro-react";
 import Ohjeteksti from "./components/Ohjeteksti";
 
 const App = () => {
@@ -30,14 +29,12 @@ const App = () => {
     height: window.innerHeight,
     width: window.innerWidth,
   });
+
   const [BGI, setBGI] = useState({
     height: 0,
     width: 0,
   });
-  // Ref kalenterille, viittausta tarvitaan kalenterin funktioiden kutsuihin
-  const calendarRef = useRef(null);
-  // Kalenterin viikon aloituspäivä
-  const [startDate, setStartDate] = useState(DayPilot.Date.today());
+
   const backgroundStyles = "bg-primary"; // valinnainen tausta kaikkialla
 
   var img = new Image();
@@ -78,8 +75,11 @@ const App = () => {
    */
 
   useEffect(() => {
+    console.log("useEffect")
     // Ikkunan resize funktio, Hoitaa UI:n Dynaamisuutta!!!
     function handleResize() {
+     
+      console.log("tarkistetaan ikkunan koko")
       let nav = document.getElementsByClassName("input-group")[0];
       let ots = document.getElementById("etusivuOtsikko");
 
@@ -107,18 +107,16 @@ const App = () => {
     }
 
     const doThings = async () => {
-      console.log(
-        "use effect, katsotaan onko cachessa kirjauduttu kalenteriin"
-      );
-      const loggedSharedCalendarJSON = window.localStorage.getItem(
-        "loggedSharedCalendar"
-      );
+      console.log("use effect, katsotaan onko cachessa kirjauduttu kalenteriin");
+      const loggedSharedCalendarJSON =
+        window.localStorage.getItem("loggedSharedCalendar");
 
       const TSS = window.localStorage.getItem("TSSAcc") == 1 ? true : false; //onko tietosuojaseloste täytetty?
       if (loggedSharedCalendarJSON && TSS) {
         // Mikäli tietosuojaseloste ei ole täytetty, ei myöskään lataa valmista kalenteria.
         const calendar = JSON.parse(loggedSharedCalendarJSON);
         setSharedCalendar(calendar);
+        console.log(calendar)
         calendarService.setToken(calendar.token);
         const sharedCal = await calendarService.getSharedCalendar(
           calendar.sharedCalendarID
@@ -129,22 +127,7 @@ const App = () => {
           (pc) => (privates = privates.concat({ id: pc.id, name: pc.name }))
         );
         setPcNID(privates);
-        // Kalenterinäkymän asetukset
-        const calendarViewConfig = {
-          durationBarVisible: false,
-          cellDuration: 15,
-          cellHeight: 20,
-          headerDateFormat: "ddd d/M/yyyy",
-          timeRangeSelectedHandling: "Disabled",
-          eventMoveHandling: "Disabled",
-          eventClickHandling: "Disabled",
-          eventHoverHandling: "Disabled",
-          eventResizeHandling: "Disabled",
-          crosshairType: "Disabled",
-          businessBeginsHour: 8,
-        };
         setAvailableTimes({
-          ...calendarViewConfig,
           events: sharedCal.availabletimes,
         });
       }
@@ -157,7 +140,7 @@ const App = () => {
     }
     window.addEventListener("resize", handleResize);
     handleResize();
-  }, []); // Eslint herjaa tästä, mutta ilman näitä dynaamisuus ei toimi!!!
+  }, []);
 
   /**
    * Tämä funktio hoitaa uloskirjautumisen.
@@ -167,6 +150,8 @@ const App = () => {
     event.preventDefault();
     window.localStorage.removeItem("loggedSharedCalendar");
     setSharedCalendar(null);
+    setAvailableTimes({})
+    setPcNID([])
   };
 
   /**
@@ -174,34 +159,34 @@ const App = () => {
    * salasana otetaan muuttujasta {creatingNewCalendarPassword}
    *
    */
-  const handleCreatingNewCalendar = async () => {
+  const handleCreatingNewCalendar = async (event) => {
+    event.preventDefault()
+    handleLogout(event);
     const newCalendarID = await calendarService.createSharedCalendar(
       creatingNewCalendarPassword
     );
-    //tässä vaiheessa voitaisiin ilmoittaa käyttäjälle, mikä on juuri luodun kalenterin id
-    //myöskin sähköpostia voitaisiin kysyä, johon tämä id lähetettäisiin
+    //sähköpostia voitaisiin kysyä, johon tämä id lähetettäisiin
 
     try {
-      const sharedCalendar = await calendarLoginService.calendarLogin({
+      const newSharedCalendar = await calendarLoginService.calendarLogin({
         sharedCalendarID: newCalendarID,
         password: creatingNewCalendarPassword,
       });
-      window.localStorage.setItem(
-        "loggedSharedCalendar",
-        JSON.stringify(sharedCalendar)
-      );
-      calendarService.setToken(sharedCalendar.token);
-      setSharedCalendar(sharedCalendar);
+      window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(newSharedCalendar));
+      calendarService.setToken(newSharedCalendar.token);
+      setSharedCalendar(newSharedCalendar);
+      console.log("5")
       resetInputs();
       const sharedCal = await calendarService.getSharedCalendar(
-        sharedCalendar.sharedCalendarID
+        newSharedCalendar.sharedCalendarID
       );
 
       // Virheilmoitus pois?
-    } catch {
+    } catch(e) {
+      console.log("error tapahtu")
       //tähän voitaisiin laittaa error message
       resetInputs();
-      alert("Virhe uuteen kalenteriin automaattisesti kirjautumisessa");
+      alert(e);
     }
   };
 
@@ -209,31 +194,40 @@ const App = () => {
    * Funktio hoitaa kirjautumisen.
    * Kirjautumisen jälkeen tallennetaan selaimeen jaettu kalenteri
    */
-  const handleCalendarLogin = async () => {
+  const handleCalendarLogin = async (event) => {
+    event.preventDefault();
+    handleLogout(event);
     //jos ei olla vielä kirjauduttu sisään
-    if (sharedCalendar) console.log("haetaan kalenteria");
+    console.log("haetaan kalenteria");
     console.log(calendarID, calendarPassword);
     try {
-      const sharedCalendar = await calendarLoginService.calendarLogin({
+      const newSharedCalendar = await calendarLoginService.calendarLogin({
         sharedCalendarID: calendarID,
         password: calendarPassword,
       });
-      window.localStorage.setItem(
-        "loggedSharedCalendar",
-        JSON.stringify(sharedCalendar)
+    setSharedCalendar(newSharedCalendar)
+    calendarService.setToken(newSharedCalendar.token)
+    window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(newSharedCalendar));
+      const sharedCal = await calendarService.getSharedCalendar( //ongelma on tässä
+        newSharedCalendar.sharedCalendarID
       );
-      calendarService.setToken(sharedCalendar.token);
-      setSharedCalendar(sharedCalendar);
-      resetInputs();
-      const sharedCal = await calendarService.getSharedCalendar(
-        sharedCalendar.sharedCalendarID
+
+      console.log("tässä 1")
+      let privates = [];
+      sharedCal.privateCalendars.map(
+        (pc) => (privates = privates.concat({ id: pc.id, name: pc.name }))
       );
-    } catch {
+      setPcNID(privates);
+      setAvailableTimes({
+      events: sharedCal.availabletimes
+    });
+    resetInputs(); 
+  }
+    catch(e) {
       //tähän voitaisiin laittaa error message
+      console.log(e)
       resetInputs();
-      alert(
-        "Virhe kirjautumisessa. Salasana on väärin tai kalenteria ei löydy."
-      );
+      alert("Virhe kirjautumisessa. Salasana on väärin tai kalenteria ei löydy.");
     }
   };
   /**
@@ -244,9 +238,7 @@ const App = () => {
     try {
       console.log("lisätään tämä kalenteri: ", kalenteriUrl);
       //ladataan kalenteri, ja annetaan ne parse funktiolle
-      privateCalendarJson = parseICS.parse(
-        await getCalendar.download(kalenteriUrl)
-      );
+      privateCalendarJson = parseICS.parse(await getCalendar.download(kalenteriUrl));
       privateCalendarJson = { events: privateCalendarJson, name: name };
 
       console.log(privateCalendarJson);
@@ -254,8 +246,12 @@ const App = () => {
         privateCalendarJson,
         sharedCalendar.sharedCalendarID
       );
-      const newPc = newShared.privateCalendars.filter((pc) => pc.name == name);
-      const addedPC = pcNameAndID.concat({ id: addedPC.id, name: name });
+
+      const newPc = {id : newShared.newCalendarID, name : name}
+      const addedPC = pcNameAndID.concat(newPc);
+      console.log("uusi pncid: ", addedPC)
+      setPcNID(addedPC)
+      setAvailableTimes({events: newShared.sharedCalendar.availabletimes })
       resetInputs();
     } catch (exception) {
       console.log(exception);
@@ -267,40 +263,17 @@ const App = () => {
   const handleDeletingPrivateCalendar = async (id) => {
     try {
       const response = await calendarService.remPrivateCalendar(id);
-      const filtered = pcNameAndID.filter((pc) => pc.id != id);
-      setPcNID(filtered);
+      console.log(response)
+      const filtered = pcNameAndID.filter((pc) => pc.id !== id);
+      setPcNID(filtered)
+      setAvailableTimes({events: response.availabletimes})
     } catch {
       alert("Invalid id");
     }
   };
-
-  // Napin painallus joka vie edelliseen viikkoon
-  const handlePrevWeekClick = function (e) {
-    // Lasketaan uusi pvm, otetaan siitä vain teksti
-    let uusiPvm = startDate.addDays(-7).value;
-    // Luodaan siitä uusi olio
-    let uusiPvmObj = DayPilot.Date(uusiPvm);
-    // Asetetaan se uudeksi tilaksi
-    setStartDate(uusiPvmObj);
-    calendarRef.current.control.update({ startDate: uusiPvmObj });
-  };
-
-  // Käsittelijä, joka Siirtää seuraavaan viikkoon
-  const handleNextWeekClick = function (e) {
-    // Lasketaan uusi pvm, otetaan siitä vain teksti
-    let uusiPvm = startDate.addDays(7).value;
-    // Luodaan siitä uusi olio
-    let uusiPvmObj = DayPilot.Date(uusiPvm);
-    // Asetetaan se uudeksi tilaksi
-    setStartDate(uusiPvmObj);
-    calendarRef.current.control.update({ startDate: uusiPvmObj });
-  };
-
+console.log(availableTimes)
   return (
-    <div
-      className={backgroundStyle()}
-      style={{ height: "100%", width: "100%" }}
-    >
+    <div className={backgroundStyle()} style={{ height: "100%", width: "100%" }}>
       <Navbar
         calendarPassword={calendarPassword}
         setCalendarPassword={setCalendarPassword}
@@ -333,9 +306,6 @@ const App = () => {
           privateCals={pcNameAndID}
           handleDelete={handleDeletingPrivateCalendar} //TODO: Muuta pois testistä!!!
           availableTimes={availableTimes}
-          ref={calendarRef} // Tämä mahdollistaa daypilot metodikutsut
-          handlePrevWeekClick={handlePrevWeekClick}
-          handleNextWeekClick={handleNextWeekClick}
         />
       </div>
     </div>

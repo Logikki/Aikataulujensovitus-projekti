@@ -114,13 +114,11 @@ const AddPrivateCalendar = ({
                   onChange={(e) => handleCalendar(e)}
                   style={inputStyles}
                 ></input>
-                <p class="input-error" style={urlErr ? {} : errorStyles()}>
+                <p className="input-error" style={urlErr ? {} : errorStyles()}>
                   Aseta URL
                 </p>
 
-                <div style={{ marginTop: "5px", textAlign: "center" }}>
-                  Nimi
-                </div>
+                <div style={{ marginTop: "5px", textAlign: "center" }}>Nimi</div>
                 <input // Nimen input kenttä
                   className="form-control"
                   type="text"
@@ -128,7 +126,7 @@ const AddPrivateCalendar = ({
                   style={inputStyles}
                 ></input>
 
-                <p class="input-error" style={nameErr ? {} : errorStyles()}>
+                <p className="input-error" style={nameErr ? {} : errorStyles()}>
                   Aseta Nimi
                 </p>
               </div>

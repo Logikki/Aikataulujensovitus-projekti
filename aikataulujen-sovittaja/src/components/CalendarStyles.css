@@ -5,8 +5,8 @@
 .calendar_default_event_inner {
     background: limegreen;
     color: #fff;
-    border: none;
-    border-radius: 5px;
+    border: 1px solid green;
+    border-radius: 15px;
     font-size: 10pt;
     opacity: 0.8;
 }
@@ -14,11 +14,11 @@
 /* Kalenterin solujen muotoilut */
 .calendar_default_cell_inner
 {
-	background: purple;
-    opacity: 0.8;
+	background: lightgray;
 }
 
+/*
 .calendar_default_cell_business .calendar_default_cell_inner {
-	background: red;
+	 background: red;
 }
-
+*/

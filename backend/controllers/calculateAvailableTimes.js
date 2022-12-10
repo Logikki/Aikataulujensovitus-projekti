@@ -85,6 +85,12 @@ function calculateAvailebleTimes(data) {
             }
         }
     }
+    //lisätään vapataa aikaa viimeisen eventin jälkeen vuoden verran
+    if(availabletimes.length > 0){
+        availabletimes.push({start: availabletimes[availabletimes.length-1].end, 
+        end: dayjs(availabletimes[availabletimes.length-1].end).add(1, 'year').format('YYYY-MM-DDTHH:mm:ss'), 
+        id: eventId})
+    }
     return availabletimes;
 }
 
