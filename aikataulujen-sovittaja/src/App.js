@@ -56,7 +56,7 @@ const App = () => {
       backgroundRepeat: "no-repeat",
     };
   }
-  let privateCalendarJson = null;
+  
 
   // Ohjeteksti, joka näytetään kun ei näkyvissä kalenteria
   const ohje = `Aloita kirjautumalla yhteiseen kalenteriin. 
@@ -75,11 +75,8 @@ const App = () => {
    */
 
   useEffect(() => {
-    console.log("useEffect")
     // Ikkunan resize funktio, Hoitaa UI:n Dynaamisuutta!!!
     function handleResize() {
-     
-      console.log("tarkistetaan ikkunan koko")
       let nav = document.getElementsByClassName("input-group")[0];
       let ots = document.getElementById("etusivuOtsikko");
 
@@ -107,7 +104,6 @@ const App = () => {
     }
 
     const doThings = async () => {
-      console.log("use effect, katsotaan onko cachessa kirjauduttu kalenteriin");
       const loggedSharedCalendarJSON =
         window.localStorage.getItem("loggedSharedCalendar");
 
@@ -116,12 +112,10 @@ const App = () => {
         // Mikäli tietosuojaseloste ei ole täytetty, ei myöskään lataa valmista kalenteria.
         const calendar = JSON.parse(loggedSharedCalendarJSON);
         setSharedCalendar(calendar);
-        console.log(calendar)
         calendarService.setToken(calendar.token);
         const sharedCal = await calendarService.getSharedCalendar(
           calendar.sharedCalendarID
         );
-        console.log(sharedCal);
         let privates = [];
         sharedCal.privateCalendars.map(
           (pc) => (privates = privates.concat({ id: pc.id, name: pc.name }))
@@ -175,7 +169,6 @@ const App = () => {
       window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(newSharedCalendar));
       calendarService.setToken(newSharedCalendar.token);
       setSharedCalendar(newSharedCalendar);
-      console.log("5")
       resetInputs();
       const sharedCal = await calendarService.getSharedCalendar(
         newSharedCalendar.sharedCalendarID
@@ -183,7 +176,6 @@ const App = () => {
 
       // Virheilmoitus pois?
     } catch(e) {
-      console.log("error tapahtu")
       //tähän voitaisiin laittaa error message
       resetInputs();
       alert(e);
@@ -198,8 +190,6 @@ const App = () => {
     event.preventDefault();
     handleLogout(event);
     //jos ei olla vielä kirjauduttu sisään
-    console.log("haetaan kalenteria");
-    console.log(calendarID, calendarPassword);
     try {
       const newSharedCalendar = await calendarLoginService.calendarLogin({
         sharedCalendarID: calendarID,
@@ -211,8 +201,6 @@ const App = () => {
       const sharedCal = await calendarService.getSharedCalendar( //ongelma on tässä
         newSharedCalendar.sharedCalendarID
       );
-
-      console.log("tässä 1")
       let privates = [];
       sharedCal.privateCalendars.map(
         (pc) => (privates = privates.concat({ id: pc.id, name: pc.name }))
@@ -235,13 +223,11 @@ const App = () => {
    * Lisätään olioon nimi, myöhemmässä vaiheessa myös jaetun kalenterin id
    */
   const handlePostingPrivateCalendar = async (event) => {
-    try {
-      console.log("lisätään tämä kalenteri: ", kalenteriUrl);
+    let privateCalendarJson = null;
+    try { 
       //ladataan kalenteri, ja annetaan ne parse funktiolle
       privateCalendarJson = parseICS.parse(await getCalendar.download(kalenteriUrl));
-      privateCalendarJson = { events: privateCalendarJson, name: name };
-
-      console.log(privateCalendarJson);
+      privateCalendarJson = { events: privateCalendarJson, name: name }
       const newShared = await calendarService.createPrivateCalendar(
         privateCalendarJson,
         sharedCalendar.sharedCalendarID
@@ -249,7 +235,6 @@ const App = () => {
 
       const newPc = {id : newShared.newCalendarID, name : name}
       const addedPC = pcNameAndID.concat(newPc);
-      console.log("uusi pncid: ", addedPC)
       setPcNID(addedPC)
       setAvailableTimes({events: newShared.sharedCalendar.availabletimes })
       resetInputs();
@@ -263,7 +248,6 @@ const App = () => {
   const handleDeletingPrivateCalendar = async (id) => {
     try {
       const response = await calendarService.remPrivateCalendar(id);
-      console.log(response)
       const filtered = pcNameAndID.filter((pc) => pc.id !== id);
       setPcNID(filtered)
       setAvailableTimes({events: response.availabletimes})
@@ -271,7 +255,6 @@ const App = () => {
       alert("Invalid id");
     }
   };
-console.log(availableTimes)
   return (
     <div className={backgroundStyle()} style={{ height: "100%", width: "100%" }}>
       <Navbar
