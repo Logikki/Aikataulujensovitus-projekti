@@ -19,3 +19,13 @@ code {
 .Otsikko{
   font-size: 30px;
 }
+
+#kal-ylä{
+  text-align: center;
+}
+#viikkoNapit{
+float:left;
+}
+#kalenteri-nimi{
+  font-size: 30px;
+}

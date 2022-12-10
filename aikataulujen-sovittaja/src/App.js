@@ -104,8 +104,9 @@ const App = () => {
     }
 
     const doThings = async () => {
-      const loggedSharedCalendarJSON =
-        window.localStorage.getItem("loggedSharedCalendar");
+      const loggedSharedCalendarJSON = window.localStorage.getItem(
+        "loggedSharedCalendar"
+      );
 
       const TSS = window.localStorage.getItem("TSSAcc") == 1 ? true : false; //onko tietosuojaseloste täytetty?
       if (loggedSharedCalendarJSON && TSS) {
@@ -144,8 +145,8 @@ const App = () => {
     event.preventDefault();
     window.localStorage.removeItem("loggedSharedCalendar");
     setSharedCalendar(null);
-    setAvailableTimes({})
-    setPcNID([])
+    setAvailableTimes({});
+    setPcNID([]);
   };
 
   /**
@@ -154,7 +155,7 @@ const App = () => {
    *
    */
   const handleCreatingNewCalendar = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
     handleLogout(event);
     const newCalendarID = await calendarService.createSharedCalendar(
       creatingNewCalendarPassword
@@ -166,7 +167,10 @@ const App = () => {
         sharedCalendarID: newCalendarID,
         password: creatingNewCalendarPassword,
       });
-      window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(newSharedCalendar));
+      window.localStorage.setItem(
+        "loggedSharedCalendar",
+        JSON.stringify(newSharedCalendar)
+      );
       calendarService.setToken(newSharedCalendar.token);
       setSharedCalendar(newSharedCalendar);
       resetInputs();
@@ -175,7 +179,7 @@ const App = () => {
       );
 
       // Virheilmoitus pois?
-    } catch(e) {
+    } catch (e) {
       //tähän voitaisiin laittaa error message
       resetInputs();
       alert(e);
@@ -195,10 +199,14 @@ const App = () => {
         sharedCalendarID: calendarID,
         password: calendarPassword,
       });
-    setSharedCalendar(newSharedCalendar)
-    calendarService.setToken(newSharedCalendar.token)
-    window.localStorage.setItem("loggedSharedCalendar", JSON.stringify(newSharedCalendar));
-      const sharedCal = await calendarService.getSharedCalendar( //ongelma on tässä
+      setSharedCalendar(newSharedCalendar);
+      calendarService.setToken(newSharedCalendar.token);
+      window.localStorage.setItem(
+        "loggedSharedCalendar",
+        JSON.stringify(newSharedCalendar)
+      );
+      const sharedCal = await calendarService.getSharedCalendar(
+        //ongelma on tässä
         newSharedCalendar.sharedCalendarID
       );
       let privates = [];
@@ -207,15 +215,15 @@ const App = () => {
       );
       setPcNID(privates);
       setAvailableTimes({
-      events: sharedCal.availabletimes
-    });
-    resetInputs(); 
-  }
-    catch(e) {
-      //tähän voitaisiin laittaa error message
-      console.log(e)
+        events: sharedCal.availabletimes,
+      });
       resetInputs();
-      alert("Virhe kirjautumisessa. Salasana on väärin tai kalenteria ei löydy.");
+    } catch (e) {
+      //tähän voitaisiin laittaa error message
+      resetInputs();
+      alert(
+        "Virhe kirjautumisessa. Salasana on väärin tai kalenteria ei löydy."
+      );
     }
   };
   /**
@@ -226,20 +234,22 @@ const App = () => {
     let privateCalendarJson = null;
     try { 
       //ladataan kalenteri, ja annetaan ne parse funktiolle
-      privateCalendarJson = parseICS.parse(await getCalendar.download(kalenteriUrl));
-      privateCalendarJson = { events: privateCalendarJson, name: name }
+      privateCalendarJson = parseICS.parse(
+        await getCalendar.download(kalenteriUrl)
+      );
+      privateCalendarJson = { events: privateCalendarJson, name: name };
+
       const newShared = await calendarService.createPrivateCalendar(
         privateCalendarJson,
         sharedCalendar.sharedCalendarID
       );
 
-      const newPc = {id : newShared.newCalendarID, name : name}
+      const newPc = { id: newShared.newCalendarID, name: name };
       const addedPC = pcNameAndID.concat(newPc);
-      setPcNID(addedPC)
-      setAvailableTimes({events: newShared.sharedCalendar.availabletimes })
+      setPcNID(addedPC);
+      setAvailableTimes({ events: newShared.sharedCalendar.availabletimes });
       resetInputs();
     } catch (exception) {
-      console.log(exception);
       alert("Something went wrong");
       resetInputs();
     }
@@ -249,14 +259,17 @@ const App = () => {
     try {
       const response = await calendarService.remPrivateCalendar(id);
       const filtered = pcNameAndID.filter((pc) => pc.id !== id);
-      setPcNID(filtered)
-      setAvailableTimes({events: response.availabletimes})
-    } catch (e) {
-      alert(e);
+      setPcNID(filtered);
+      setAvailableTimes({ events: response.availabletimes });
+    } catch {
+      alert("Invalid id");
     }
   };
   return (
-    <div className={backgroundStyle()} style={{ height: "100%", width: "100%" }}>
+    <div
+      className={backgroundStyle()}
+      style={{ height: "100%", width: "100%" }}
+    >
       <Navbar
         calendarPassword={calendarPassword}
         setCalendarPassword={setCalendarPassword}
@@ -289,6 +302,7 @@ const App = () => {
           privateCals={pcNameAndID}
           handleDelete={handleDeletingPrivateCalendar} //TODO: Muuta pois testistä!!!
           availableTimes={availableTimes}
+          dimensions={dimensions}
         />
       </div>
     </div>
