@@ -141,6 +141,8 @@ function Navbar({
                 <h1 style={{ fontSize: "30px", textAlign: "center" }}>
                   Uusi Kalenteri
                 </h1>
+                <p style={{textAlign: "center"}}>Luo uusi jaettu yhteinen kalenteri antamalla kalenterille salasanan
+                </p>
                 <div style={{ marginTop: "5px", textAlign: "center" }}>
                   Salasana
                 </div>
