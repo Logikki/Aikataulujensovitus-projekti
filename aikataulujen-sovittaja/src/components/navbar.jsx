@@ -115,23 +115,16 @@ function Navbar({
           Tietosuojaseloste
         </button>
       </div>
-      <span
-        style={{
-          marginLeft: dimensions.width - 170,
-          position: "absolute",
-        }}
-      >
+
+      <div id="uusi-kalenteri">
         <button // Uusi kalenteri nappi
           className={nappiStyles}
-          style={{
-            width: "130px",
-          }}
           type="button"
           onClick={togglePopup}
         >
           Uusi kalenteri
         </button>
-      </span>
+      </div>
 
       {popup && ( // Uusi kalenteri popup
         <Popup
