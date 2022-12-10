@@ -37,7 +37,8 @@ function Navbar({
   const handleSelosteOk = () => {
     window.localStorage.setItem("TSSAcc", 1);
     setSeloste(window.localStorage.getItem("TSSAcc") == 1 ? false : true);
-    document.location.reload();
+    if (window.localStorage.getItem("loggedSharedCalendar") !== null)
+      document.location.reload();
   };
 
   const handleSelosteNotOk = () => {
