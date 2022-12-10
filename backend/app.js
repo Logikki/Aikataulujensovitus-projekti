@@ -15,7 +15,7 @@ app.use(cors());
 //Käytetään express.json(), jotta voidaan käsitellä http pyyntöjen mukana lähetettyä json muotoista dataa.
 app.use(express.json());
 app.use(middleware.tokenExtractor);
-
+app.use(express.static('build'))
 app.use("/api/logincalendar", loginCalendarRouter);
 app.use("/api/download", downloadRouter);
 app.use("/api/sharedcalendar", sharedCalendarRouter);
