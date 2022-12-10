@@ -77,6 +77,8 @@ const CalendarView = function ({
     eventResizeHandling: "Disabled",
     crosshairType: "Disabled",
     businessBeginsHour: 8,
+    heightSpec: "Fixed",
+    height: dimensions.height * 0.75,
   };
 
   if (sharedCalendar == null) {
