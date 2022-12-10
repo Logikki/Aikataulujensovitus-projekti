@@ -11,8 +11,7 @@ const baseUrl = 'http://localhost:3003/api/logincalendar'
  * Token pitää sitten tallentaa johonkin muuttujaan, että sitä voidaan käyttää
  * myöhemmissä pyynnöissä.
  */
-const calendarLogin = async calendarCredentials => {
-  console.log("kirjaudutaan kalenteriin")
+const calendarLogin = async calendarCredentials => { 
   const response = await axios.post(baseUrl, calendarCredentials)
   return response.data
 }

@@ -250,19 +250,32 @@ const App = () => {
       setAvailableTimes({ events: newShared.sharedCalendar.availabletimes });
       resetInputs();
     } catch (exception) {
-      alert("Something went wrong");
+      alert(exception);
       resetInputs();
     }
   };
 
   const handleDeletingPrivateCalendar = async (id) => {
+    console.log(id)
     try {
-      const response = await calendarService.remPrivateCalendar(id);
       const filtered = pcNameAndID.filter((pc) => pc.id !== id);
       setPcNID(filtered);
+      const response = await calendarService.remPrivateCalendar(id);
       setAvailableTimes({ events: response.availabletimes });
-    } catch {
-      alert("Invalid id");
+    } catch(e) {
+      const sharedCal = await calendarService.getSharedCalendar(
+        sharedCalendar.sharedCalendarID
+      );
+      let privates = [];
+      sharedCal.privateCalendars.map(
+        (pc) => (privates = privates.concat({ id: pc.id, name: pc.name }))
+      );
+      setPcNID(privates);
+      setAvailableTimes({
+        events: sharedCal.availabletimes,
+      });
+
+      alert(e);
     }
   };
   return (
