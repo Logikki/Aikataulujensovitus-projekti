@@ -291,6 +291,7 @@ const App = () => {
         setNewCalendarPassword={setNewCalendarPassword}
         createNewCalendarHandler={handleCreatingNewCalendar}
         sharedCalendar={sharedCalendar}
+        setSharedCalendar={setSharedCalendar}
         calendarIDValue={calendarID}
         dimensions={dimensions}
       ></Navbar>
