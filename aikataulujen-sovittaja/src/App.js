@@ -251,8 +251,8 @@ const App = () => {
       const filtered = pcNameAndID.filter((pc) => pc.id !== id);
       setPcNID(filtered)
       setAvailableTimes({events: response.availabletimes})
-    } catch {
-      alert("Invalid id");
+    } catch (e) {
+      alert(e);
     }
   };
   return (

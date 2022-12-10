@@ -13,15 +13,16 @@ privateCalendarRouter.post('/', async (req, res) => {
     if (!req.token) {
         return res.status(401).json({error: 'token missing '})
     }
-
     const decodedToken = jwt.verify(req.token, process.env.SECRET)
     const sharedCalendar = await SharedCalendar.findById(decodedToken.sharedCalendarID)
+    console.log(body.name)
+    if (!body.name || body.name == "undefined" || body.name === '') {
+        return res.status(400).json({error: 'Calendar must have name'})
+    }
     const calendar = new PrivateCalendar({
         name : body.name,
         events : body.events
     })
-    console.log("new calendar id : ", calendar.id)
-    console.log("lisätään kalenteri")
     const savedCalendar = await calendar.save()
     sharedCalendar.privateCalendars = sharedCalendar.privateCalendars.concat(savedCalendar.id)
     await sharedCalendar.save()
