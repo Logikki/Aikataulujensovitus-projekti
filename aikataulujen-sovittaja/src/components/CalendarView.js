@@ -17,6 +17,8 @@ const CalendarView = function ({
   handleDelete,
   availableTimes,
   dimensions,
+  setNimi,
+  setUrl,
 }) {
   // Napin painallus joka vie edelliseen viikkoon
   const handlePrevWeekClick = function (e) {
@@ -122,6 +124,8 @@ const CalendarView = function ({
             setName={setName}
             name={name}
             kalenteriUrl={kalenteriUrl}
+            setNimi={setNimi}
+            setUrl={setUrl}
           />
         </div>
       </div>

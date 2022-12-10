@@ -56,7 +56,6 @@ const App = () => {
       backgroundRepeat: "no-repeat",
     };
   }
-  
 
   // Ohjeteksti, joka näytetään kun ei näkyvissä kalenteria
   const ohje = `Aloita kirjautumalla yhteiseen kalenteriin. 
@@ -232,7 +231,7 @@ const App = () => {
    */
   const handlePostingPrivateCalendar = async (event) => {
     let privateCalendarJson = null;
-    try { 
+    try {
       //ladataan kalenteri, ja annetaan ne parse funktiolle
       privateCalendarJson = parseICS.parse(
         await getCalendar.download(kalenteriUrl)
@@ -256,13 +255,13 @@ const App = () => {
   };
 
   const handleDeletingPrivateCalendar = async (id) => {
-    console.log(id)
+    console.log(id);
     try {
       const filtered = pcNameAndID.filter((pc) => pc.id !== id);
       setPcNID(filtered);
       const response = await calendarService.remPrivateCalendar(id);
       setAvailableTimes({ events: response.availabletimes });
-    } catch(e) {
+    } catch (e) {
       const sharedCal = await calendarService.getSharedCalendar(
         sharedCalendar.sharedCalendarID
       );
@@ -317,6 +316,8 @@ const App = () => {
           handleDelete={handleDeletingPrivateCalendar} //TODO: Muuta pois testistä!!!
           availableTimes={availableTimes}
           dimensions={dimensions}
+          setNimi={setName}
+          setUrl={setUrl}
         />
       </div>
     </div>

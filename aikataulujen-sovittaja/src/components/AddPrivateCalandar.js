@@ -9,6 +9,8 @@ const AddPrivateCalendar = ({
   handleFetchCalendar,
   name,
   kalenteriUrl,
+  setNimi,
+  setUrl,
 }) => {
   const nappiStyles = "btn btn-secondary";
   const inputStyles = { width: "100%", textAlign: "center" };
@@ -50,10 +52,10 @@ const AddPrivateCalendar = ({
       allowNam = true;
     }
     if (allowCal && allowNam) {
-      togglePopup();
       handleFetchCalendar();
       allowCal = false;
       allowNam = false;
+      close();
     }
     // TODO: Viimeistele toiminnallisuus!
   };
@@ -72,10 +74,8 @@ const AddPrivateCalendar = ({
 
   const close = () => {
     togglePopup();
-    handleKalenteriUrlChange("");
-    setName("");
-    setUrlErr(false);
-    setNameErr(false);
+    setUrl("");
+    setNimi("");
   };
 
   return (
